@@ -1,4 +1,4 @@
-import os, time, requests
+import os, time, requests, pytest
 
 BASE = f"http://127.0.0.1:{os.getenv('PORT','8800')}"
 
@@ -29,6 +29,13 @@ def test_kpis_and_costs():
 
 def test_suppliers_crud():
     assert _wait()
+    # Skip if DB is not available
+    try:
+        ping = requests.get(f"{BASE}/db/ping", timeout=3).json()
+        if not ping.get("ok"):
+            pytest.skip("DB not available; skipping suppliers CRUD tests")
+    except Exception:
+        pytest.skip("DB not available; skipping suppliers CRUD tests")
     payload = {"name": "Test Supplier", "file_path": "/tmp/test.xlsx", "rows": 1, "sheets": 1}
     created = requests.post(f"{BASE}/suppliers", json=payload, timeout=5)
     assert created.status_code in (200, 201)
