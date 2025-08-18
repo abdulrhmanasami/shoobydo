@@ -1,0 +1,14 @@
+node_modules/
+.next/
+dist/
+.coverage/
+__pycache__/
+*.pyc
+.env
+.env.*
+.DS_Store
+backup_*.zip
+.env.dev
+reports/
+.venv/
+*.py[cod]
