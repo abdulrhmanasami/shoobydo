@@ -2,6 +2,20 @@
 
 This draft maps discovered column names to proposed unified keys.
 
+## Unified Columns (Proposed)
+- supplier_name: Supplier_Name, "اسم المورد", Recommended_Suppliers → supplier_name
+- monthly_cost_eur: Monthly_Cost_EUR, Monthly_Fee_EUR, "الرسوم الشهرية (يورو)", "التكلفة الشهرية (يورو)" → monthly_cost_eur
+- monthly_margin_eur: Monthly_Margin_EUR, Gross_Margin_EUR → monthly_margin_eur
+- commission_percentage: Commission_Fee, "Commission (%)" → commission_percentage
+- minimum_order_qty: Min_Order_Qty, "الحد الأدنى للطلب" → minimum_order_qty
+- country_region: Country_Region, "البلد/المنطقة" → country_region
+- specialization: Specialization, "التخصص" → specialization
+- shipping_time_days: Shipping_Time_Days, "وقت الشحن (أيام)" → shipping_time_days
+- product_price_range_eur: Product_Price_Range_EUR, "نطاق الأسعار (يورو)" → product_price_range_eur
+- overall_rating: Overall_Rating, "التقييم العام" → overall_rating
+
+> Note: Arabic labels are mapped by meaning; future ETL will normalize localized headers to these unified keys.
+
 ## api_integration
 - occurrences: 4
   - suppliers_model_04.xlsx :: Complete_Comparison :: "API_Integration"
