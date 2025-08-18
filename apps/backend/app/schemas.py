@@ -35,3 +35,9 @@ class SupplierIn(BaseModel):
     rows: int = 0
     sheets: int = 0
 
+class SupplierUpdate(BaseModel):
+    name: Optional[str] = None
+    file_path: Optional[str] = None
+    rows: Optional[int] = None
+    sheets: Optional[int] = None
+

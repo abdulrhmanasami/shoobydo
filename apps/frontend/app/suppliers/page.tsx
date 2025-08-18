@@ -11,6 +11,8 @@ export default function SuppliersPage(){
   const [err,setErr] = useState<string|null>(null);
   const [name,setName] = useState("");
   const [filePath,setFilePath] = useState("");
+  const [info,setInfo] = useState<string|undefined>();
+  const [editId,setEditId] = useState<number|null>(null);
 
   async function load(){
     try{
@@ -34,15 +36,31 @@ export default function SuppliersPage(){
   async function addSupplier(){
     try{
       const body = { name, file_path: filePath, rows: 0, sheets: 0 };
-      await fetch(`${API}/suppliers`,{ method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(body)});
-      setName(""); setFilePath("");
+      const res = await fetch(`${API}/suppliers`,{ method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(body)});
+      if(!res.ok) throw new Error(await res.text());
+      setName(""); setFilePath(""); setInfo('Supplier added');
       await load();
     } catch(e:any){ setErr(String(e)); }
   }
 
   async function removeSupplier(id:number){
     try{
-      await fetch(`${API}/suppliers/${id}`,{ method:'DELETE' });
+      const res = await fetch(`${API}/suppliers/${id}`,{ method:'DELETE' });
+      if(!res.ok) throw new Error(await res.text());
+      setInfo('Supplier deleted');
+      await load();
+    } catch(e:any){ setErr(String(e)); }
+  }
+
+  async function saveEdit(){
+    if(editId==null) return;
+    try{
+      const body:any = {};
+      if(name) body.name = name;
+      if(filePath) body.file_path = filePath;
+      const res = await fetch(`${API}/suppliers/${editId}`,{ method:'PUT', headers:{'Content-Type':'application/json'}, body: JSON.stringify(body)});
+      if(!res.ok) throw new Error(await res.text());
+      setInfo('Supplier updated'); setEditId(null); setName(""); setFilePath("");
       await load();
     } catch(e:any){ setErr(String(e)); }
   }
@@ -51,6 +69,7 @@ export default function SuppliersPage(){
     <main className="main space-y-6">
       <h1 className="h1">Suppliers</h1>
       {err && <pre className="text-error">{err}</pre>}
+      {info && <div style={{color:'#059669'}}>{info}</div>}
       <button onClick={reindex} className="btn">Reindex Suppliers</button>
       {stats && (
         <div className="mt-4">
@@ -69,7 +88,11 @@ export default function SuppliersPage(){
             <label>File path</label>
             <input value={filePath} onChange={e=>setFilePath(e.target.value)} style={{display:'block',border:'1px solid #e5e7eb',padding:'8px',width:'480px'}} />
           </div>
-          <button onClick={addSupplier} className="btn">Add Supplier</button>
+          {editId==null ? (
+            <button onClick={addSupplier} className="btn">Add Supplier</button>
+          ) : (
+            <button onClick={saveEdit} className="btn">Save Changes</button>
+          )}
         </div>
       </div>
 
@@ -90,7 +113,10 @@ export default function SuppliersPage(){
               <td>{s.name}</td>
               <td>{s.rows}</td>
               <td>{s.sheets}</td>
-              <td><button className="btn" onClick={()=>removeSupplier(s.id)}>Delete</button></td>
+              <td style={{display:'flex',gap:'8px'}}>
+                <button className="btn" onClick={()=>{setEditId(s.id); setName(s.name); setFilePath(s.file_path);}}>Edit</button>
+                <button className="btn" onClick={()=>removeSupplier(s.id)}>Delete</button>
+              </td>
             </tr>
           ))}
         </tbody>

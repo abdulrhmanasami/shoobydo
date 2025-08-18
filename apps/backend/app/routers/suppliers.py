@@ -5,7 +5,7 @@ import os
 
 from app.db import get_db
 from app.models import Supplier
-from app.schemas import SupplierOut, SupplierStats, SupplierIn
+from app.schemas import SupplierOut, SupplierStats, SupplierIn, SupplierUpdate
 
 router = APIRouter()
 
@@ -84,4 +84,28 @@ def delete_supplier(supplier_id: int, db: Session = Depends(get_db)):
     db.delete(obj)
     db.commit()
     return {"deleted": supplier_id}
+
+@router.get("/{supplier_id}", response_model=SupplierOut)
+def get_supplier(supplier_id: int, db: Session = Depends(get_db)):
+    obj = db.query(Supplier).filter(Supplier.id == supplier_id).one_or_none()
+    if not obj:
+        raise HTTPException(status_code=404, detail="Supplier not found")
+    return obj
+
+@router.put("/{supplier_id}", response_model=SupplierOut)
+def update_supplier(supplier_id: int, payload: SupplierUpdate, db: Session = Depends(get_db)):
+    obj = db.query(Supplier).filter(Supplier.id == supplier_id).one_or_none()
+    if not obj:
+        raise HTTPException(status_code=404, detail="Supplier not found")
+    if payload.name is not None:
+        obj.name = payload.name
+    if payload.file_path is not None:
+        obj.file_path = payload.file_path
+    if payload.rows is not None:
+        obj.rows = payload.rows
+    if payload.sheets is not None:
+        obj.sheets = payload.sheets
+    db.commit()
+    db.refresh(obj)
+    return obj
 

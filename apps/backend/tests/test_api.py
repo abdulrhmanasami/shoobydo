@@ -42,6 +42,13 @@ def test_suppliers_crud():
     obj = created.json()
     sid = obj.get("id")
     assert sid
+    # get
+    got = requests.get(f"{BASE}/suppliers/{sid}", timeout=5)
+    assert got.status_code == 200
+    # update
+    upd = requests.put(f"{BASE}/suppliers/{sid}", json={"name":"Updated"}, timeout=5)
+    assert upd.status_code == 200
+    assert upd.json().get("name") == "Updated"
     # list
     lst = requests.get(f"{BASE}/suppliers", timeout=5)
     assert lst.status_code == 200

@@ -26,14 +26,25 @@
 - GET `/suppliers`
 - GET `/suppliers/stats`
 - POST `/suppliers/reindex`
+- POST `/suppliers`
+- GET `/suppliers/{id}`
+- PUT `/suppliers/{id}`
+- DELETE `/suppliers/{id}`
 
 ## واجهة المستخدم (Frontend)
 - `/dashboard`
 - `/suppliers`
 - `/costs`
+- `/analytics`
 
 ## ملاحظات تقنية
 - قاعدة البيانات: PostgreSQL (Docker).
 - الكاش/الصفوف السريعة: Redis (Docker).
 - backend: Python FastAPI + Alembic للهجرات.
 - frontend: Next.js (React 18)؛ تم تبسيط CSS بدون Tailwind.
+ 
+### CRUD للموردين
+- إضافة مورد عبر API: `POST /suppliers` مع JSON يحتوي `name`, `file_path`, `rows`, `sheets`.
+- تعديل مورد: `PUT /suppliers/{id}` مع القيم المراد تحديثها.
+- حذف مورد: `DELETE /suppliers/{id}`.
+- من الواجهة: صفحة `/suppliers` توفر نموذج إضافة، تعديل سريع لكل صف، وحذف.
