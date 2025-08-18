@@ -36,12 +36,22 @@
    - Gap notes:
      - Insert finalized Privacy/ToS/Returns templates
      - Map VAT/OSS flows and records retention
-8. Final Recommendations
+8. Brand Identity
+   - Sources:
+     - `docs/brand_identity.md`
+   - Notes:
+     - Usage of logo, color palette, typography; reflected in frontend `/brand`
+9. Supplier Outreach
+   - Sources:
+     - `docs/templates/supplier_outreach.md`
+   - Notes:
+     - Process, value prop, KPIs for onboarding suppliers
+10. Final Recommendations
    - Sources:
      - Synthesis of all above
    - Gap notes:
      - Prioritized roadmap with owners/ETA
-9. Appendices
+11. Appendices
    - Sources:
      - `docs/research/01_Report/Sources/tech_platform_architecture.md` (platform details)
      - Any extended tables, scoring sheets, and policies

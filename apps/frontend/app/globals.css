@@ -12,3 +12,34 @@ body { font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, U
 .table thead tr { background: #f3f4f6; }
 
 
+
+:root {
+  --brand-primary: #1F3A5F;
+  --brand-secondary: #4A7A8C;
+  --brand-accent: #E0A458;
+}
+
+.site-header {
+  background: #fff;
+  border-bottom: 1px solid #e5e7eb;
+}
+.container.header-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1rem;
+}
+.brand { display: flex; align-items: center; gap: 0.5rem; }
+.brand-logo { height: 28px; width: auto; display: inline-block; }
+.brand-name { font-weight: 600; color: var(--brand-primary); }
+.main-nav a { margin-left: 0.75rem; color: var(--brand-primary); text-decoration: none; }
+.main-nav a:hover { color: var(--brand-accent); }
+
+.brand-section { margin: 1rem 0; }
+.color-row { display: flex; align-items: center; gap: 0.5rem; margin: 0.25rem 0; }
+.swatch { width: 28px; height: 28px; border-radius: 4px; border: 1px solid #e5e7eb; }
+.brand-heading { font-size: 1.25rem; font-weight: 600; }
+
+
