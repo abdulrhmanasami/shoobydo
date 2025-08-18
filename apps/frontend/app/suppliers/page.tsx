@@ -9,6 +9,8 @@ export default function SuppliersPage(){
   const [suppliers,setSuppliers] = useState<Supplier[]>([]);
   const [stats,setStats] = useState<StatResp|null>(null);
   const [err,setErr] = useState<string|null>(null);
+  const [name,setName] = useState("");
+  const [filePath,setFilePath] = useState("");
 
   async function load(){
     try{
@@ -29,6 +31,22 @@ export default function SuppliersPage(){
     } catch(e:any){ setErr(String(e)); }
   }
 
+  async function addSupplier(){
+    try{
+      const body = { name, file_path: filePath, rows: 0, sheets: 0 };
+      await fetch(`${API}/suppliers`,{ method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(body)});
+      setName(""); setFilePath("");
+      await load();
+    } catch(e:any){ setErr(String(e)); }
+  }
+
+  async function removeSupplier(id:number){
+    try{
+      await fetch(`${API}/suppliers/${id}`,{ method:'DELETE' });
+      await load();
+    } catch(e:any){ setErr(String(e)); }
+  }
+
   return (
     <main className="main space-y-6">
       <h1 className="h1">Suppliers</h1>
@@ -41,6 +59,20 @@ export default function SuppliersPage(){
           <p>Total sheets: {stats.sheets}</p>
         </div>
       )}
+      <div className="mt-4">
+        <div className="space-y-6">
+          <div>
+            <label>Name</label>
+            <input value={name} onChange={e=>setName(e.target.value)} style={{display:'block',border:'1px solid #e5e7eb',padding:'8px',width:'320px'}} />
+          </div>
+          <div>
+            <label>File path</label>
+            <input value={filePath} onChange={e=>setFilePath(e.target.value)} style={{display:'block',border:'1px solid #e5e7eb',padding:'8px',width:'480px'}} />
+          </div>
+          <button onClick={addSupplier} className="btn">Add Supplier</button>
+        </div>
+      </div>
+
       <table className="table">
         <thead>
           <tr>
@@ -48,6 +80,7 @@ export default function SuppliersPage(){
             <th>Name</th>
             <th>Rows</th>
             <th>Sheets</th>
+            <th></th>
           </tr>
         </thead>
         <tbody>
@@ -57,6 +90,7 @@ export default function SuppliersPage(){
               <td>{s.name}</td>
               <td>{s.rows}</td>
               <td>{s.sheets}</td>
+              <td><button className="btn" onClick={()=>removeSupplier(s.id)}>Delete</button></td>
             </tr>
           ))}
         </tbody>

@@ -29,3 +29,9 @@ class CostsSummary(BaseModel):
     notes: Optional[str] = None
 
 
+class SupplierIn(BaseModel):
+    name: str
+    file_path: str
+    rows: int = 0
+    sheets: int = 0
+

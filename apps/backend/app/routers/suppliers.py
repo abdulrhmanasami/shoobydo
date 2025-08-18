@@ -1,11 +1,11 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from typing import List
 import os
 
 from app.db import get_db
 from app.models import Supplier
-from app.schemas import SupplierOut, SupplierStats
+from app.schemas import SupplierOut, SupplierStats, SupplierIn
 
 router = APIRouter()
 
@@ -66,4 +66,22 @@ def reindex_suppliers(db: Session = Depends(get_db)):
     db.commit()
     return {"indexed": updated, "files": len(found_files)}
 
+
+@router.post("/", response_model=SupplierOut)
+def create_supplier(payload: SupplierIn, db: Session = Depends(get_db)):
+    entity = Supplier(name=payload.name, file_path=payload.file_path, rows=payload.rows, sheets=payload.sheets)
+    db.add(entity)
+    db.commit()
+    db.refresh(entity)
+    return entity
+
+
+@router.delete("/{supplier_id}")
+def delete_supplier(supplier_id: int, db: Session = Depends(get_db)):
+    obj = db.query(Supplier).filter(Supplier.id == supplier_id).one_or_none()
+    if not obj:
+        raise HTTPException(status_code=404, detail="Supplier not found")
+    db.delete(obj)
+    db.commit()
+    return {"deleted": supplier_id}
 
