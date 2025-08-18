@@ -21,3 +21,11 @@ class SupplierStats(BaseModel):
     notes: Optional[str] = None
 
 
+class CostsSummary(BaseModel):
+    files: int
+    rows: int
+    total_cost: float
+    total_margin: float
+    notes: Optional[str] = None
+
+

@@ -41,6 +41,7 @@ from typing import Optional
 from pydantic import BaseModel
 import os
 from app.routers import suppliers
+from app.schemas import CostsSummary
 
 class KPISummary(BaseModel):
     files: int
@@ -114,3 +115,34 @@ def reports_kpis():
 
 # Suppliers router
 app.include_router(suppliers.router, prefix="/suppliers", tags=["suppliers"])
+
+
+@app.get("/reports/costs", response_model=CostsSummary)
+def reports_costs():
+    """Summarize costs from data/02_Excel/suppliers_model_02.xlsx.
+    Reads first sheet only; sums numeric columns heuristically.
+    """
+    data_file = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "..", "data", "02_Excel", "suppliers_model_02.xlsx"))
+    if not os.path.isfile(data_file):
+        return CostsSummary(files=0, rows=0, total_cost=0.0, total_margin=0.0, notes="file not found")
+    try:
+        import pandas as pd
+        xl = pd.ExcelFile(data_file)
+        sheet = xl.sheet_names[0]
+        df = xl.parse(sheet)
+        rows = int(df.shape[0])
+        lower_cols = {str(c).lower(): c for c in df.columns}
+        total_cost = 0.0
+        total_margin = 0.0
+        if 'total_cost' in lower_cols:
+            total_cost = float(pd.to_numeric(df[lower_cols['total_cost']], errors='coerce').fillna(0).sum())
+        if 'total_margin' in lower_cols:
+            total_margin = float(pd.to_numeric(df[lower_cols['total_margin']], errors='coerce').fillna(0).sum())
+        if total_cost == 0.0:
+            num_df = df.select_dtypes(include=['number'])
+            total_cost = float(num_df.sum(numeric_only=True).sum()) if not num_df.empty else 0.0
+        if total_margin == 0.0 and 'margin' in lower_cols:
+            total_margin = float(pd.to_numeric(df[lower_cols['margin']], errors='coerce').fillna(0).sum())
+        return CostsSummary(files=1, rows=rows, total_cost=round(total_cost,2), total_margin=round(total_margin,2), notes="ok")
+    except Exception as e:
+        return CostsSummary(files=1, rows=0, total_cost=0.0, total_margin=0.0, notes=f"pandas/openpyxl issue: {e}")
