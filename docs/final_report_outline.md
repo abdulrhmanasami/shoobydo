@@ -3,12 +3,48 @@
 1. Cover
 2. Executive Summary
 3. Suppliers Analysis
+   - Sources:
+     - `docs/research/01_Report/Sources/supplier_oem_odm_strategy.md`
+     - Supporting excerpts: `docs/research/01_Report/Sources/untitled-*.md` (supplier selection, tiers, KPIs)
+   - Gap notes:
+     - Need per-supplier unit cost tables and margin assumptions
+     - Finalize selection matrix and scoring evidence
 4. Cost Analysis
+   - Sources:
+     - `docs/research/01_Report/Sources/supplier_oem_odm_strategy.md` (investment models, TCO)
+     - Data: `docs/excel_summary.json`, `data/02_Excel/suppliers_model_02.xlsx`, API `/reports/costs`
+   - Gap notes:
+     - Detailed BOM/unit economics per category missing
+     - Channel fees/commission tables to be added
 5. KPIs Dashboard
+   - Sources:
+     - `docs/research/01_Report/Sources/content_strategy_seo.md` (KPIs & measurement)
+     - Data: `data/02_Excel/suppliers_model_01.xlsx`, `data/02_Excel/suppliers_model_03.xlsx`, API `/reports/kpis`
+   - Gap notes:
+     - Define target ranges per KPI per market
+     - Set baseline periods and refresh cadence
 6. Marketing Strategy
+   - Sources:
+     - `docs/research/01_Report/Sources/content_strategy_seo.md`
+     - Supporting: `docs/research/01_Report/Sources/untitled-*.md` (campaign ideas/templates)
+   - Gap notes:
+     - Add concrete email/blog/ad templates per language
+     - Budget split and funnel metrics per market
 7. Legal Compliance (GDPR & Consumer Protection)
+   - Sources:
+     - `docs/research/01_Report/Sources/untitled-*.md` (legal/risks), dedicated legal guide in Sources
+   - Gap notes:
+     - Insert finalized Privacy/ToS/Returns templates
+     - Map VAT/OSS flows and records retention
 8. Final Recommendations
+   - Sources:
+     - Synthesis of all above
+   - Gap notes:
+     - Prioritized roadmap with owners/ETA
 9. Appendices
+   - Sources:
+     - `docs/research/01_Report/Sources/tech_platform_architecture.md` (platform details)
+     - Any extended tables, scoring sheets, and policies
 
 Notes:
 - Data sources: data/02_Excel/*.xlsx, API reports (/reports/*), DB snapshots.
