@@ -30,10 +30,10 @@ export default function SuppliersPage(){
   }
 
   return (
-    <main className="p-8 space-y-6">
-      <h1 className="text-2xl font-semibold">Suppliers</h1>
-      {err && <pre className="text-red-600">{err}</pre>}
-      <button onClick={reindex} className="px-4 py-2 rounded-md bg-blue-600 text-white">Reindex Suppliers</button>
+    <main className="main space-y-6">
+      <h1 className="h1">Suppliers</h1>
+      {err && <pre className="text-error">{err}</pre>}
+      <button onClick={reindex} className="btn">Reindex Suppliers</button>
       {stats && (
         <div className="mt-4">
           <p>Total suppliers: {stats.total}</p>
@@ -41,22 +41,22 @@ export default function SuppliersPage(){
           <p>Total sheets: {stats.sheets}</p>
         </div>
       )}
-      <table className="min-w-full border mt-4">
+      <table className="table">
         <thead>
-          <tr className="bg-gray-100">
-            <th className="px-4 py-2 border">ID</th>
-            <th className="px-4 py-2 border">Name</th>
-            <th className="px-4 py-2 border">Rows</th>
-            <th className="px-4 py-2 border">Sheets</th>
+          <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Rows</th>
+            <th>Sheets</th>
           </tr>
         </thead>
         <tbody>
           {suppliers.map(s => (
-            <tr key={s.id} className="text-sm">
-              <td className="px-4 py-2 border">{s.id}</td>
-              <td className="px-4 py-2 border">{s.name}</td>
-              <td className="px-4 py-2 border">{s.rows}</td>
-              <td className="px-4 py-2 border">{s.sheets}</td>
+            <tr key={s.id}>
+              <td>{s.id}</td>
+              <td>{s.name}</td>
+              <td>{s.rows}</td>
+              <td>{s.sheets}</td>
             </tr>
           ))}
         </tbody>
