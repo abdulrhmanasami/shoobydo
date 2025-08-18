@@ -1,27 +1,23 @@
-from fastapi import FastAPI
-from pydantic import BaseModel
-import os
+#!/usr/bin/env bash
+set -euo pipefail
+root="$(pwd)"
 
-app = FastAPI(title="EuroDropship API", version="0.1.0")
+# 1) تأمين المتطلبات (redis, psycopg2-binary, pandas, openpyxl)
+req="$root/apps/backend/requirements.txt"
+mkdir -p "$root/apps/backend"
+touch "$req"
+add() { grep -Eqi "^$1([=>< ]|$)" "$req" || echo "$2" >> "$req"; }
+add "redis"               "redis>=5.0.0"
+add "psycopg2-binary"     "psycopg2-binary>=2.9.9"
+add "pandas"              "pandas>=2.2.0"
+add "openpyxl"            "openpyxl>=3.1.2"
 
-@app.get("/health")
-def health():
-    return {"status": "ok"}
+# 2) إضافة نقاط نهاية: /db/ping و /cache/ping و /reports/kpis (بدون لمس الموجود)
+main="$root/apps/backend/app/main.py"
+[ -f "$main" ] || { echo "ERROR: $main غير موجود"; exit 1; }
 
-class ReportSummary(BaseModel):
-    suppliers: int
-    kpis: int
-    notes: str
-
-@app.get("/reports/summary", response_model=ReportSummary)
-def reports_summary():
-    import os
-    data_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "..", "data"))
-    suppliers = 0
-    if os.path.isdir(data_dir):
-        for root, _, files in os.walk(data_dir):
-            suppliers += sum(1 for f in files if f.lower().endswith(".xlsx"))
-    return ReportSummary(suppliers=suppliers, kpis=2, notes="based on Excel models")
+if ! grep -q "@app.get(\"/db/ping\"" "$main"; then
+  cat >> "$main" <<'PY'
 
 # === Integrations: DB/Redis/KPIs ===
 from typing import Optional
@@ -97,3 +93,7 @@ def reports_kpis():
     except Exception as e:
         return KPISummary(files=len(files), rows=rows, sheets=sheets, notes=f"pandas/openpyxl issue: {e}")
     return KPISummary(files=len(files), rows=rows, sheets=sheets, notes="ok")
+PY
+fi
+
+echo "[ok] API integrations appended"
