@@ -7,4 +7,33 @@
 - apps/backend: واجهة برمجية (FastAPI).
 - infra: حاويات التطوير (Docker Compose).
 
-طريقة التشغيل ستضاف بعد التهيئة.
+## التشغيل السريع
+
+- تهيئة بيئة التطوير وتشغيل الخدمات:
+  - `tools/dev_up.sh` يطبق سياسة عدم التعارض (اختيار منافذ متاحة)، يرفع Postgres/Redis، يشغّل الـ backend، ويولّد تقارير صحية.
+- تشغيل الواجهة الأمامية:
+  - `tools/start_frontend.sh` يستخدم `FRONTEND_PORT` من `.env.dev` ويبدأ Next.js.
+- اختبارات الـ backend:
+  - `tools/run_tests.sh` لتشغيل وحدات الاختبار (pytest).
+
+## واجهة البرمجة (API)
+- GET `/health`
+- GET `/reports/summary`
+- GET `/reports/kpis`
+- GET `/reports/costs`
+- GET `/db/ping`
+- GET `/cache/ping`
+- GET `/suppliers`
+- GET `/suppliers/stats`
+- POST `/suppliers/reindex`
+
+## واجهة المستخدم (Frontend)
+- `/dashboard`
+- `/suppliers`
+- `/costs`
+
+## ملاحظات تقنية
+- قاعدة البيانات: PostgreSQL (Docker).
+- الكاش/الصفوف السريعة: Redis (Docker).
+- backend: Python FastAPI + Alembic للهجرات.
+- frontend: Next.js (React 18)؛ تم تبسيط CSS بدون Tailwind.
