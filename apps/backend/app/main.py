@@ -1,8 +1,21 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import os
 
-app = FastAPI(title="EuroDropship API", version="0.1.0")
+app = FastAPI(title="shoobydo-api")
+
+# CORS for local frontend
+import os as _os
+_fe_port = _os.getenv("FRONTEND_PORT", "3000")
+_origins = [f"http://127.0.0.1:{_fe_port}", f"http://localhost:{_fe_port}"]
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=_origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 @app.get("/health")
 def health():
@@ -27,6 +40,7 @@ def reports_summary():
 from typing import Optional
 from pydantic import BaseModel
 import os
+from app.routers import suppliers
 
 class KPISummary(BaseModel):
     files: int
@@ -97,3 +111,6 @@ def reports_kpis():
     except Exception as e:
         return KPISummary(files=len(files), rows=rows, sheets=sheets, notes=f"pandas/openpyxl issue: {e}")
     return KPISummary(files=len(files), rows=rows, sheets=sheets, notes="ok")
+
+# Suppliers router
+app.include_router(suppliers.router, prefix="/suppliers", tags=["suppliers"])
