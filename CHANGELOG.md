@@ -6,7 +6,8 @@
 - إنشاء صفحات الواجهة: `/dashboard`, `/suppliers`, `/costs` مع رسم بياني باستخدام recharts.
 - إزالة Tailwind وتبسيط CSS عالمي.
 - إضافة Alembic للهجرات وتحديث أوامر التشغيل (`tools/dev_up.sh`) وتقارير التشغيل.
- - تحسين إدارة الموردين: إضافة CRUD كامل (`POST/GET/PUT/DELETE /suppliers`)، وتحسين واجهة `/suppliers` مع الإشعارات.
+- تحسين إدارة الموردين: إضافة CRUD كامل (`POST/GET/PUT/DELETE /suppliers`)، وتحسين واجهة `/suppliers` مع الإشعارات.
+- إضافة رفع ملفات Excel عبر `POST /suppliers/upload` وصفحة `/upload` في الواجهة.
 
 ## v2
 - تنظيف الأرشيف: حذف `__MACOSX/`, ملفات `._*`, و`pasted_content.txt`.

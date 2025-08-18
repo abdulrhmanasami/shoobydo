@@ -27,6 +27,35 @@ def test_kpis_and_costs():
     assert "files" in r1.json()
     assert "total_cost" in r2.json()
 
+def test_upload():
+    assert _wait()
+    # skip if DB not available
+    try:
+        ping = requests.get(f"{BASE}/db/ping", timeout=3).json()
+        if not ping.get("ok"):
+            import pytest; pytest.skip("DB not available for upload test")
+    except Exception:
+        import pytest; pytest.skip("DB not available for upload test")
+    # prepare a tiny xlsx in memory
+    import io
+    try:
+        from openpyxl import Workbook
+    except Exception:
+        import pytest; pytest.skip("openpyxl missing")
+    wb = Workbook()
+    ws = wb.active
+    ws.append(["col1","col2"]) ; ws.append([1,2])
+    bio = io.BytesIO()
+    wb.save(bio)
+    bio.seek(0)
+    files = {"file": ("test_upload.xlsx", bio.getvalue(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")}
+    r = requests.post(f"{BASE}/suppliers/upload", files=files, timeout=10)
+    assert r.status_code == 200
+    # wrong extension
+    files_bad = {"file": ("bad.txt", b"hello", "text/plain")}
+    r2 = requests.post(f"{BASE}/suppliers/upload", files=files_bad, timeout=5)
+    assert r2.status_code == 400
+
 def test_suppliers_crud():
     assert _wait()
     # Skip if DB is not available

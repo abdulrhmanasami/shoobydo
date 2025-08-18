@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, UploadFile, File
 from sqlalchemy.orm import Session
 from typing import List
 import os
@@ -108,4 +108,26 @@ def update_supplier(supplier_id: int, payload: SupplierUpdate, db: Session = Dep
     db.commit()
     db.refresh(obj)
     return obj
+
+@router.post("/upload")
+def upload_excel(file: UploadFile = File(...), db: Session = Depends(get_db)):
+    filename = file.filename or ""
+    if not filename.lower().endswith(".xlsx"):
+        raise HTTPException(status_code=400, detail="Only .xlsx files are accepted")
+    # Save into data/02_Excel/
+    target_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "..", "..", "data", "02_Excel"))
+    os.makedirs(target_dir, exist_ok=True)
+    # Avoid collisions
+    safe_name = os.path.basename(filename)
+    base, ext = os.path.splitext(safe_name)
+    counter = 1
+    target_path = os.path.join(target_dir, safe_name)
+    while os.path.exists(target_path):
+        target_path = os.path.join(target_dir, f"{base}_{counter}{ext}")
+        counter += 1
+    with open(target_path, "wb") as out:
+        out.write(file.file.read())
+    # Reindex suppliers to reflect new file
+    res = reindex_suppliers(db)
+    return {"saved": os.path.relpath(target_path, start=os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "..", ".."))), "reindexed": res}
 

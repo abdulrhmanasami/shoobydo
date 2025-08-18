@@ -30,6 +30,7 @@
 - GET `/suppliers/{id}`
 - PUT `/suppliers/{id}`
 - DELETE `/suppliers/{id}`
+- POST `/suppliers/upload` (multipart/form-data: file .xlsx)
 
 ## واجهة المستخدم (Frontend)
 - `/dashboard`
@@ -48,3 +49,6 @@
 - تعديل مورد: `PUT /suppliers/{id}` مع القيم المراد تحديثها.
 - حذف مورد: `DELETE /suppliers/{id}`.
 - من الواجهة: صفحة `/suppliers` توفر نموذج إضافة، تعديل سريع لكل صف، وحذف.
+
+### رفع ملفات Excel
+- صفحة `/upload` تسمح برفع ملف `.xlsx` وسيتم حفظه في `data/02_Excel/` وإعادة فهرسة الموردين تلقائيًا.
