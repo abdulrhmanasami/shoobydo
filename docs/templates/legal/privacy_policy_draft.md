@@ -1,9 +1,9 @@
 # Privacy Policy (GDPR Draft)
 
 ## Controller
-- Company Name: {{company_name}}
-- Contact: {{contact_email}}
-- DPO (if any): {{dpo_contact}}
+- Company Name: EuroDropship Ltd (placeholder)
+- Contact: privacy@eurodropship.local
+- DPO (if any): dpo@eurodropship.local
 
 ## Data We Collect & Purpose
 - Account & Order Data (contract necessity)
@@ -34,4 +34,4 @@
 - TLS, encryption, access controls, audits
 
 ## Contact
-- {{company_address}} | {{contact_email}}
+- 10 Example Street, Berlin, DE | privacy@eurodropship.local

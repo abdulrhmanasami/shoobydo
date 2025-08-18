@@ -1,16 +1,18 @@
 # Returns and Refunds Policy (Draft)
 
 ## Right of Withdrawal (14 days)
-- Eligibility, timelines, condition of goods, exclusions
+- Eligibility: consumer purchases only; request within 14 calendar days of delivery
+- Condition: unused, original packaging; exclude perishable/custom items
 
 ## Return Process
-- Notification, RMA (if used), shipping address, costs
+- Start request via returns portal; receive RMA; ship to provided EU address
+- Costs: buyer pays return shipping unless defective item
 
 ## Refund Method
-- Same payment method, processing timeframes
+- Refunded to original payment method within 7–10 business days after inspection
 
 ## Damaged/Defective Items
-- Evidence, replacement or refund workflow
+- Provide photos within 48h; replacement or full refund offered
 
 ## Contact
-- {{support_email}} | {{support_phone}}
+- returns@eurodropship.local | +49 30 1234567

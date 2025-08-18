@@ -1,25 +1,25 @@
 # Terms and Conditions (Draft)
 
 ## Parties & Scope
-- Store operator details, contact, VAT/Company IDs
+- Operator: EuroDropship Ltd (placeholder), contact: support@eurodropship.local, VAT: DE123456789
 
 ## Orders & Payment
-- Accepted methods, pricing transparency, taxes, currency
+- Methods: Cards, PayPal, SEPA, Klarna; prices incl. VAT unless stated; currency EUR
 
 ## Shipping & Delivery
-- Regions served, timelines, tracking
+- Regions: DE/FR/IT/ES/NL, 2–3 business days typical; tracking provided
 
 ## Returns & Refunds
-- 14-day right of withdrawal (EU), conditions, process
+- 14-day right of withdrawal per EU law; items unused, original packaging; start via portal
 
 ## Warranties & Liability
-- Statutory warranty, limitations, force majeure
+- Statutory warranty applies; no liability for indirect damages; force majeure clause
 
 ## Privacy & Cookies
-- Link to privacy policy and cookie notice
+- See Privacy Policy for details; cookie consent required for marketing cookies
 
 ## Governing Law & Disputes
-- Jurisdiction, ADR/ODR references
+- German law; EU ODR platform link provided; ADR where applicable
 
 ## Changes to Terms
-- How updates are communicated
+- We may update Terms; material changes communicated by email and site notice

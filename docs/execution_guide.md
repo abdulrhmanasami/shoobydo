@@ -22,6 +22,13 @@
 - Persist Postgres volume, managed Redis
 - CI/CD: build, run tests, deploy containers, run Alembic `upgrade head`
 
+### Deployment steps (example: single VPS with Docker Compose)
+1) Copy repo to server and set `.env.prod` with ports from no‑conflict policy
+2) `docker compose -f infra/docker-compose.yml -f infra/docker-compose.override.yml --profile with-redis up -d db redis backend`
+3) Run DB migrations: `docker compose exec backend alembic upgrade head`
+4) Put reverse proxy (Caddy/NGINX) in front of backend and Next.js
+5) Monitoring: enable health endpoints `/health`, `/reports/summary`, logs shipping
+
 ## Roles & Daily Routines
 - Developer: implement endpoints/UI, run tests, update Alembic, review logs
 - Operator: monitor health, refresh KPIs, manage suppliers uploads, review errors

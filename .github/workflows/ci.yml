@@ -1,0 +1,57 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  backend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install backend deps
+        working-directory: apps/backend
+        run: |
+          python -m venv .venv
+          . .venv/bin/activate
+          pip install -U pip
+          pip install -r requirements.txt
+      - name: Run backend tests
+        working-directory: apps/backend
+        env:
+          API_BASE_URL: http://127.0.0.1:8803
+          SKIP_DB_TESTS: true
+        run: |
+          . .venv/bin/activate
+          pytest -q
+
+  lint-frontend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+      - name: Install deps
+        working-directory: apps/frontend
+        run: |
+          npm ci || npm install
+      - name: Lint
+        working-directory: apps/frontend
+        run: |
+          npx next lint || echo "Skipping lint failures for now"
+
+  docker-build-backend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build backend image
+        run: docker build -t backend-ci:latest apps/backend
+

@@ -49,3 +49,10 @@
 Notes:
 - Data sources: data/02_Excel/*.xlsx, API reports (/reports/*), DB snapshots.
 - Visuals: charts from /analytics and KPIs.
+
+---
+
+Gaps to address next:
+- Detailed unit economics per supplier/product (cost breakdowns by market/channel)
+- Final legal templates (localized per market) + VAT/OSS mapping and returns flowchart
+- Operational marketing metrics (per channel) with weekly targets and dashboards
