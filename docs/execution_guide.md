@@ -13,6 +13,12 @@
 - Backend tests: `tools/run_tests.sh` (pytest)
 - Health & summaries: `tools/health_check.sh`, `tools/quick_report.sh`, `tools/final_status.sh`
 
+### Compliance & Security Ops
+- Policies: see `docs/legal/*.md`
+- Risk plan: `docs/risk_management_plan.md`
+- Security plan: `docs/security_plan.md`
+- Backups: nightly Postgres + `data/02_Excel` per Security Plan
+
 ### Data & Suppliers
 - Reindex from Excel: `POST /suppliers/reindex`
 - Upload Excel: UI `/upload` or `POST /suppliers/upload`

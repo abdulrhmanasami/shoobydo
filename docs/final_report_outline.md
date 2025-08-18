@@ -33,20 +33,26 @@
 7. Legal Compliance (GDPR & Consumer Protection)
    - Sources:
      - `docs/research/01_Report/Sources/untitled-*.md` (legal/risks), dedicated legal guide in Sources
+     - Final policies: `docs/legal/privacy_policy.md`, `docs/legal/terms_and_conditions.md`, `docs/legal/returns_policy.md`
    - Gap notes:
      - Insert finalized Privacy/ToS/Returns templates
      - Map VAT/OSS flows and records retention
-8. Brand Identity
+8. Security & Risk Management
+   - Sources:
+     - `docs/security_plan.md`, `docs/risk_management_plan.md`
+   - Notes:
+     - Incident response, backups, monitoring, and periodic reviews
+9. Brand Identity
    - Sources:
      - `docs/brand_identity.md`
    - Notes:
      - Usage of logo, color palette, typography; reflected in frontend `/brand`
-9. Supplier Outreach
+10. Supplier Outreach
    - Sources:
      - `docs/templates/supplier_outreach.md`
    - Notes:
      - Process, value prop, KPIs for onboarding suppliers
-10. Final Recommendations
+11. Final Recommendations
    - Sources:
      - Synthesis of all above
    - Gap notes:
