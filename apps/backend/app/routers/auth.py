@@ -8,6 +8,8 @@ Last updated: 2025-08-19
 """
 
 from fastapi import APIRouter, Depends, HTTPException, status
+import re
+from sqlalchemy.exc import IntegrityError
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from sqlalchemy.orm import Session
 
@@ -36,23 +38,31 @@ def login(payload: UserLogin, db: Session = Depends(get_db)):
 @router.post("/register", response_model=UserPublic, status_code=201)
 def register(payload: UserRegister, db: Session = Depends(get_db)):
     # password policy: min 8, upper, lower, digit
-    pw = payload.password or ""
+    pw = (payload.password or "").strip()
     if not (len(pw) >= 8 and any(c.islower() for c in pw) and any(c.isupper() for c in pw) and any(c.isdigit() for c in pw)):
         raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail="Weak password")
-    exists = db.query(User).filter(User.email == payload.email).first()
+    # basic email validation + normalization
+    email_normalized = (payload.email or "").strip().lower()
+    if not re.match(r"^[^@\s]+@[^@\s]+\.[^@\s]+$", email_normalized):
+        raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail="Invalid email")
+    exists = db.query(User).filter(User.email == email_normalized).first()
     if exists:
         raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="Email already registered")
     from app.models_user import UserRole
     role_in = (payload.role or "viewer").lower()
     role_value = role_in if role_in in {"admin","manager","viewer"} else "viewer"
     user = User(
-        email=payload.email,
+        email=email_normalized,
         hashed_password=get_password_hash(payload.password),
         role=UserRole(role_value),
         is_active=True,
     )
     db.add(user)
-    db.commit()
+    try:
+        db.commit()
+    except IntegrityError:
+        db.rollback()
+        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="Email already registered")
     db.refresh(user)
     return UserPublic(
         id=str(user.id), email=user.email, role=getattr(user.role, "value", str(user.role)), is_active=user.is_active, created_at=str(user.created_at)
