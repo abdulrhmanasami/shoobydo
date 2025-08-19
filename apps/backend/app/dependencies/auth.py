@@ -19,7 +19,7 @@ from app.security import decode_token
 bearer_scheme = HTTPBearer(auto_error=False)
 
 
-def get_current_user(
+def require_user(
     credentials: HTTPAuthorizationCredentials | None = Depends(bearer_scheme),
     db: Session = Depends(get_db),
 ):
@@ -40,7 +40,7 @@ def get_current_user(
 
 
 def require_role(required: str):
-    def _role_guard(user = Depends(get_current_user)):
+    def _role_guard(user = Depends(require_user)):
         role_value = getattr(user, "role", None)
         try:
             from enum import Enum as _PyEnum
@@ -54,5 +54,17 @@ def require_role(required: str):
             raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Forbidden")
         return user
     return _role_guard
+
+
+def require_any_role(*roles: str):
+    allowed = {r.lower() for r in roles}
+    def _guard(user = Depends(require_user)):
+        role_value = getattr(user, "role", None)
+        role_str = getattr(role_value, "value", role_value)
+        role_str = str(role_str).lower() if role_str is not None else ""
+        if role_str not in allowed:
+            raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Forbidden")
+        return user
+    return _guard
 
 
