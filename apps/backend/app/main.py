@@ -43,6 +43,7 @@ import os
 from app.routers import suppliers
 from app.routers import auth as auth_router
 from app.routers import admin as admin_router
+from app.routers import products as products_router
 from app.schemas import CostsSummary
 
 class KPISummary(BaseModel):
@@ -119,6 +120,7 @@ def reports_kpis():
 app.include_router(suppliers.router, prefix="/suppliers", tags=["suppliers"])
 app.include_router(auth_router.router, prefix="/auth", tags=["auth"])
 app.include_router(admin_router.router, prefix="/admin", tags=["admin"])
+app.include_router(products_router.router)
 
 
 @app.get("/reports/costs", response_model=CostsSummary)

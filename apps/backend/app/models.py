@@ -13,3 +13,4 @@ class Supplier(Base):
     sheets: Mapped[int] = mapped_column(Integer, default=0)
 
 
+import app.models_product  # ensure Product model is imported
