@@ -1,8 +1,8 @@
 export const API = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8805";
-export function authHeader() {
-  if (typeof window === "undefined") return {} as Record<string,string>;
+export function authHeader(): Record<string,string> {
+  if (typeof window === "undefined") return {};
   const t = window.localStorage.getItem("token");
-  return t ? { Authorization: `Bearer ${t}` } : {} as Record<string,string>;
+  return t ? { Authorization: `Bearer ${t}` } : {};
 }
 export async function apiFetch(path: string, init: RequestInit = {}) {
   const res = await fetch(`${API}${path}`, {
