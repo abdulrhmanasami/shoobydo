@@ -34,11 +34,26 @@ def upgrade() -> None:
     )
     op.create_index(op.f('ix_customers_email'), 'customers', ['email'], unique=False)
     op.create_index(op.f('ix_customers_id'), 'customers', ['id'], unique=False)
+    # Ensure enum type 'userrole' exists without recreating it if already present
+    op.execute(
+        """
+        DO $$
+        BEGIN
+            IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'userrole') THEN
+                CREATE TYPE userrole AS ENUM ('admin', 'manager', 'viewer');
+            END IF;
+        END$$;
+        """
+    )
+
+    # Reuse existing enum type to avoid implicit CREATE TYPE by SQLAlchemy
+    userrole = sa.Enum('admin', 'manager', 'viewer', name='userrole', create_type=False)
+
     op.create_table('users',
     sa.Column('id', sa.UUID(), nullable=False),
     sa.Column('email', sa.String(length=255), nullable=False),
     sa.Column('hashed_password', sa.String(length=255), nullable=False),
-    sa.Column('role', sa.Enum('admin', 'manager', 'viewer', name='userrole'), nullable=False),
+    sa.Column('role', userrole, nullable=False),
     sa.Column('is_active', sa.Boolean(), nullable=False),
     sa.Column('created_at', sa.DateTime(timezone=True), server_default=sa.text('now()'), nullable=False),
     sa.Column('updated_at', sa.DateTime(timezone=True), server_default=sa.text('now()'), nullable=False),
