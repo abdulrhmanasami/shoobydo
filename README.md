@@ -1,4 +1,4 @@
-SHOOPYDO Dropship Monorepo
+SHOOBYDO Dropship Monorepo
 
 - docs/research: الملفات البحثية والتقارير (مرجع التنفيذ).
 - assets: الأصول البصرية (شعارات، لقطات، موك‌آبس).
