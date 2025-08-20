@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+python3 tools/linkify_docs_readme.py >/dev/null 2>&1 || true
 set -euo pipefail
 ROOT_DIR="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$ROOT_DIR"
