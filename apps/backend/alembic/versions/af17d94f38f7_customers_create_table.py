@@ -9,6 +9,7 @@ from typing import Sequence, Union
 
 from alembic import op
 import sqlalchemy as sa
+from sqlalchemy.dialects import postgresql as psql
 
 
 # revision identifiers, used by Alembic.
@@ -34,20 +35,8 @@ def upgrade() -> None:
     )
     op.create_index(op.f('ix_customers_email'), 'customers', ['email'], unique=False)
     op.create_index(op.f('ix_customers_id'), 'customers', ['id'], unique=False)
-    # Ensure enum type 'userrole' exists without recreating it if already present
-    op.execute(
-        """
-        DO $$
-        BEGIN
-            IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'userrole') THEN
-                CREATE TYPE userrole AS ENUM ('admin', 'manager', 'viewer');
-            END IF;
-        END$$;
-        """
-    )
-
     # Reuse existing enum type to avoid implicit CREATE TYPE by SQLAlchemy
-    userrole = sa.Enum('admin', 'manager', 'viewer', name='userrole', create_type=False)
+    userrole = psql.ENUM('admin', 'manager', 'viewer', name='userrole', create_type=False)
 
     op.create_table('users',
     sa.Column('id', sa.UUID(), nullable=False),
