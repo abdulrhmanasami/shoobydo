@@ -35,20 +35,7 @@ def upgrade() -> None:
     )
     op.create_index(op.f('ix_customers_email'), 'customers', ['email'], unique=False)
     op.create_index(op.f('ix_customers_id'), 'customers', ['id'], unique=False)
-    # Reuse existing enum type to avoid implicit CREATE TYPE by SQLAlchemy
-    userrole = psql.ENUM('admin', 'manager', 'viewer', name='userrole', create_type=False)
-
-    op.create_table('users',
-    sa.Column('id', sa.UUID(), nullable=False),
-    sa.Column('email', sa.String(length=255), nullable=False),
-    sa.Column('hashed_password', sa.String(length=255), nullable=False),
-    sa.Column('role', userrole, nullable=False),
-    sa.Column('is_active', sa.Boolean(), nullable=False),
-    sa.Column('created_at', sa.DateTime(timezone=True), server_default=sa.text('now()'), nullable=False),
-    sa.Column('updated_at', sa.DateTime(timezone=True), server_default=sa.text('now()'), nullable=False),
-    sa.PrimaryKeyConstraint('id')
-    )
-    op.create_index(op.f('ix_users_email'), 'users', ['email'], unique=True)
+    # No changes to 'users' table in this migration. It is managed by earlier revisions.
     # ### end Alembic commands ###
 
 
