@@ -36,3 +36,9 @@ class UserPublic(BaseModel):
     created_at: Optional[str] = None
 
 
+class TokenPair(BaseModel):
+    access_token: str
+    refresh_token: str
+    token_type: Literal["bearer"] = "bearer"
+
+

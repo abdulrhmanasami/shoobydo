@@ -15,24 +15,32 @@ from sqlalchemy.orm import Session
 
 from app.db import get_db
 from app.models_user import User
-from app.schemas_auth import Token, UserLogin, UserRegister, UserPublic
+from app.schemas_auth import Token, UserLogin, UserRegister, UserPublic, TokenPair
 from app.security import create_access_token, verify_password, get_password_hash
 from app.dependencies.auth import require_user
+from app.services.tokens import (
+    create_access_token as create_access_token_pair,
+    create_refresh_token,
+    rotate_refresh,
+    decode_refresh,
+    blacklist_refresh_jti,
+)
 
 
 router = APIRouter()
 _bearer = HTTPBearer(auto_error=False)
 
 
-@router.post("/login", response_model=Token)
+@router.post("/login", response_model=TokenPair)
 def login(payload: UserLogin, db: Session = Depends(get_db)):
     user = db.query(User).filter(User.email == payload.email).one_or_none()
     if not user or not verify_password(payload.password, user.hashed_password):
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid credentials")
     # Ensure role claim uses enum value
     role_value = user.role.value if hasattr(user.role, "value") else str(user.role)
-    token = create_access_token(str(user.id), role=role_value)
-    return Token(access_token=token)
+    access, _ = create_access_token_pair(str(user.id), role=role_value)
+    refresh, _, _ = create_refresh_token(str(user.id), role=role_value)
+    return TokenPair(access_token=access, refresh_token=refresh)
 
 
 @router.post("/register", response_model=UserPublic, status_code=201)
@@ -69,17 +77,41 @@ def register(payload: UserRegister, db: Session = Depends(get_db)):
     )
 
 
-@router.post("/refresh", response_model=Token)
-def refresh(current_user = Depends(require_user)):
-    # Mint a new token using the currently authenticated user
-    role_value = current_user.role.value if hasattr(current_user.role, "value") else str(current_user.role)
-    new_token = create_access_token(str(current_user.id), role=role_value)
-    return Token(access_token=new_token)
+from fastapi import Header
+
+
+@router.post("/refresh", response_model=TokenPair)
+def refresh(authorization: str | None = Header(None)):
+    # Expect refresh token in Authorization header; rotate and blacklist old
+    token = authorization
+    if not token:
+        raise HTTPException(status_code=401, detail="missing Authorization")
+    parts = token.split()
+    if len(parts) != 2 or parts[0].lower() != "bearer":
+        raise HTTPException(status_code=401, detail="invalid Authorization")
+    rt = parts[1]
+    try:
+        new_refresh, _, _ = rotate_refresh(rt)
+        claims = decode_refresh(new_refresh)
+        new_access, _ = create_access_token_pair(str(claims["sub"]), role=claims.get("role", "viewer"))
+        return TokenPair(access_token=new_access, refresh_token=new_refresh)
+    except Exception as e:
+        raise HTTPException(status_code=401, detail=str(e))
 
 
 @router.post("/logout")
-def logout():
-    # Stateless JWT logout stub (client should discard token)
+def logout(authorization: str = Depends(lambda authorization: authorization)):
+    if not authorization:
+        return {"ok": True}
+    parts = authorization.split()
+    if len(parts) == 2 and parts[0].lower() == "bearer":
+        try:
+            claims = decode_refresh(parts[1])
+            jti = claims.get("jti")
+            if jti:
+                blacklist_refresh_jti(jti, claims.get("exp"))
+        except Exception:
+            pass
     return {"ok": True}
 
 
