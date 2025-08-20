@@ -1,6 +1,5 @@
 from sqlalchemy import Column, Integer, String, DateTime, func, UniqueConstraint
 from .models import Base
-
 class Customer(Base):
     __tablename__ = "customers"
     id = Column(Integer, primary_key=True, index=True)

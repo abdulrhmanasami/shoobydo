@@ -14,3 +14,4 @@ class Supplier(Base):
 
 
 import app.models_product  # ensure Product model is imported
+import app.models_customer  # ensure Customer model is imported
