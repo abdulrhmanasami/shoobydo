@@ -1,35 +1,34 @@
 #!/usr/bin/env bash
 set -euo pipefail
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+PORT="${PORT:-8805}"
+LOG_DIR="$ROOT/logs"; RUN_DIR="$ROOT/.run"
+mkdir -p "$LOG_DIR" "$RUN_DIR"
+cd "$ROOT/apps/backend"
 
-# Ensure we run from repo root
-cd "$(dirname "$0")/.."
+# venv
+[ -x .venv/bin/python ] || python3 -m venv .venv
+. .venv/bin/activate
 
-# Load env and sanitize
-if [ -f .env.dev ]; then
-  set -a; . .env.dev; set +a
-fi
-PORT=${PORT:-}
-PORT=$(printf "%s" "$PORT" | tr -d '\r')
-if [ -z "$PORT" ]; then PORT=8800; fi
+# تحقق سريع لقاعدة البيانات
+alembic upgrade head || true
 
-MODE="docker"; [ -f .backend_mode ] && MODE=$(cat .backend_mode)
-
-is_healthy(){ curl -fsS "http://127.0.0.1:$PORT/health" >/dev/null 2>&1; }
-
-if [ "$MODE" = "docker" ]; then
-  if is_healthy; then
-    echo "[backend] docker healthy on :$PORT (skip local)"
-    exit 0
-  fi
-  echo "[backend] docker not healthy; falling back to local"
+# إطفاء أي عملية قديمة على نفس المنفذ
+if lsof -ti :"$PORT" >/dev/null 2>&1; then
+  kill $(lsof -ti :"$PORT") || true
+  sleep 1
 fi
 
-cd apps/backend
-. .venv/bin/activate 2>/dev/null || (python3 -m venv .venv && . .venv/bin/activate)
-python -m pip install -U pip wheel >/dev/null
-[ -f requirements.txt ] && pip install -r requirements.txt >/dev/null || pip install fastapi uvicorn[standard] jinja2 pydantic python-multipart >/dev/null
+# تشغيل uvicorn بلا مراقبة وبـ PID+LOG
+TS="$(date +%Y%m%d-%H%M%S)"
+LOG="$LOG_DIR/backend-$TS.log"
+nohup .venv/bin/python -m uvicorn app.main:app \
+  --host 0.0.0.0 --port "$PORT" --no-access-log \
+  >>"$LOG" 2>&1 & echo $! > "$RUN_DIR/uvicorn.pid"
 
-lsof -ti :"$PORT" | xargs -r kill -9 || true
-nohup uvicorn app.main:app --host 127.0.0.1 --port "$PORT" --reload > "/tmp/uvicorn.$PORT.log" 2>&1 & echo $! > "/tmp/uvicorn.$PORT.pid"
-sleep 2
-tail -n 20 "/tmp/uvicorn.$PORT.log" || true
+# فاصل قصير ثم فحص صحة سريع via openapi (health قد لا يكون موجود)
+sleep 3
+if ! curl --max-time 5 --connect-timeout 2 -fsSL "http://127.0.0.1:${PORT}/openapi.json" >/dev/null; then
+  echo "WARN: openapi not responding on :$PORT, see $LOG"
+fi
+echo "OK: uvicorn pid=$(cat "$RUN_DIR/uvicorn.pid"), log=$LOG"
