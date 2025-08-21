@@ -52,3 +52,18 @@ SHOOBYDO Dropship Monorepo
 
 ### رفع ملفات Excel
 - صفحة `/upload` تسمح برفع ملف `.xlsx` وسيتم حفظه في `data/02_Excel/` وإعادة فهرسة الموردين تلقائيًا.
+
+
+<!-- EPIC-02-TASK-02F:BEGIN -->
+## Customers Core (EPIC-02/TASK-02F)
+### Permissions
+- GET /customers ⇒ user
+- POST /customers ⇒ admin|manager
+- PUT /customers/{id} ⇒ admin|manager
+- DELETE /customers/{id} ⇒ admin
+
+### OpenAPI
+- `/customers/` → get, post
+- `/customers/{cid}` → delete, put
+
+<!-- EPIC-02-TASK-02F:END -->
