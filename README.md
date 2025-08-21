@@ -127,5 +127,18 @@ SHOOBYDO Dropship Monorepo
 - CHECKs: quantity>0, unit_price>=0, total>=0
 - Auto-recalc of orders.total on item changes
 ### OpenAPI (order-items)
-
+Order Items API endpoints
 <!-- EPIC-02-TASK-02J:END -->
+
+<!-- EPIC-02-TASK-02K:BEGIN -->
+## Inventory & Reservations (EPIC-02/TASK-02K)
+- Stock management: stock_on_hand, stock_reserved
+- Movement tracking: stock_movements table
+- Anti-oversell: automatic reservations with OrderItems
+- CHECK constraints: non-negative stock values
+### OpenAPI (inventory)
+- `GET /inventory/products/{id}/stock` → Get stock status
+- `POST /inventory/products/{id}/adjust` → Manual stock adjustment (admin/manager)
+- `POST /inventory/products/{id}/reserve` → Reserve stock
+- `POST /inventory/products/{id}/release` → Release reserved stock
+<!-- EPIC-02-TASK-02K:END -->

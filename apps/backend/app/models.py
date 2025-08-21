@@ -17,3 +17,4 @@ import app.models_product  # ensure Product model is imported
 import app.models_customer  # ensure Customer model is imported
 import app.models_order  # ensure Order model is imported
 import app.models_order_item  # ensure OrderItem model is imported
+import app.models_stock_movement  # ensure StockMovement model is imported
