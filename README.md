@@ -67,3 +67,40 @@ SHOOBYDO Dropship Monorepo
 - `/customers/{cid}` → delete, put
 
 <!-- EPIC-02-TASK-02F:END -->
+
+
+<!-- EPIC-02-TASK-02G:BEGIN -->
+## Products Core (EPIC-02/TASK-02G) — Verification
+### OpenAPI
+- `/products/` → get, post
+- `/products/{pid}` → delete, put
+
+### Artifacts
+- reports/EPIC-02/TASK-02G/openapi_products_paths_after_merge.txt
+- reports/EPIC-02/TASK-02G/health_after_merge.txt
+- reports/EPIC-02/TASK-02G/curl_01_create.txt
+- reports/EPIC-02/TASK-02G/curl_02_list.txt
+- reports/EPIC-02/TASK-02G/curl_03_update.txt
+- reports/EPIC-02/TASK-02G/curl_04_delete.txt
+<!-- EPIC-02-TASK-02G:END -->
+
+
+<!-- EPIC-02-TASK-02H:BEGIN -->
+## Orders Core (EPIC-02/TASK-02H)
+### Permissions
+- GET /orders ⇒ user
+- POST /orders ⇒ admin|manager
+- PUT /orders/<built-in function id> ⇒ admin|manager
+- DELETE /orders/<built-in function id> ⇒ admin
+### OpenAPI
+ - `/orders/` → get (filters: q,status,customer_id,limit,offset), post
+ - `/orders/{oid}` → get, delete, put
+
+### Artifacts
+- reports/EPIC-02/TASK-02H/health_after_merge.txt
+- reports/EPIC-02/TASK-02H/openapi_orders_paths_after_merge.txt
+- reports/EPIC-02/TASK-02H/curl_01_create.txt
+- reports/EPIC-02/TASK-02H/curl_02_list.txt
+- reports/EPIC-02/TASK-02H/curl_03_update.txt
+- reports/EPIC-02/TASK-02H/curl_04_delete.txt
+<!-- EPIC-02-TASK-02H:END -->

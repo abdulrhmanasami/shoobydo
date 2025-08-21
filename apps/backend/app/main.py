@@ -15,4 +15,7 @@ from app.routers import order_items as order_items_router
 app = FastAPI(title="shoobydo-api")
 
 app.include_router(customers.router)
+app.include_router(auth_router.router, prefix="/auth", tags=["auth"])
 app.include_router(products.router)
+app.include_router(orders_router.router)
+app.include_router(order_items_router.router)
