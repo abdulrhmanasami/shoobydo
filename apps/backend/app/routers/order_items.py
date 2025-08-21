@@ -6,6 +6,7 @@ from app.dependencies.auth import require_user, require_any_role
 from app.models_order import Order
 from app.models_product import Product
 from app.models_order_item import OrderItem
+from app.services.orders_total import recalc_order_total
 from app.schemas_order_item import OrderItemCreate, OrderItemUpdate, OrderItemOut
 
 router = APIRouter(prefix="/orders", tags=["orders"])
