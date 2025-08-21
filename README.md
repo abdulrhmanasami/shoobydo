@@ -120,3 +120,12 @@ SHOOBYDO Dropship Monorepo
 - reports/EPIC-02/TASK-02I/curl_03_update.txt
 - reports/EPIC-02/TASK-02I/curl_04_delete.txt
 <!-- EPIC-02-TASK-02I:END -->
+
+
+<!-- EPIC-02-TASK-02J:BEGIN -->
+## Order Totals & Constraints (EPIC-02/TASK-02J)
+- CHECKs: quantity>0, unit_price>=0, total>=0
+- Auto-recalc of orders.total on item changes
+### OpenAPI (order-items)
+
+<!-- EPIC-02-TASK-02J:END -->
