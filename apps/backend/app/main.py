@@ -8,9 +8,11 @@ from app.routers import suppliers
 from app.routers import auth as auth_router
 from app.routers import admin as admin_router
 from app.routers import products as products_router
+from app.routers import products
 from app.routers import orders as orders_router
 from app.routers import order_items as order_items_router
 
 app = FastAPI(title="shoobydo-api")
 
 app.include_router(customers.router)
+app.include_router(products.router)
