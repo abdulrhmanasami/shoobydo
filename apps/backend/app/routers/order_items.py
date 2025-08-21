@@ -7,6 +7,7 @@ from app.models_order import Order
 from app.models_product import Product
 from app.models_order_item import OrderItem
 from app.services.orders_total import recalc_order_total
+from app.services.inventory import reserve_stock, release_stock
 from app.schemas_order_item import OrderItemCreate, OrderItemUpdate, OrderItemOut
 
 router = APIRouter(prefix="/orders", tags=["orders"])
@@ -32,9 +33,13 @@ def add_item(oid: int, data: OrderItemCreate, db: Session = Depends(get_db)):
     if not order: raise HTTPException(status_code=404, detail="order not found")
     product = db.get(Product, data.product_id)
     if not product: raise HTTPException(status_code=404, detail="product not found")
-    if product.stock is None or product.stock < data.qty:
-        raise HTTPException(status_code=409, detail="insufficient stock")
-    product.stock -= data.qty
+    
+    # Reserve stock using inventory service
+    try:
+        reserve_stock(db, data.product_id, data.qty, "order_item_create")
+    except HTTPException as e:
+        raise e  # Re-raise the HTTP exception from inventory service
+    
     it = OrderItem(order_id=oid, product_id=data.product_id, qty=data.qty,
                    unit_price=data.unit_price, subtotal=round(data.qty * data.unit_price, 2))
     db.add(it); db.commit(); db.refresh(it)
@@ -45,16 +50,21 @@ def add_item(oid: int, data: OrderItemCreate, db: Session = Depends(get_db)):
 def update_item(oid: int, iid: int, data: OrderItemUpdate, db: Session = Depends(get_db)):
     it = db.get(OrderItem, iid)
     if not it or it.order_id != oid: raise HTTPException(status_code=404, detail="item not found")
-    # adjust stock if qty changes
+    
+    # Adjust stock reservations if quantity changes
     if data.qty is not None and data.qty != it.qty:
         diff = data.qty - it.qty
-        prod = db.get(Product, it.product_id)
         if diff > 0:
-            if prod.stock < diff: raise HTTPException(status_code=409, detail="insufficient stock")
-            prod.stock -= diff
+            # Need to reserve more stock
+            try:
+                reserve_stock(db, it.product_id, diff, "order_item_update")
+            except HTTPException as e:
+                raise e
         else:
-            prod.stock += (-diff)
+            # Need to release some stock
+            release_stock(db, it.product_id, -diff, "order_item_update")
         it.qty = data.qty
+    
     if data.unit_price is not None:
         it.unit_price = data.unit_price
     it.subtotal = round(it.qty * float(it.unit_price), 2)
@@ -66,8 +76,10 @@ def update_item(oid: int, iid: int, data: OrderItemUpdate, db: Session = Depends
 def delete_item(oid: int, iid: int, db: Session = Depends(get_db)):
     it = db.get(OrderItem, iid)
     if not it or it.order_id != oid: raise HTTPException(status_code=404, detail="item not found")
-    prod = db.get(Product, it.product_id)
-    prod.stock += it.qty
+    
+    # Release reserved stock
+    release_stock(db, it.product_id, it.qty, "order_item_delete")
+    
     db.delete(it); db.commit()
     _recalc_total(db, oid)
     return {"ok": True}
