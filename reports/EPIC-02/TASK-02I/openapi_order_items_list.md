@@ -1,0 +1,4 @@
+- `/orders/` → get, post
+- `/orders/{oid}` → delete, get, put
+- `/orders/{oid}/items` → get, post
+- `/orders/{oid}/items/{iid}` → delete, put

@@ -104,3 +104,19 @@ SHOOBYDO Dropship Monorepo
 - reports/EPIC-02/TASK-02H/curl_03_update.txt
 - reports/EPIC-02/TASK-02H/curl_04_delete.txt
 <!-- EPIC-02-TASK-02H:END -->
+
+
+<!-- EPIC-02-TASK-02I:BEGIN -->
+## Order Items (EPIC-02/TASK-02I)
+### OpenAPI
+- `/orders/` → get, post
+- `/orders/{oid}` → delete, get, put
+- `/orders/{oid}/items` → get, post
+- `/orders/{oid}/items/{iid}` → delete, put
+
+### Artifacts
+- reports/EPIC-02/TASK-02I/curl_01_create.txt
+- reports/EPIC-02/TASK-02I/curl_02_list.txt
+- reports/EPIC-02/TASK-02I/curl_03_update.txt
+- reports/EPIC-02/TASK-02I/curl_04_delete.txt
+<!-- EPIC-02-TASK-02I:END -->
