@@ -23,3 +23,4 @@
 - 2025-08-21 feat: Order Items core (EPIC-02/TASK-02I)
 - [2025-08-21] feat: Order Totals & Constraints (EPIC-02/TASK-02J)
 - [2025-08-21] feat: Inventory & Reservations (EPIC-02/TASK-02K)
+- [2025-08-21] chore: enforce D-rule (nohup+PID+LOG, scurl wrapper)
