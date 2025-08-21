@@ -6,6 +6,7 @@ import os
 from app.db import get_db
 from app.models import Supplier
 from app.schemas import SupplierOut, SupplierStats, SupplierIn, SupplierUpdate
+from app.dependencies.auth import require_role, require_any_role
 
 router = APIRouter()
 
@@ -77,7 +78,7 @@ def create_supplier(payload: SupplierIn, db: Session = Depends(get_db)):
 
 
 @router.delete("/{supplier_id}")
-def delete_supplier(supplier_id: int, db: Session = Depends(get_db)):
+def delete_supplier(supplier_id: int, db: Session = Depends(get_db), user = Depends(require_role("admin"))):
     obj = db.query(Supplier).filter(Supplier.id == supplier_id).one_or_none()
     if not obj:
         raise HTTPException(status_code=404, detail="Supplier not found")
@@ -93,7 +94,7 @@ def get_supplier(supplier_id: int, db: Session = Depends(get_db)):
     return obj
 
 @router.put("/{supplier_id}", response_model=SupplierOut)
-def update_supplier(supplier_id: int, payload: SupplierUpdate, db: Session = Depends(get_db)):
+def update_supplier(supplier_id: int, payload: SupplierUpdate, db: Session = Depends(get_db), user = Depends(require_any_role("admin","manager"))):
     obj = db.query(Supplier).filter(Supplier.id == supplier_id).one_or_none()
     if not obj:
         raise HTTPException(status_code=404, detail="Supplier not found")

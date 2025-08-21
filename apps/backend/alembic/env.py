@@ -8,6 +8,9 @@ from pathlib import Path
 sys.path.append(str(Path(__file__).resolve().parents[1]))
 from app.db import Base
 import app.models  # ensure models are imported so Base.metadata is populated
+import app.models_user  # ensure User model present in metadata
+import app.models_product  # ensure Product model present in metadata
+import app.models_product  # ensure Product model is included
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
