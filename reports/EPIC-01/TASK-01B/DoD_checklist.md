@@ -1,0 +1,6 @@
+- [x] POST /auth/register with validation and hashing
+- [x] Duplicate email returns 409
+- [x] Viewer cannot access admin-only route (403)
+- [x] Admin can access admin route (200)
+- [x] Role guards generalized and reusable
+- [x] Artifacts captured under reports/EPIC-01/TASK-01B/

@@ -1,0 +1,396 @@
+FFFFF                                                                    [100%]
+=================================== FAILURES ===================================
+_________________________________ test_health __________________________________
+
+    def test_health():
+>       assert _wait()
+E       assert False
+E        +  where False = _wait()
+
+tests/test_api.py:16: AssertionError
+_____________________________ test_kpis_and_costs ______________________________
+
+    def test_kpis_and_costs():
+>       assert _wait()
+E       assert False
+E        +  where False = _wait()
+
+tests/test_api.py:22: AssertionError
+_________________________________ test_upload __________________________________
+
+    def test_upload():
+>       assert _wait()
+E       assert False
+E        +  where False = _wait()
+
+tests/test_api.py:31: AssertionError
+_____________________________ test_suppliers_crud ______________________________
+
+    def test_suppliers_crud():
+>       assert _wait()
+E       assert False
+E        +  where False = _wait()
+
+tests/test_api.py:60: AssertionError
+_____________________ test_products_orders_items_crud_flow _____________________
+
+self = <sqlalchemy.engine.base.Connection object at 0x110047e00>
+engine = Engine(postgresql+psycopg2://postgres:***@127.0.0.1:5432/eurodropship)
+connection = None, _has_events = None, _allow_revalidate = True
+_allow_autobegin = True
+
+    def __init__(
+        self,
+        engine: Engine,
+        connection: Optional[PoolProxiedConnection] = None,
+        _has_events: Optional[bool] = None,
+        _allow_revalidate: bool = True,
+        _allow_autobegin: bool = True,
+    ):
+        """Construct a new Connection."""
+        self.engine = engine
+        self.dialect = dialect = engine.dialect
+    
+        if connection is None:
+            try:
+>               self._dbapi_connection = engine.raw_connection()
+                                         ^^^^^^^^^^^^^^^^^^^^^^^
+
+.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py:143: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py:3301: in raw_connection
+    return self.pool.connect()
+           ^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.13/site-packages/sqlalchemy/pool/base.py:447: in connect
+    return _ConnectionFairy._checkout(self)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.13/site-packages/sqlalchemy/pool/base.py:1264: in _checkout
+    fairy = _ConnectionRecord.checkout(pool)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.13/site-packages/sqlalchemy/pool/base.py:711: in checkout
+    rec = pool._do_get()
+          ^^^^^^^^^^^^^^
+.venv/lib/python3.13/site-packages/sqlalchemy/pool/impl.py:177: in _do_get
+    with util.safe_reraise():
+         ^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.13/site-packages/sqlalchemy/util/langhelpers.py:224: in __exit__
+    raise exc_value.with_traceback(exc_tb)
+.venv/lib/python3.13/site-packages/sqlalchemy/pool/impl.py:175: in _do_get
+    return self._create_connection()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.13/site-packages/sqlalchemy/pool/base.py:388: in _create_connection
+    return _ConnectionRecord(self)
+           ^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.13/site-packages/sqlalchemy/pool/base.py:673: in __init__
+    self.__connect()
+.venv/lib/python3.13/site-packages/sqlalchemy/pool/base.py:899: in __connect
+    with util.safe_reraise():
+         ^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.13/site-packages/sqlalchemy/util/langhelpers.py:224: in __exit__
+    raise exc_value.with_traceback(exc_tb)
+.venv/lib/python3.13/site-packages/sqlalchemy/pool/base.py:895: in __connect
+    self.dbapi_connection = connection = pool._invoke_creator(self)
+                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.13/site-packages/sqlalchemy/engine/create.py:661: in connect
+    return dialect.connect(*cargs, **cparams)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.13/site-packages/sqlalchemy/engine/default.py:629: in connect
+    return self.loaded_dbapi.connect(*cargs, **cparams)  # type: ignore[no-any-return]  # NOQA: E501
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+dsn = 'host=127.0.0.1 dbname=eurodropship user=postgres password=postgres port=5432'
+connection_factory = None, cursor_factory = None
+kwargs = {'dbname': 'eurodropship', 'host': '127.0.0.1', 'password': 'postgres', 'port': 5432, ...}
+kwasync = {}
+
+    def connect(dsn=None, connection_factory=None, cursor_factory=None, **kwargs):
+        """
+        Create a new database connection.
+    
+        The connection parameters can be specified as a string:
+    
+            conn = psycopg2.connect("dbname=test user=postgres password=secret")
+    
+        or using a set of keyword arguments:
+    
+            conn = psycopg2.connect(database="test", user="postgres", password="secret")
+    
+        Or as a mix of both. The basic connection parameters are:
+    
+        - *dbname*: the database name
+        - *database*: the database name (only as keyword argument)
+        - *user*: user name used to authenticate
+        - *password*: password used to authenticate
+        - *host*: database host address (defaults to UNIX socket if not provided)
+        - *port*: connection port number (defaults to 5432 if not provided)
+    
+        Using the *connection_factory* parameter a different class or connections
+        factory can be specified. It should be a callable object taking a dsn
+        argument.
+    
+        Using the *cursor_factory* parameter, a new default cursor factory will be
+        used by cursor().
+    
+        Using *async*=True an asynchronous connection will be created. *async_* is
+        a valid alias (for Python versions where ``async`` is a keyword).
+    
+        Any other keyword parameter will be passed to the underlying client
+        library: the list of supported parameters depends on the library version.
+    
+        """
+        kwasync = {}
+        if 'async' in kwargs:
+            kwasync['async'] = kwargs.pop('async')
+        if 'async_' in kwargs:
+            kwasync['async_'] = kwargs.pop('async_')
+    
+        dsn = _ext.make_dsn(dsn, **kwargs)
+>       conn = _connect(dsn, connection_factory=connection_factory, **kwasync)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       psycopg2.OperationalError: connection to server at "127.0.0.1", port 5432 failed: FATAL:  database "eurodropship" does not exist
+
+.venv/lib/python3.13/site-packages/psycopg2/__init__.py:122: OperationalError
+
+The above exception was the direct cause of the following exception:
+
+    def test_products_orders_items_crud_flow():
+>       hdr = login_admin()
+              ^^^^^^^^^^^^^
+
+tests/test_products_orders_items.py:12: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_products_orders_items.py:6: in login_admin
+    r = client.post("/auth/login", json={"email":"admin@example.com","password":"admin123"})
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.13/site-packages/starlette/testclient.py:552: in post
+    return super().post(
+.venv/lib/python3.13/site-packages/httpx/_client.py:1144: in post
+    return self.request(
+.venv/lib/python3.13/site-packages/starlette/testclient.py:451: in request
+    return super().request(
+.venv/lib/python3.13/site-packages/httpx/_client.py:825: in request
+    return self.send(request, auth=auth, follow_redirects=follow_redirects)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.13/site-packages/httpx/_client.py:914: in send
+    response = self._send_handling_auth(
+.venv/lib/python3.13/site-packages/httpx/_client.py:942: in _send_handling_auth
+    response = self._send_handling_redirects(
+.venv/lib/python3.13/site-packages/httpx/_client.py:979: in _send_handling_redirects
+    response = self._send_single_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.13/site-packages/httpx/_client.py:1014: in _send_single_request
+    response = transport.handle_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.13/site-packages/starlette/testclient.py:354: in handle_request
+    raise exc
+.venv/lib/python3.13/site-packages/starlette/testclient.py:351: in handle_request
+    portal.call(self.app, scope, receive, send)
+.venv/lib/python3.13/site-packages/anyio/from_thread.py:291: in call
+    return cast(T_Retval, self.start_task_soon(func, *args).result())
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/Cellar/python@3.13/3.13.3/Frameworks/Python.framework/Versions/3.13/lib/python3.13/concurrent/futures/_base.py:456: in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+/usr/local/Cellar/python@3.13/3.13.3/Frameworks/Python.framework/Versions/3.13/lib/python3.13/concurrent/futures/_base.py:401: in __get_result
+    raise self._exception
+.venv/lib/python3.13/site-packages/anyio/from_thread.py:222: in _call_func
+    retval = await retval_or_awaitable
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.13/site-packages/fastapi/applications.py:1054: in __call__
+    await super().__call__(scope, receive, send)
+.venv/lib/python3.13/site-packages/starlette/applications.py:113: in __call__
+    await self.middleware_stack(scope, receive, send)
+.venv/lib/python3.13/site-packages/starlette/middleware/errors.py:186: in __call__
+    raise exc
+.venv/lib/python3.13/site-packages/starlette/middleware/errors.py:164: in __call__
+    await self.app(scope, receive, _send)
+.venv/lib/python3.13/site-packages/starlette/middleware/cors.py:85: in __call__
+    await self.app(scope, receive, send)
+.venv/lib/python3.13/site-packages/starlette/middleware/exceptions.py:63: in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+.venv/lib/python3.13/site-packages/starlette/_exception_handler.py:53: in wrapped_app
+    raise exc
+.venv/lib/python3.13/site-packages/starlette/_exception_handler.py:42: in wrapped_app
+    await app(scope, receive, sender)
+.venv/lib/python3.13/site-packages/starlette/routing.py:716: in __call__
+    await self.middleware_stack(scope, receive, send)
+.venv/lib/python3.13/site-packages/starlette/routing.py:736: in app
+    await route.handle(scope, receive, send)
+.venv/lib/python3.13/site-packages/starlette/routing.py:290: in handle
+    await self.app(scope, receive, send)
+.venv/lib/python3.13/site-packages/starlette/routing.py:78: in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+.venv/lib/python3.13/site-packages/starlette/_exception_handler.py:53: in wrapped_app
+    raise exc
+.venv/lib/python3.13/site-packages/starlette/_exception_handler.py:42: in wrapped_app
+    await app(scope, receive, sender)
+.venv/lib/python3.13/site-packages/starlette/routing.py:75: in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+.venv/lib/python3.13/site-packages/fastapi/routing.py:302: in app
+    raw_response = await run_endpoint_function(
+.venv/lib/python3.13/site-packages/fastapi/routing.py:215: in run_endpoint_function
+    return await run_in_threadpool(dependant.call, **values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.13/site-packages/starlette/concurrency.py:38: in run_in_threadpool
+    return await anyio.to_thread.run_sync(func)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.13/site-packages/anyio/to_thread.py:56: in run_sync
+    return await get_async_backend().run_sync_in_worker_thread(
+.venv/lib/python3.13/site-packages/anyio/_backends/_asyncio.py:2476: in run_sync_in_worker_thread
+    return await future
+           ^^^^^^^^^^^^
+.venv/lib/python3.13/site-packages/anyio/_backends/_asyncio.py:967: in run
+    result = context.run(func, *args)
+             ^^^^^^^^^^^^^^^^^^^^^^^^
+app/routers/auth.py:36: in login
+    user = db.query(User).filter(User.email == payload.email).one_or_none()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.13/site-packages/sqlalchemy/orm/query.py:2785: in one_or_none
+    return self._iter().one_or_none()  # type: ignore
+           ^^^^^^^^^^^^
+.venv/lib/python3.13/site-packages/sqlalchemy/orm/query.py:2857: in _iter
+    result: Union[ScalarResult[_T], Result[_T]] = self.session.execute(
+.venv/lib/python3.13/site-packages/sqlalchemy/orm/session.py:2365: in execute
+    return self._execute_internal(
+.venv/lib/python3.13/site-packages/sqlalchemy/orm/session.py:2241: in _execute_internal
+    conn = self._connection_for_bind(bind)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.13/site-packages/sqlalchemy/orm/session.py:2110: in _connection_for_bind
+    return trans._connection_for_bind(engine, execution_options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<string>:2: in _connection_for_bind
+    ???
+.venv/lib/python3.13/site-packages/sqlalchemy/orm/state_changes.py:137: in _go
+    ret_value = fn(self, *arg, **kw)
+                ^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.13/site-packages/sqlalchemy/orm/session.py:1189: in _connection_for_bind
+    conn = bind.connect()
+           ^^^^^^^^^^^^^^
+.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py:3277: in connect
+    return self._connection_cls(self)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py:145: in __init__
+    Connection._handle_dbapi_exception_noconnection(
+.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py:2440: in _handle_dbapi_exception_noconnection
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py:143: in __init__
+    self._dbapi_connection = engine.raw_connection()
+                             ^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py:3301: in raw_connection
+    return self.pool.connect()
+           ^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.13/site-packages/sqlalchemy/pool/base.py:447: in connect
+    return _ConnectionFairy._checkout(self)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.13/site-packages/sqlalchemy/pool/base.py:1264: in _checkout
+    fairy = _ConnectionRecord.checkout(pool)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.13/site-packages/sqlalchemy/pool/base.py:711: in checkout
+    rec = pool._do_get()
+          ^^^^^^^^^^^^^^
+.venv/lib/python3.13/site-packages/sqlalchemy/pool/impl.py:177: in _do_get
+    with util.safe_reraise():
+         ^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.13/site-packages/sqlalchemy/util/langhelpers.py:224: in __exit__
+    raise exc_value.with_traceback(exc_tb)
+.venv/lib/python3.13/site-packages/sqlalchemy/pool/impl.py:175: in _do_get
+    return self._create_connection()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.13/site-packages/sqlalchemy/pool/base.py:388: in _create_connection
+    return _ConnectionRecord(self)
+           ^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.13/site-packages/sqlalchemy/pool/base.py:673: in __init__
+    self.__connect()
+.venv/lib/python3.13/site-packages/sqlalchemy/pool/base.py:899: in __connect
+    with util.safe_reraise():
+         ^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.13/site-packages/sqlalchemy/util/langhelpers.py:224: in __exit__
+    raise exc_value.with_traceback(exc_tb)
+.venv/lib/python3.13/site-packages/sqlalchemy/pool/base.py:895: in __connect
+    self.dbapi_connection = connection = pool._invoke_creator(self)
+                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.13/site-packages/sqlalchemy/engine/create.py:661: in connect
+    return dialect.connect(*cargs, **cparams)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.13/site-packages/sqlalchemy/engine/default.py:629: in connect
+    return self.loaded_dbapi.connect(*cargs, **cparams)  # type: ignore[no-any-return]  # NOQA: E501
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+dsn = 'host=127.0.0.1 dbname=eurodropship user=postgres password=postgres port=5432'
+connection_factory = None, cursor_factory = None
+kwargs = {'dbname': 'eurodropship', 'host': '127.0.0.1', 'password': 'postgres', 'port': 5432, ...}
+kwasync = {}
+
+    def connect(dsn=None, connection_factory=None, cursor_factory=None, **kwargs):
+        """
+        Create a new database connection.
+    
+        The connection parameters can be specified as a string:
+    
+            conn = psycopg2.connect("dbname=test user=postgres password=secret")
+    
+        or using a set of keyword arguments:
+    
+            conn = psycopg2.connect(database="test", user="postgres", password="secret")
+    
+        Or as a mix of both. The basic connection parameters are:
+    
+        - *dbname*: the database name
+        - *database*: the database name (only as keyword argument)
+        - *user*: user name used to authenticate
+        - *password*: password used to authenticate
+        - *host*: database host address (defaults to UNIX socket if not provided)
+        - *port*: connection port number (defaults to 5432 if not provided)
+    
+        Using the *connection_factory* parameter a different class or connections
+        factory can be specified. It should be a callable object taking a dsn
+        argument.
+    
+        Using the *cursor_factory* parameter, a new default cursor factory will be
+        used by cursor().
+    
+        Using *async*=True an asynchronous connection will be created. *async_* is
+        a valid alias (for Python versions where ``async`` is a keyword).
+    
+        Any other keyword parameter will be passed to the underlying client
+        library: the list of supported parameters depends on the library version.
+    
+        """
+        kwasync = {}
+        if 'async' in kwargs:
+            kwasync['async'] = kwargs.pop('async')
+        if 'async_' in kwargs:
+            kwasync['async_'] = kwargs.pop('async_')
+    
+        dsn = _ext.make_dsn(dsn, **kwargs)
+>       conn = _connect(dsn, connection_factory=connection_factory, **kwasync)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       sqlalchemy.exc.OperationalError: (psycopg2.OperationalError) connection to server at "127.0.0.1", port 5432 failed: FATAL:  database "eurodropship" does not exist
+E       
+E       (Background on this error at: https://sqlalche.me/e/20/e3q8)
+
+.venv/lib/python3.13/site-packages/psycopg2/__init__.py:122: OperationalError
+=============================== warnings summary ===============================
+.venv/lib/python3.13/site-packages/pydantic/_internal/_config.py:323
+.venv/lib/python3.13/site-packages/pydantic/_internal/_config.py:323
+.venv/lib/python3.13/site-packages/pydantic/_internal/_config.py:323
+.venv/lib/python3.13/site-packages/pydantic/_internal/_config.py:323
+  /Users/abdulrahman/Documents/GitHub/shoobydo/apps/backend/.venv/lib/python3.13/site-packages/pydantic/_internal/_config.py:323: PydanticDeprecatedSince20: Support for class-based `config` is deprecated, use ConfigDict instead. Deprecated in Pydantic V2.0 to be removed in V3.0. See Pydantic V2 Migration Guide at https://errors.pydantic.dev/2.11/migration/
+    warnings.warn(DEPRECATION_MESSAGE, DeprecationWarning)
+
+.venv/lib/python3.13/site-packages/pydantic/_internal/_config.py:373
+  /Users/abdulrahman/Documents/GitHub/shoobydo/apps/backend/.venv/lib/python3.13/site-packages/pydantic/_internal/_config.py:373: UserWarning: Valid config keys have changed in V2:
+  * 'orm_mode' has been renamed to 'from_attributes'
+    warnings.warn(message, UserWarning)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED tests/test_api.py::test_health - assert False
+FAILED tests/test_api.py::test_kpis_and_costs - assert False
+FAILED tests/test_api.py::test_upload - assert False
+FAILED tests/test_api.py::test_suppliers_crud - assert False
+FAILED tests/test_products_orders_items.py::test_products_orders_items_crud_flow
+5 failed, 5 warnings in 23.43s

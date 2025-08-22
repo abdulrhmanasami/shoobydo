@@ -1,0 +1,7 @@
+- [x] users table migrated (alembic head)
+- [x] admin seed created (admin@example.com)
+- [x] /auth/login returns JWT for admin
+- [x] /admin/ping 401 without token
+- [x] /admin/ping 200 with valid token (role=admin)
+- [x] /auth/refresh accepts Authorization header and returns new token
+- [x] artifacts captured under reports/EPIC-01/TASK-01A/

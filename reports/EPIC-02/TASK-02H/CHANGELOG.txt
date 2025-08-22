@@ -1,0 +1,6 @@
+Orders Core hardening:
+- GET /orders/{id}
+- Filters & pagination (q,status,customer_id,limit,offset)
+- Indexes & checks (nonneg total, currency len=3)
+- Schemas tightened (status enum, currency uppercase)
+- E2E tests added

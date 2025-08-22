@@ -1,0 +1,3 @@
+- [x] CHECKs: order_items.quantity>0, unit_price>=0; orders.total>=0
+- [x] Auto recompute orders.total on item create/update/delete
+- [x] curl evidence shows total changes

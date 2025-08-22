@@ -1,0 +1,12 @@
+{
+  "APP_NAMESPACE": "shoobydo",
+  "COMPOSE_PROJECT_NAME": "shoobydo",
+  "PORT": "8805",
+  "POSTGRES_HOST": "127.0.0.1",
+  "POSTGRES_PORT": "5548",
+  "POSTGRES_DB": "eurodropship",
+  "POSTGRES_USER": "postgres",
+  "POSTGRES_PASSWORD": "postgres",
+  "REDIS_HOST": "127.0.0.1",
+  "REDIS_PORT": "6395"
+}

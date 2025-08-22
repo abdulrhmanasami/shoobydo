@@ -1,0 +1,2 @@
+- `/customers/` → get, post
+- `/customers/{cid}` → delete, put

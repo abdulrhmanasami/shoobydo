@@ -1,0 +1,7 @@
+[delete item - live test via scurl]
+HTTP/1.1 200 OK
+{"ok":true}
+
+# Test Command:
+# scurl -s -i -X DELETE "http://127.0.0.1:8805/orders/1/items/1" \
+#   -H "Authorization: Bearer $ADM"

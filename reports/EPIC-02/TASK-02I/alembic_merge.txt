@@ -1,0 +1,6 @@
+  Generating /Users/abdulr
+  ahman/Documents/GitHub/s
+  hoobydo/apps/backend/ale
+  mbic/versions/61500400e4
+  58_merge_heads_for_02i.p
+  y ...  done

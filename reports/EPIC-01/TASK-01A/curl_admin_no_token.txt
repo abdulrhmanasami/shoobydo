@@ -1,0 +1,8 @@
+[admin no token]
+HTTP/1.1 401 Unauthorized
+date: Tue, 19 Aug 2025 23:35:07 GMT
+server: uvicorn
+content-length: 30
+content-type: application/json
+
+{"detail":"Not authenticated"}

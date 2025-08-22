@@ -1,0 +1,8 @@
+[create]
+HTTP/1.1 404 Not Found
+date: Thu, 21 Aug 2025 02:43:17 GMT
+server: uvicorn
+content-length: 22
+content-type: application/json
+
+{"detail":"Not Found"}

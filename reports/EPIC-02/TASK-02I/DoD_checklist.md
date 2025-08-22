@@ -1,0 +1,4 @@
+- [x] order_items: model + FK (orders, products) + unique(order_id,product_id)
+- [x] router wired; list/create/update/delete تعمل
+- [x] migration applied
+- [x] curl evidence saved

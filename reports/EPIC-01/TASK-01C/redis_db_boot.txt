@@ -1,0 +1,43 @@
+db-1  | 
+db-1  | PostgreSQL Database directory appears to contain a database; Skipping initialization
+db-1  | 
+db-1  | 2025-08-18 16:06:59.966 UTC [1] LOG:  starting PostgreSQL 16.10 (Debian 16.10-1.pgdg13+1) on x86_64-pc-linux-gnu, compiled by gcc (Debian 14.2.0-19) 14.2.0, 64-bit
+db-1  | 2025-08-18 16:06:59.966 UTC [1] LOG:  listening on IPv4 address "0.0.0.0", port 5432
+db-1  | 2025-08-18 16:06:59.966 UTC [1] LOG:  listening on IPv6 address "::", port 5432
+db-1  | 2025-08-18 16:06:59.969 UTC [1] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+db-1  | 2025-08-18 16:06:59.974 UTC [29] LOG:  database system was shut down at 2025-08-18 16:06:58 UTC
+db-1  | 2025-08-18 16:06:59.983 UTC [1] LOG:  database system is ready to accept connections
+db-1  | 2025-08-18 16:12:00.047 UTC [27] LOG:  checkpoint starting: time
+db-1  | 2025-08-18 16:12:00.053 UTC [27] LOG:  checkpoint complete: wrote 3 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.002 s, sync=0.002 s, total=0.007 s; sync files=2, longest=0.001 s, average=0.001 s; distance=0 kB, estimate=0 kB; lsn=0/19407E8, redo lsn=0/19407B0
+db-1  | 2025-08-18 17:52:01.556 UTC [27] LOG:  checkpoint starting: time
+db-1  | 2025-08-18 17:52:05.308 UTC [27] LOG:  checkpoint complete: wrote 38 buffers (0.2%); 0 WAL file(s) added, 0 removed, 0 recycled; write=3.740 s, sync=0.009 s, total=3.752 s; sync files=32, longest=0.005 s, average=0.001 s; distance=141 kB, estimate=141 kB; lsn=0/1963E70, redo lsn=0/1963E38
+db-1  | 2025-08-18 18:07:01.567 UTC [27] LOG:  checkpoint starting: time
+db-1  | 2025-08-18 18:07:01.795 UTC [27] LOG:  checkpoint complete: wrote 3 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.206 s, sync=0.008 s, total=0.229 s; sync files=3, longest=0.005 s, average=0.003 s; distance=0 kB, estimate=127 kB; lsn=0/1964120, redo lsn=0/19640E8
+db-1  | 2025-08-18 18:09:25.506 UTC [389] ERROR:  table "suppliers" does not exist
+db-1  | 2025-08-18 18:09:25.506 UTC [389] STATEMENT:  
+db-1  | 	DROP TABLE suppliers
+db-1  | 
+db-1  | PostgreSQL Database directory appears to contain a database; Skipping initialization
+db-1  | 
+db-1  | 2025-08-19 22:53:11.088 UTC [1] LOG:  starting PostgreSQL 16.10 (Debian 16.10-1.pgdg13+1) on x86_64-pc-linux-gnu, compiled by gcc (Debian 14.2.0-19) 14.2.0, 64-bit
+db-1  | 2025-08-19 22:53:11.090 UTC [1] LOG:  listening on IPv4 address "0.0.0.0", port 5432
+db-1  | 2025-08-19 22:53:11.091 UTC [1] LOG:  listening on IPv6 address "::", port 5432
+db-1  | 2025-08-19 22:53:11.100 UTC [1] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+db-1  | 2025-08-19 22:53:11.117 UTC [29] LOG:  database system was interrupted; last known up at 2025-08-18 18:07:01 UTC
+db-1  | 2025-08-19 22:53:11.685 UTC [29] LOG:  database system was not properly shut down; automatic recovery in progress
+db-1  | 2025-08-19 22:53:11.694 UTC [29] LOG:  redo starts at 0/19640E8
+db-1  | 2025-08-19 22:53:11.716 UTC [29] LOG:  invalid record length at 0/198DD88: expected at least 24, got 0
+db-1  | 2025-08-19 22:53:11.716 UTC [29] LOG:  redo done at 0/198DD50 system usage: CPU: user: 0.00 s, system: 0.01 s, elapsed: 0.02 s
+db-1  | 2025-08-19 22:53:11.729 UTC [27] LOG:  checkpoint starting: end-of-recovery immediate wait
+db-1  | 2025-08-19 22:53:11.781 UTC [27] LOG:  checkpoint complete: wrote 52 buffers (0.3%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.014 s, sync=0.022 s, total=0.055 s; sync files=43, longest=0.009 s, average=0.001 s; distance=167 kB, estimate=167 kB; lsn=0/198DD88, redo lsn=0/198DD88
+db-1  | 2025-08-19 22:53:11.808 UTC [1] LOG:  database system is ready to accept connections
+db-1  | 2025-08-19 22:53:22.100 UTC [33] ERROR:  type "userrole" already exists
+db-1  | 2025-08-19 22:53:22.100 UTC [33] STATEMENT:  CREATE TYPE userrole AS ENUM ('admin', 'manager', 'viewer')
+db-1  | 2025-08-19 22:54:18.590 UTC [35] ERROR:  type "userrole" already exists
+db-1  | 2025-08-19 22:54:18.590 UTC [35] STATEMENT:  CREATE TYPE userrole AS ENUM ('admin', 'manager', 'viewer')
+db-1  | 2025-08-19 22:54:53.186 UTC [37] ERROR:  invalid input value for enum userrole: "ADMIN" at character 210
+db-1  | 2025-08-19 22:54:53.186 UTC [37] STATEMENT:  INSERT INTO users (id, email, hashed_password, role, is_active) VALUES ('147e5bb9-f22e-4664-aac3-b0940319836f'::uuid::UUID, 'admin@example.com', '$2b$12$e5H7QeOscEv8UGykjA.pDegWyauYjnxjDh0tqij4MLF474g5jRjEC', 'ADMIN', true) RETURNING users.created_at, users.updated_at
+db-1  | 2025-08-19 22:58:11.820 UTC [27] LOG:  checkpoint starting: time
+db-1  | 2025-08-19 22:58:17.188 UTC [27] LOG:  checkpoint complete: wrote 54 buffers (0.3%); 0 WAL file(s) added, 0 removed, 0 recycled; write=5.356 s, sync=0.008 s, total=5.368 s; sync files=40, longest=0.003 s, average=0.001 s; distance=193 kB, estimate=193 kB; lsn=0/19BE480, redo lsn=0/19BE448
+db-1  | 2025-08-19 23:18:11.377 UTC [27] LOG:  checkpoint starting: time
+db-1  | 2025-08-19 23:18:12.008 UTC [27] LOG:  checkpoint complete: wrote 7 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.610 s, sync=0.008 s, total=0.631 s; sync files=5, longest=0.004 s, average=0.002 s; distance=0 kB, estimate=174 kB; lsn=0/19BE808, redo lsn=0/19BE7D0

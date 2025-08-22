@@ -1,0 +1,32 @@
+[health]
+HTTP/1.1 200 OK
+date: Tue, 19 Aug 2025 22:38:24 GMT
+server: uvicorn
+content-length: 15
+content-type: application/json
+
+{"status":"ok"}
+[login admin]
+HTTP/1.1 500 Internal Server Error
+date: Tue, 19 Aug 2025 22:38:24 GMT
+server: uvicorn
+content-length: 21
+content-type: text/plain; charset=utf-8
+
+Internal Server Error
+[admin ping (no token)]
+HTTP/1.1 401 Unauthorized
+date: Tue, 19 Aug 2025 22:38:24 GMT
+server: uvicorn
+content-length: 30
+content-type: application/json
+
+{"detail":"Not authenticated"}
+[refresh (no token)]
+HTTP/1.1 401 Unauthorized
+date: Tue, 19 Aug 2025 22:38:24 GMT
+server: uvicorn
+content-length: 30
+content-type: application/json
+
+{"detail":"Not authenticated"}

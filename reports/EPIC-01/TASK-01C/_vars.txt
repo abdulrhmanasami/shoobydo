@@ -1,0 +1,2 @@
+EMAIL=user1755652621@example.com
+PASS=StrongPass1

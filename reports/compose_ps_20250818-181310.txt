@@ -1,0 +1,4 @@
+NAME                 IMAGE              COMMAND                  SERVICE   CREATED         STATUS         PORTS
+shoobydo-backend-1   shoobydo-backend   "uvicorn app.main:ap…"   backend   6 minutes ago   Up 6 minutes   0.0.0.0:8803->8000/tcp, [::]:8803->8000/tcp
+shoobydo-db-1        postgres:16        "docker-entrypoint.s…"   db        6 minutes ago   Up 6 minutes   0.0.0.0:5548->5432/tcp, [::]:5548->5432/tcp
+shoobydo-redis-1     redis:7            "docker-entrypoint.s…"   redis     6 minutes ago   Up 6 minutes   0.0.0.0:6395->6379/tcp, [::]:6395->6379/tcp

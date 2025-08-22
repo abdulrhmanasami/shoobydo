@@ -1,0 +1,2 @@
+- `/products/` → get, post
+- `/products/{pid}` → delete, put

@@ -1,0 +1,7 @@
+  Generating /Users/abdulr
+  ahman/Documents/GitHub/s
+  hoobydo/apps/backend/ale
+  mbic/versions/f83a34166d
+  76_checks_order_items_qu
+  antity_unit_price_.py
+  ...  done

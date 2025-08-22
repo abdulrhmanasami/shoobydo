@@ -1,0 +1,5 @@
+- [x] إنشاء نموذج Product وربطه بالمورّد (اختياري) مع أعمدة: sku, name, price, stock, timestamps
+- [x] مسارات REST: GET /products, POST /products, PUT /products/{id}, DELETE /products/{id}
+- [x] حراسة الأدوار: create/update => admin|manager, delete => admin, list => مستخدم مصادق
+- [x] Alembic migration مطبّق، والتحقق من وجود جدول products في قاعدة البيانات
+- [x] سيناريوهات curl (إنشاء/استعراض/تحديث/حذف) محفوظة كأدلة

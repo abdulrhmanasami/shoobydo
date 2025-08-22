@@ -1,0 +1,20 @@
+                                                                  Table "public.products"
+   Column    |           Type           | Collation | Nullable |               Default                | Storage  | Compression | Stats target | Description 
+-------------+--------------------------+-----------+----------+--------------------------------------+----------+-------------+--------------+-------------
+ id          | integer                  |           | not null | nextval('products_id_seq'::regclass) | plain    |             |              | 
+ sku         | character varying(64)    |           | not null |                                      | extended |             |              | 
+ name        | character varying(255)   |           | not null |                                      | extended |             |              | 
+ supplier_id | integer                  |           |          |                                      | plain    |             |              | 
+ price       | numeric(12,2)            |           | not null |                                      | main     |             |              | 
+ stock       | integer                  |           | not null |                                      | plain    |             |              | 
+ created_at  | timestamp with time zone |           |          | now()                                | plain    |             |              | 
+ updated_at  | timestamp with time zone |           |          | now()                                | plain    |             |              | 
+Indexes:
+    "products_pkey" PRIMARY KEY, btree (id)
+    "ix_products_id" btree (id)
+    "ix_products_name" btree (name)
+    "ix_products_sku" UNIQUE, btree (sku)
+Foreign-key constraints:
+    "products_supplier_id_fkey" FOREIGN KEY (supplier_id) REFERENCES suppliers(id)
+Access method: heap
+

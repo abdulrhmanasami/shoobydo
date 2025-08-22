@@ -1,0 +1,6 @@
+- [x] /auth/login أصدر زوج توكنات أولي (access+refresh)
+- [x] /auth/refresh دوّر الـ refresh وأعاد زوجًا جديدًا
+- [x] رفض إعادة استخدام الـ refresh القديم بعد التدوير
+- [x] /auth/logout أدرج refresh في القائمة السوداء
+- [x] فشل محاولة refresh بتوكن مُدرج بالقائمة السوداء
+- [x] /admin/ping يعمل مع access صالح

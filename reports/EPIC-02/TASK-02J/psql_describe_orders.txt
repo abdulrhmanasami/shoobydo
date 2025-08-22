@@ -1,0 +1,26 @@
+                                                                  Table "public.orders"
+   Column    |           Type           | Collation | Nullable |              Default               | Storage  | Compression | Stats target | Description 
+-------------+--------------------------+-----------+----------+------------------------------------+----------+-------------+--------------+-------------
+ id          | integer                  |           | not null | nextval('orders_id_seq'::regclass) | plain    |             |              | 
+ customer_id | integer                  |           | not null |                                    | plain    |             |              | 
+ status      | character varying(32)    |           | not null |                                    | extended |             |              | 
+ currency    | character varying(3)     |           | not null |                                    | extended |             |              | 
+ total       | numeric(12,2)            |           | not null |                                    | main     |             |              | 
+ notes       | character varying(1024)  |           |          |                                    | extended |             |              | 
+ created_at  | timestamp with time zone |           |          | now()                              | plain    |             |              | 
+ updated_at  | timestamp with time zone |           |          | now()                              | plain    |             |              | 
+Indexes:
+    "orders_pkey" PRIMARY KEY, btree (id)
+    "ix_orders_created_at" btree (created_at)
+    "ix_orders_customer_id" btree (customer_id)
+    "ix_orders_id" btree (id)
+    "ix_orders_status" btree (status)
+Check constraints:
+    "ck_orders_currency_len3" CHECK (length(currency::text) = 3)
+    "ck_orders_total_nonneg" CHECK (total >= 0::numeric)
+Foreign-key constraints:
+    "orders_customer_id_fkey" FOREIGN KEY (customer_id) REFERENCES customers(id) ON DELETE RESTRICT
+Referenced by:
+    TABLE "order_items" CONSTRAINT "order_items_order_id_fkey" FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE
+Access method: heap
+
