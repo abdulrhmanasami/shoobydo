@@ -1,0 +1,1 @@
+{"product_id":8,"on_hand":10,"reserved":0,"available":10}
