@@ -1,0 +1,1 @@
+ISSUE: 409 Conflict due to missing stock_on_hand/stock_reserved fields in database schema. Inventory service expects these fields but they are null.
