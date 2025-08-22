@@ -1,2 +1,1 @@
-PR=PENDING: Order items endpoint needs schema fix before PR creation
-Infrastructure and auth setup complete under D-rule compliance
+https://github.com/abdulrhmanasami/shoobydo/pull/6

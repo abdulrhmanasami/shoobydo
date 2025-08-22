@@ -1,1 +1,7 @@
-ISSUE: 404 on order items endpoints. API paths available but routing incomplete.
+HTTP/1.1 200 OK
+date: Fri, 22 Aug 2025 02:40:52 GMT
+server: uvicorn
+content-length: 65
+content-type: application/json
+
+{"product_id":8,"qty":2,"unit_price":10.0,"id":1,"subtotal":20.0}
