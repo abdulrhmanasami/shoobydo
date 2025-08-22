@@ -1,5 +1,1 @@
-30.00
-
-# Test Command:
-# scurl -s "http://127.0.0.1:8805/orders" -H "Authorization: Bearer $ADM" | \
-#   jq ".[]|select(.id==1)|.total"
+"30.00"

@@ -17,6 +17,5 @@ if [ -f "$PID_FILE" ]; then
   rm -f "$PID_FILE"
 fi
 
-# تنظيف منفذ عالق
 lsof -ti :"$PORT" >/dev/null 2>&1 && kill -KILL $(lsof -ti :"$PORT") || true
 echo "OK: backend stopped on :$PORT"
