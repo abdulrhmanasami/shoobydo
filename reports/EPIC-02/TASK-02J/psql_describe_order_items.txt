@@ -1,0 +1,21 @@
+                                                                 Table "public.order_items"
+   Column   |           Type           | Collation | Nullable |                 Default                 | Storage | Compression | Stats target | Description 
+------------+--------------------------+-----------+----------+-----------------------------------------+---------+-------------+--------------+-------------
+ id         | integer                  |           | not null | nextval('order_items_id_seq'::regclass) | plain   |             |              | 
+ order_id   | integer                  |           | not null |                                         | plain   |             |              | 
+ product_id | integer                  |           | not null |                                         | plain   |             |              | 
+ qty        | integer                  |           | not null |                                         | plain   |             |              | 
+ unit_price | numeric(12,2)            |           | not null |                                         | main    |             |              | 
+ subtotal   | numeric(12,2)            |           | not null |                                         | main    |             |              | 
+ created_at | timestamp with time zone |           |          | now()                                   | plain   |             |              | 
+ updated_at | timestamp with time zone |           |          | now()                                   | plain   |             |              | 
+Indexes:
+    "order_items_pkey" PRIMARY KEY, btree (id)
+    "ix_order_items_id" btree (id)
+    "ix_order_items_order_id" btree (order_id)
+    "ix_order_items_product_id" btree (product_id)
+Foreign-key constraints:
+    "order_items_order_id_fkey" FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE
+    "order_items_product_id_fkey" FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE RESTRICT
+Access method: heap
+

@@ -1,0 +1,2 @@
+  Generating /Users/abdulrahman/Documents/GitHub/shoobydo/apps/backend/alembic/versions/af17d94f38f7_custome
+  rs_create_table.py ...  done

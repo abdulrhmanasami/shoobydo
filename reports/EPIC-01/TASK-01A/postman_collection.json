@@ -1,0 +1,46 @@
+{
+  "info": {
+    "name": "TASK-01A Auth Skeleton",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Health",
+      "request": {"method": "GET", "url": "{{baseUrl}}/health"}
+    },
+    {
+      "name": "Auth Login",
+      "request": {
+        "method": "POST",
+        "header": [{"key": "Content-Type", "value": "application/json"}],
+        "body": {"mode": "raw", "raw": "{\n  \"email\": \"admin@example.com\",\n  \"password\": \"admin123\"\n}"},
+        "url": "{{baseUrl}}/auth/login"
+      }
+    },
+    {
+      "name": "Admin Ping (no token)",
+      "request": {"method": "GET", "url": "{{baseUrl}}/admin/ping"}
+    },
+    {
+      "name": "Admin Ping (with token)",
+      "event": [{"listen": "prerequest", "script": {"exec": [
+        "pm.request.headers.add({key: 'Authorization', value: 'Bearer ' + pm.collectionVariables.get('token')});"
+      ]}}],
+      "request": {"method": "GET", "url": "{{baseUrl}}/admin/ping"}
+    },
+    {
+      "name": "Auth Refresh",
+      "event": [{"listen": "prerequest", "script": {"exec": [
+        "pm.request.headers.add({key: 'Authorization', value: 'Bearer ' + pm.collectionVariables.get('token')});"
+      ]}}],
+      "request": {"method": "POST", "url": "{{baseUrl}}/auth/refresh"}
+    }
+  ],
+  "variable": [
+    {"key": "baseUrl", "value": "http://127.0.0.1:{{port}}"},
+    {"key": "port", "value": "8805"},
+    {"key": "token", "value": ""}
+  ]
+}
+
+

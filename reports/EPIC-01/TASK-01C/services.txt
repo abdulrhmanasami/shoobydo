@@ -1,0 +1,4 @@
+[services before]
+db
+NAME            IMAGE     COMMAND                  SERVICE   CREATED        STATUS                  PORTS
+infra-redis-1   redis:7   "docker-entrypoint.s…"   redis     1 second ago   Up Less than a second   0.0.0.0:6390->6379/tcp, [::]:6390->6379/tcp

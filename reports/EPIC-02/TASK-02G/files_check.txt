@@ -1,0 +1,5 @@
+[OK] apps/backend/app/models_product.py
+[OK] apps/backend/app/schemas_product.py
+[OK] apps/backend/app/routers/products.py
+[OK] import app.models_product
+[MISSING] include_router(products.router)

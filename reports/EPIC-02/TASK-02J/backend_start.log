@@ -1,0 +1,4 @@
+[backend] docker not healthy; falling back to local
+INFO:     Will watch for changes in these directories: ['/Users/abdulrahman/Documents/GitHub/shoobydo/apps/backend']
+INFO:     Uvicorn running on http://127.0.0.1:8805 (Press CTRL+C to quit)
+INFO:     Started reloader process [46381] using WatchFiles

@@ -1,0 +1,5 @@
+- [x] 403: منع الوصول لمسارات admin عبر مستخدم viewer
+- [x] 409: SKU مكرر في /products
+- [x] 409: insufficient stock عند إضافة OrderItem
+- [x] 404: معرفات غير موجودة للطلبات/المنتجات/العناصر
+- [x] تشغيل pytest وتخزين النتائج ضمن reports/EPIC-02/TASK-02E/

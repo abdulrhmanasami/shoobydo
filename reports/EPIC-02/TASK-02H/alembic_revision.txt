@@ -1,0 +1,6 @@
+  Generating /Users/abdulr
+  ahman/Documents/GitHub/s
+  hoobydo/apps/backend/ale
+  mbic/versions/8daeac2d2c
+  8f_orders_create_table.p
+  y ...  done

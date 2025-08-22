@@ -1,0 +1,2 @@
+  Generating /Users/abdulrahman/Documents/GitHub/shoobydo/apps/backend/alembic/versions/98f59dc042fa_product
+  s_create_table.py ...  done

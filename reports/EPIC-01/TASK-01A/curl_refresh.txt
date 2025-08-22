@@ -1,0 +1,8 @@
+[refresh]
+HTTP/1.1 200 OK
+date: Tue, 19 Aug 2025 23:35:07 GMT
+server: uvicorn
+content-length: 249
+content-type: application/json
+
+{"access_token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5MzM3OGY3NC1mZjUzLTRmNDUtYTA0Ny05MTc2YWE5NDcxY2YiLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3NTU2NDY1MDgsImV4cCI6MTc1NTY0ODMwOH0.FgpAvxdRFWRADlUned742JZ6ZEPa7gz6ZhNwo49nV5s","token_type":"bearer"}
