@@ -2,7 +2,7 @@ from fastapi import FastAPI, APIRouter
 from fastapi.middleware.cors import CORSMiddleware
 
 # استيراد الراوترات كوحدات، لمرة واحدة فقط
-from app.routers import auth, products, customers, orders, order_items
+from app.routers import auth, products, customers, orders, order_items, suppliers
 
 app = FastAPI(title="Shoobydo API", version="0.1.0")
 
@@ -25,6 +25,7 @@ api_v1.include_router(products.router, tags=["products"])
 api_v1.include_router(customers.router, tags=["customers"])
 api_v1.include_router(orders.router, tags=["orders"])
 api_v1.include_router(order_items.router, tags=["order_items"])
+api_v1.include_router(suppliers.router, prefix="/suppliers", tags=["suppliers"])
 
 # تجميع تحت التطبيق
 app.include_router(api_v1)
