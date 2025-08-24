@@ -12,7 +12,7 @@ Last updated: 2025-08-21
 from fastapi import APIRouter, Depends, HTTPException, Path
 from sqlalchemy.orm import Session
 from app.db import get_db
-from app.dependencies.auth import require_any_role
+from app.security import require_role
 from app.services.inventory import (
     reserve_stock, release_stock, adjust_stock_on_hand, get_stock_status
 )

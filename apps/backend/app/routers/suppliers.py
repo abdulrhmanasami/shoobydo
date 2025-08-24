@@ -6,17 +6,17 @@ import os
 from app.db import get_db
 from app.models import Supplier
 from app.schemas import SupplierOut, SupplierStats, SupplierIn, SupplierUpdate
-from app.dependencies.auth import require_role, require_any_role
+from app.security import get_current_user, require_role
 
 router = APIRouter()
 
 
-@router.get("/", response_model=List[SupplierOut])
+@router.get("/", response_model=List[SupplierOut], dependencies=[Depends(get_current_user)])
 def list_suppliers(db: Session = Depends(get_db)):
     return db.query(Supplier).order_by(Supplier.id.asc()).all()
 
 
-@router.get("/stats", response_model=SupplierStats)
+@router.get("/stats", response_model=SupplierStats, dependencies=[Depends(get_current_user)])
 def supplier_stats(db: Session = Depends(get_db)):
     total = db.query(Supplier).count()
     agg_rows = 0
@@ -28,7 +28,7 @@ def supplier_stats(db: Session = Depends(get_db)):
     return SupplierStats(total=total, files=total, rows=agg_rows, sheets=agg_sheets, notes="ok")
 
 
-@router.post("/reindex")
+@router.post("/reindex", dependencies=[Depends(require_role("admin"))])
 def reindex_suppliers(db: Session = Depends(get_db)):
     # Scan data directory recursively for .xlsx files
     data_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "..", "..", "data"))
@@ -68,7 +68,7 @@ def reindex_suppliers(db: Session = Depends(get_db)):
     return {"indexed": updated, "files": len(found_files)}
 
 
-@router.post("/", response_model=SupplierOut)
+@router.post("/", response_model=SupplierOut, dependencies=[Depends(require_role("admin"))])
 def create_supplier(payload: SupplierIn, db: Session = Depends(get_db)):
     entity = Supplier(name=payload.name, file_path=payload.file_path, rows=payload.rows, sheets=payload.sheets)
     db.add(entity)
@@ -77,7 +77,7 @@ def create_supplier(payload: SupplierIn, db: Session = Depends(get_db)):
     return entity
 
 
-@router.delete("/{supplier_id}")
+@router.delete("/{supplier_id}", dependencies=[Depends(require_role("admin"))])
 def delete_supplier(supplier_id: int, db: Session = Depends(get_db), user = Depends(require_role("admin"))):
     obj = db.query(Supplier).filter(Supplier.id == supplier_id).one_or_none()
     if not obj:
@@ -86,14 +86,14 @@ def delete_supplier(supplier_id: int, db: Session = Depends(get_db), user = Depe
     db.commit()
     return {"deleted": supplier_id}
 
-@router.get("/{supplier_id}", response_model=SupplierOut)
+@router.get("/{supplier_id}", response_model=SupplierOut, dependencies=[Depends(get_current_user)])
 def get_supplier(supplier_id: int, db: Session = Depends(get_db)):
     obj = db.query(Supplier).filter(Supplier.id == supplier_id).one_or_none()
     if not obj:
         raise HTTPException(status_code=404, detail="Supplier not found")
     return obj
 
-@router.put("/{supplier_id}", response_model=SupplierOut)
+@router.put("/{supplier_id}", response_model=SupplierOut, dependencies=[Depends(require_role("admin"))])
 def update_supplier(supplier_id: int, payload: SupplierUpdate, db: Session = Depends(get_db), user = Depends(require_any_role("admin","manager"))):
     obj = db.query(Supplier).filter(Supplier.id == supplier_id).one_or_none()
     if not obj:
@@ -110,7 +110,7 @@ def update_supplier(supplier_id: int, payload: SupplierUpdate, db: Session = Dep
     db.refresh(obj)
     return obj
 
-@router.post("/upload")
+@router.post("/upload", dependencies=[Depends(require_role("admin"))])
 def upload_excel(file: UploadFile = File(...), db: Session = Depends(get_db)):
     filename = file.filename or ""
     if not filename.lower().endswith(".xlsx"):

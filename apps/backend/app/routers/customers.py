@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
 from sqlalchemy import or_
 from app.db import get_db
-from app.dependencies.auth import require_user, require_any_role
+from app.security import get_current_user, require_role
 from app.models_customer import Customer
 from app.schemas_customer import CustomerCreate, CustomerUpdate, CustomerOut
 router = APIRouter(prefix="/customers", tags=["customers"])

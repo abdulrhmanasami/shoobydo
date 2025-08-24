@@ -9,39 +9,40 @@ Last updated: 2025-08-20
 
 from typing import Literal, Optional
 from pydantic import ConfigDict
-
 from pydantic import BaseModel
 
+class UserOut(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+    id: int
+    email: str
+    role: Literal["admin","manager","viewer"]
+    is_active: bool
+
+class UserCreate(BaseModel):
+    email: str
+    password: str
+    role: Literal["admin","manager","viewer"] = "user"
 
 class UserLogin(BaseModel):
     email: str
     password: str
 
-
 class Token(BaseModel):
     access_token: str
-    token_type: Literal["bearer"] = "bearer"
-
-
-class UserRegister(BaseModel):
-    email: str
-    password: str
-    role: Optional[str] = "viewer"
-
-
-class UserPublic(BaseModel):
-    id: str
-    email: str
-    role: str
-    is_active: bool
-    created_at: Optional[str] = None
-
+    token_type: str = "bearer"
 
 class TokenPair(BaseModel):
     access_token: str
     refresh_token: str
-    token_type: Literal["bearer"] = "bearer"
+    token_type: str = "bearer"
 
+class UserRegister(BaseModel):
+    email: str
+    password: str
+    confirm_password: str
 
-
-model_config = ConfigDict(from_attributes=True)
+class UserPublic(BaseModel):
+    id: int
+    email: str
+    role: str
+    is_active: bool
