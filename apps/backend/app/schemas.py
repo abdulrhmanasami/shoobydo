@@ -10,7 +10,8 @@ class SupplierOut(BaseModel):
     rows: int
     sheets: int
 
-    class SupplierStats(BaseModel):
+
+class SupplierStats(BaseModel):
     total: int
     files: int
     rows: int
