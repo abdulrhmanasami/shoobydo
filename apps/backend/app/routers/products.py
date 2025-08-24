@@ -1,12 +1,12 @@
 from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
-from app.dependencies.auth import require_any_role, require_user
+from app.security import get_current_user, require_role
 from app.db import get_db
 from app.models_product import Product
 from app.schemas_product import ProductCreate, ProductUpdate, ProductOut
 router = APIRouter(prefix="/products", tags=["products"])
 @router.get("/", response_model=list[ProductOut])
-def list_products(q: str | None = None, db: Session = Depends(get_db), user=Depends(require_user)):
+def list_products(q: str | None = None, db: Session = Depends(get_db), user=Depends(require_role)):
     qs = db.query(Product)
     if q: qs = qs.filter(Product.name.ilike(f"%{q}%"))
     return qs.order_by(Product.id.desc()).limit(200).all()

@@ -9,7 +9,7 @@ Last updated: 2025-08-20
 
 from fastapi import APIRouter, Depends
 
-from app.dependencies.auth import require_role
+from app.security import require_role
 
 
 router = APIRouter()

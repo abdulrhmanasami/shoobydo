@@ -4,7 +4,7 @@ from sqlalchemy import or_, func, and_, desc
 from typing import Dict, Any
 from datetime import datetime, date
 from app.db import get_db
-from app.dependencies.auth import require_user, require_any_role
+from app.security import get_current_user, require_role
 from app.models_order import Order
 from app.models_customer import Customer
 from app.models_order_item import OrderItem
