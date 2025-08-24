@@ -2,7 +2,7 @@
 ## 1) suppliers list (HTTP head)
 ```
 HTTP/1.1 200 OK
-date: Sun, 24 Aug 2025 00:32:58 GMT
+date: Sun, 24 Aug 2025 00:39:46 GMT
 server: uvicorn
 content-length: 275
 content-type: application/json
@@ -16,7 +16,7 @@ content-type: application/json
 /Users/abdulrahman/Documents/GitHub/shoobydo/apps/backend/.venv/lib/python3.13/site-packages/pydantic/_internal/_config.py:373: UserWarning: Valid config keys have changed in V2:
 * 'orm_mode' has been renamed to 'from_attributes'
   warnings.warn(message, UserWarning)
-INFO:     Started server process [93091]
+INFO:     Started server process [95090]
 INFO:     Waiting for application startup.
 INFO:     Application startup complete.
 INFO:     Uvicorn running on http://0.0.0.0:8805 (Press CTRL+C to quit)

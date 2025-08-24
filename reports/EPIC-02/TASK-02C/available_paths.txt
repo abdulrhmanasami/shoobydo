@@ -1,1 +1,9 @@
-No orders paths found
+/api/v1/orders/
+/api/v1/orders/{oid}
+/api/v1/orders/{oid}/items
+/api/v1/orders/{oid}/items-summary
+/api/v1/orders/{oid}/items/{iid}
+/api/v1/orders/{oid}/status
+/api/v1/orders/customer/{customer_id}/orders
+/api/v1/orders/stats/daily
+/api/v1/orders/stats/summary
