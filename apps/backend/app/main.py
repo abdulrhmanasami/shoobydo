@@ -11,7 +11,7 @@ app.add_middleware(
 )
 
 api_v1 = APIRouter(prefix="/api/v1")
-api_v1.include_router(suppliers.router, prefix="/suppliers", tags=["suppliers"])
+api_v1.include_router(suppliers, prefix="/suppliers", tags=["suppliers"])
 
 @app.get("/api/health")
 def health():
