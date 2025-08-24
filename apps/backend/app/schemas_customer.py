@@ -1,4 +1,5 @@
 from pydantic import BaseModel, EmailStr
+from pydantic import ConfigDict
 class CustomerBase(BaseModel):
     email: EmailStr
     name: str | None = None

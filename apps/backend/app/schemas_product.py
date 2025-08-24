@@ -1,4 +1,5 @@
 from pydantic import BaseModel, Field
+from pydantic import ConfigDict
 from typing import Literal
 
 class ProductBase(BaseModel):

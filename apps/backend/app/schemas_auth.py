@@ -8,6 +8,7 @@ Last updated: 2025-08-20
 """
 
 from typing import Literal, Optional
+from pydantic import ConfigDict
 
 from pydantic import BaseModel
 
