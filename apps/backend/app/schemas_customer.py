@@ -1,4 +1,3 @@
-from pydantic import ConfigDict
 from pydantic import BaseModel, EmailStr
 class CustomerBase(BaseModel):
     email: EmailStr
