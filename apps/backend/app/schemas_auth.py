@@ -1,3 +1,4 @@
+from pydantic import ConfigDict
 from __future__ import annotations
 
 """
@@ -42,3 +43,5 @@ class TokenPair(BaseModel):
     token_type: Literal["bearer"] = "bearer"
 
 
+
+model_config = ConfigDict(from_attributes=True)
