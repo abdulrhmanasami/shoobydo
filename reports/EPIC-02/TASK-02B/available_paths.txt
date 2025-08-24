@@ -1,0 +1,5 @@
+/api/v1/suppliers/
+/api/v1/suppliers/reindex
+/api/v1/suppliers/stats
+/api/v1/suppliers/upload
+/api/v1/suppliers/{supplier_id}
