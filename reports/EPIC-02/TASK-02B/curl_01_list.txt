@@ -1,0 +1,7 @@
+HTTP/1.1 200 OK
+date: Sun, 24 Aug 2025 00:32:58 GMT
+server: uvicorn
+content-length: 275
+content-type: application/json
+
+[{"id":1,"name":"Test Supplier","file_path":"/test/path.xlsx","rows":100,"sheets":2},{"id":2,"name":"Test Supplier 2","file_path":"/test/path2.xlsx","rows":200,"sheets":3},{"id":3,"name":"Deliverable Test Supplier","file_path":"/deliverable/test.xlsx","rows":150,"sheets":2}]
