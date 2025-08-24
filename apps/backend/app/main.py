@@ -1,6 +1,6 @@
 from fastapi import FastAPI, APIRouter
 from fastapi.middleware.cors import CORSMiddleware
-from app.routers import suppliers  # تأكد من __init__.py
+from app.routers import auth, products, customers, orders, order_items, suppliers
 
 app = FastAPI(title="Shoobydo API", version="0.2.x")
 
@@ -11,7 +11,14 @@ app.add_middleware(
 )
 
 api_v1 = APIRouter(prefix="/api/v1")
-api_v1.include_router(suppliers, prefix="/suppliers", tags=["suppliers"])
+
+# ملاحظة: في __init__.py صدّرنا كائن router مباشرةً، لذلك نمرّره كما هو.
+api_v1.include_router(auth,        prefix="/auth",         tags=["auth"])
+api_v1.include_router(products,                         tags=["products"])
+api_v1.include_router(customers,                        tags=["customers"])
+api_v1.include_router(orders,                           tags=["orders"])
+api_v1.include_router(order_items,                      tags=["order_items"])
+api_v1.include_router(suppliers,    prefix="/suppliers",  tags=["suppliers"])
 
 @app.get("/api/health")
 def health():
