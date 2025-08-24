@@ -1,4 +1,5 @@
 from pydantic import BaseModel, condecimal, field_validator
+from pydantic import ConfigDict
 from typing import Optional
 from typing import Literal
 class OrderBase(BaseModel):
