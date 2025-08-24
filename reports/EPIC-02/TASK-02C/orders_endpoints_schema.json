@@ -1,0 +1,59 @@
+{
+  "path": "/api/v1/orders/",
+  "methods": [
+    "get",
+    "post"
+  ]
+}
+{
+  "path": "/api/v1/orders/{oid}",
+  "methods": [
+    "delete",
+    "get",
+    "put"
+  ]
+}
+{
+  "path": "/api/v1/orders/stats/summary",
+  "methods": [
+    "get"
+  ]
+}
+{
+  "path": "/api/v1/orders/stats/daily",
+  "methods": [
+    "get"
+  ]
+}
+{
+  "path": "/api/v1/orders/customer/{customer_id}/orders",
+  "methods": [
+    "get"
+  ]
+}
+{
+  "path": "/api/v1/orders/{oid}/status",
+  "methods": [
+    "post"
+  ]
+}
+{
+  "path": "/api/v1/orders/{oid}/items-summary",
+  "methods": [
+    "get"
+  ]
+}
+{
+  "path": "/api/v1/orders/{oid}/items",
+  "methods": [
+    "get",
+    "post"
+  ]
+}
+{
+  "path": "/api/v1/orders/{oid}/items/{iid}",
+  "methods": [
+    "delete",
+    "put"
+  ]
+}
