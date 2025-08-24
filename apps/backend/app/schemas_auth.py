@@ -1,4 +1,3 @@
-from pydantic import ConfigDict
 from __future__ import annotations
 
 """

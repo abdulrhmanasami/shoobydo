@@ -1,4 +1,3 @@
-from pydantic import ConfigDict
 from pydantic import BaseModel, Field
 from typing import Literal
 

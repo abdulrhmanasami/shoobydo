@@ -1,4 +1,3 @@
-from pydantic import ConfigDict
 from pydantic import BaseModel, condecimal, field_validator
 from typing import Optional
 from typing import Literal
