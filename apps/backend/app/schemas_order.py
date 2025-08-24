@@ -1,3 +1,4 @@
+from pydantic import ConfigDict
 from pydantic import BaseModel, condecimal, field_validator
 from typing import Optional
 from typing import Literal
@@ -24,3 +25,5 @@ class OrderUpdate(BaseModel):
 class OrderOut(OrderBase):
     id: int
     class Config: from_attributes = True
+
+model_config = ConfigDict(from_attributes=True)

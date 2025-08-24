@@ -1,3 +1,4 @@
+from pydantic import ConfigDict
 from pydantic import BaseModel, Field
 class OrderItemBase(BaseModel):
     product_id: int
@@ -11,3 +12,5 @@ class OrderItemOut(OrderItemBase):
     id: int
     subtotal: float
     class Config: from_attributes = True
+
+model_config = ConfigDict(from_attributes=True)

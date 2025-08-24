@@ -1,3 +1,4 @@
+from pydantic import ConfigDict
 from pydantic import BaseModel, EmailStr
 class CustomerBase(BaseModel):
     email: EmailStr
@@ -13,3 +14,5 @@ class CustomerUpdate(BaseModel):
 class CustomerOut(CustomerBase):
     id: int
     class Config: from_attributes = True
+
+model_config = ConfigDict(from_attributes=True)

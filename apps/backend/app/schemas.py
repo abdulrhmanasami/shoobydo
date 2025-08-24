@@ -1,3 +1,4 @@
+from pydantic import ConfigDict
 from pydantic import BaseModel
 from typing import Optional
 
@@ -9,11 +10,7 @@ class SupplierOut(BaseModel):
     rows: int
     sheets: int
 
-    class Config:
-        orm_mode = True
-
-
-class SupplierStats(BaseModel):
+    class SupplierStats(BaseModel):
     total: int
     files: int
     rows: int
@@ -41,3 +38,5 @@ class SupplierUpdate(BaseModel):
     rows: Optional[int] = None
     sheets: Optional[int] = None
 
+
+model_config = ConfigDict(from_attributes=True)
