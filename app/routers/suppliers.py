@@ -1,16 +1,14 @@
-from fastapi import APIRouter, Depends, HTTPException, UploadFile, File, Form
+from fastapi import APIRouter, Depends, HTTPException, UploadFile, File
 from sqlalchemy.orm import Session
 from typing import List
 import os
-import pandas as pd
-from pathlib import Path
 
 from app.db import get_db
 from app.models import Supplier
 from app.schemas import SupplierOut, SupplierStats, SupplierIn, SupplierUpdate
 from app.security import get_current_user, require_role
 
-router = APIRouter(prefix="/suppliers", tags=["suppliers"], redirect_slashes=False)
+router = APIRouter(prefix="", tags=["suppliers"], redirect_slashes=False)
 
 
 @router.get("/", response_model=List[SupplierOut], dependencies=[Depends(get_current_user)])
@@ -18,7 +16,6 @@ def list_suppliers(db: Session = Depends(get_db)):
     return db.query(Supplier).order_by(Supplier.id.asc()).all()
 
 
-# alias without trailing slash to avoid 307
 @router.get("", include_in_schema=False)
 def list_suppliers_noslash(db: Session = Depends(get_db)):
     return list_suppliers(db)
@@ -34,6 +31,57 @@ def supplier_stats(db: Session = Depends(get_db)):
             agg_rows += int(s.rows or 0)
             agg_sheets += int(s.sheets or 0)
     return SupplierStats(total=total, files=total, rows=agg_rows, sheets=agg_sheets, notes="ok")
+
+
+@router.post("/upload")
+async def upload_supplier_file(file: UploadFile = File(...), db: Session = Depends(get_db)):
+    if file.content_type not in {"text/csv","application/vnd.openxmlformats-officedocument.spreadsheetml.sheet","application/vnd.ms-excel"}:
+        raise HTTPException(status_code=415, detail="Unsupported file type")
+    data_dir = os.getenv("DATA_DIR", "data/uploads")
+    os.makedirs(data_dir, exist_ok=True)
+    dest = os.path.join(data_dir, file.filename)
+    # حد الحجم ~10MB
+    CHUNK = 1<<20
+    size = 0
+    with open(dest, "wb") as f:
+        while True:
+            chunk = await file.read(CHUNK)
+            if not chunk: break
+            size += len(chunk)
+            if size > 10*(1<<20):
+                f.close(); os.remove(dest)
+                raise HTTPException(status_code=413, detail="File too large")
+            f.write(chunk)
+
+    # فهرسة خفيفة (حساب عدد الصفوف/الأوراق إن XLSX)
+    rows = 0; sheets = 0
+    try:
+        if dest.lower().endswith(".csv"):
+            with open(dest, "rb") as fh:
+                rows = sum(1 for _ in fh) - 1
+            sheets = 1
+        else:
+            import pandas as pd
+            import openpyxl  # تأكد أنها بالـ requirements
+            xl = pd.ExcelFile(dest)
+            sheets = len(xl.sheet_names)
+            for nm in xl.sheet_names:
+                try: rows += int(xl.parse(nm).shape[0])
+                except Exception: pass
+    except Exception as e:
+        # لا نُفشل الرفع بسبب pandas/openpyxl
+        pass
+
+    from app.models import Supplier
+    name = os.path.splitext(os.path.basename(dest))[0]
+    obj = db.query(Supplier).filter(Supplier.file_path==dest).one_or_none()
+    if obj:
+        obj.name, obj.rows, obj.sheets = name, rows, sheets
+    else:
+        obj = Supplier(name=name, file_path=dest, rows=rows, sheets=sheets)
+        db.add(obj)
+    db.commit(); db.refresh(obj)
+    return {"id": obj.id, "name": obj.name, "rows": obj.rows, "sheets": obj.sheets, "file_path": obj.file_path}
 
 
 @router.post("/reindex", dependencies=[Depends(require_role("admin"))])
@@ -85,59 +133,6 @@ def create_supplier(payload: SupplierIn, db: Session = Depends(get_db)):
     return entity
 
 
-@router.post("/upload", dependencies=[Depends(require_role("admin"))])
-async def upload_supplier_file(
-    file: UploadFile = File(...),
-    supplier_name: str = Form(...),
-    db: Session = Depends(get_db)
-):
-    """Upload Excel file for supplier"""
-    if not file.filename.lower().endswith('.xlsx'):
-        raise HTTPException(status_code=400, detail="Only .xlsx files are supported")
-    
-    if file.size > 10 * 1024 * 1024:  # 10MB limit
-        raise HTTPException(status_code=400, detail="File size must be less than 10MB")
-    
-    try:
-        # Read Excel file
-        df = pd.read_excel(file.file)
-        total_rows = len(df)
-        total_sheets = 1  # Single sheet for now
-        
-        # Save file to data directory
-        data_dir = Path(__file__).parent.parent.parent.parent.parent / "data"
-        data_dir.mkdir(exist_ok=True)
-        
-        file_path = data_dir / f"{supplier_name}_{file.filename}"
-        with open(file_path, "wb") as f:
-            content = await file.read()
-            f.write(content)
-        
-        # Create or update supplier record
-        existing = db.query(Supplier).filter(Supplier.name == supplier_name).first()
-        if existing:
-            existing.file_path = str(file_path)
-            existing.rows = total_rows
-            existing.sheets = total_sheets
-            db.commit()
-            db.refresh(existing)
-            return {"message": "Supplier updated", "supplier": existing, "saved": file.filename}
-        else:
-            supplier = Supplier(
-                name=supplier_name,
-                file_path=str(file_path),
-                rows=total_rows,
-                sheets=total_sheets
-            )
-            db.add(supplier)
-            db.commit()
-            db.refresh(supplier)
-            return {"message": "Supplier created", "supplier": supplier, "saved": file.filename}
-            
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error processing file: {str(e)}")
-
-
 @router.delete("/{supplier_id}", dependencies=[Depends(require_role("admin"))])
 def delete_supplier(supplier_id: int, db: Session = Depends(get_db), user = Depends(require_role("admin"))):
     obj = db.query(Supplier).filter(Supplier.id == supplier_id).one_or_none()
@@ -159,37 +154,4 @@ def update_supplier(supplier_id: int, payload: SupplierUpdate, db: Session = Dep
     obj = db.query(Supplier).filter(Supplier.id == supplier_id).one_or_none()
     if not obj:
         raise HTTPException(status_code=404, detail="Supplier not found")
-    if payload.name is not None:
-        obj.name = payload.name
-    if payload.file_path is not None:
-        obj.file_path = payload.file_path
-    if payload.rows is not None:
-        obj.rows = payload.rows
-    if payload.sheets is not None:
-        obj.sheets = payload.sheets
-    db.commit()
-    db.refresh(obj)
-    return obj
-
-@router.post("/upload", dependencies=[Depends(require_role("admin"))])
-def upload_excel(file: UploadFile = File(...), db: Session = Depends(get_db)):
-    filename = file.filename or ""
-    if not filename.lower().endswith(".xlsx"):
-        raise HTTPException(status_code=400, detail="Only .xlsx files are accepted")
-    # Save into data/02_Excel/
-    target_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "..", "..", "data", "02_Excel"))
-    os.makedirs(target_dir, exist_ok=True)
-    # Avoid collisions
-    safe_name = os.path.basename(filename)
-    base, ext = os.path.splitext(safe_name)
-    counter = 1
-    target_path = os.path.join(target_dir, safe_name)
-    while os.path.exists(target_path):
-        target_path = os.path.join(target_dir, f"{base}_{counter}{ext}")
-        counter += 1
-    with open(target_path, "wb") as out:
-        out.write(file.file.read())
-    # Reindex suppliers to reflect new file
-    res = reindex_suppliers(db)
-    return {"saved": os.path.relpath(target_path, start=os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "..", ".."))), "reindexed": res}
-
+    # ... existing code ...

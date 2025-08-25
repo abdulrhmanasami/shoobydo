@@ -4,14 +4,14 @@ from __future__ import annotations
 Module: security
 Created by: Cursor (auto-generated)
 Purpose: Password hashing utilities and JWT token helpers
-Last updated: 2025-08-20
+Last updated: 2025-08-24
 """
 
 import os
 import datetime as dt
 from typing import Annotated, Callable, Literal
 from fastapi import Depends, HTTPException, status
-from fastapi.security import OAuth2PasswordBearer
+from fastapi.security import HTTPBearer
 from jose import jwt, JWTError
 from passlib.context import CryptContext
 from sqlalchemy.orm import Session
@@ -22,8 +22,10 @@ from app.models_user import User, UserRole
 SECRET_KEY = os.getenv("SECRET_KEY", "dev-secret-change-me")
 ALGORITHM = os.getenv("JWT_ALG", "HS256")
 ACCESS_TOKEN_EXPIRE_MINUTES = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES", "60"))
+REFRESH_TOKEN_EXPIRE_DAYS = int(os.getenv("REFRESH_TOKEN_EXPIRE_DAYS", "7"))
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/v1/auth/login")
+# استخدام HTTPBearer بدلاً من OAuth2PasswordBearer لتجنب مشاكل tokenUrl
+oauth2_scheme = HTTPBearer(auto_error=False)
 pwd = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 def hash_password(p: str) -> str:
@@ -38,13 +40,35 @@ def create_access_token(sub: str, role: str) -> str:
     payload = {"sub": sub, "role": role, "iat": int(now.timestamp()), "exp": int(exp.timestamp())}
     return jwt.encode(payload, SECRET_KEY, algorithm=ALGORITHM)
 
+def create_refresh_token(sub: str) -> str:
+    now = dt.datetime.utcnow()
+    exp = now + dt.timedelta(days=REFRESH_TOKEN_EXPIRE_DAYS)
+    payload = {"sub": sub, "type": "refresh", "iat": int(now.timestamp()), "exp": int(exp.timestamp())}
+    return jwt.encode(payload, SECRET_KEY, algorithm=ALGORITHM)
+
+def verify_refresh_token(token: str) -> dict:
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        if payload.get("type") != "refresh":
+            raise JWTError("Invalid token type")
+        return payload
+    except JWTError:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid refresh token"
+        )
+
 def get_current_user(
     token: Annotated[str, Depends(oauth2_scheme)],
     db: Session = Depends(get_db)
 ) -> User:
     cred_exc = HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid credentials", headers={"WWW-Authenticate": "Bearer"})
+    
+    if not token:
+        raise cred_exc
+        
     try:
-        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        payload = jwt.decode(token.credentials, SECRET_KEY, algorithms=[ALGORITHM])
         email: str = payload.get("sub")
         if not email:
             raise cred_exc

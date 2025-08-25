@@ -41,7 +41,7 @@ def get_product_stock(
     return status
 
 
-@router.post("/products/{product_id}/adjust", dependencies=[Depends(require_any_role("admin", "manager"))])
+@router.post("/products/{product_id}/adjust", dependencies=[Depends(require_role("admin"))])
 def adjust_product_stock(
     request: StockAdjustmentRequest,
     product_id: int = Path(..., ge=1),
