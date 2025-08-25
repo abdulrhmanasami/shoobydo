@@ -21,7 +21,7 @@ import json
 router = APIRouter(prefix="/reports", tags=["reports"])
 
 
-@router.get("/kpis", dependencies=[Depends(require_role("viewer"))])
+@router.get("/kpis", dependencies=[Depends(require_role("admin", "viewer"))])
 def get_kpis(db: Session = Depends(get_db)) -> Dict[str, Any]:
     """Get KPIs with Redis caching"""
     redis = get_redis()
@@ -65,7 +65,7 @@ def get_kpis(db: Session = Depends(get_db)) -> Dict[str, Any]:
     return kpis
 
 
-@router.get("/summary", dependencies=[Depends(require_role("viewer"))])
+@router.get("/summary", dependencies=[Depends(require_role("admin", "viewer"))])
 def get_summary(db: Session = Depends(get_db)) -> Dict[str, Any]:
     """Get summary statistics with Redis caching"""
     redis = get_redis()
@@ -95,7 +95,7 @@ def get_summary(db: Session = Depends(get_db)) -> Dict[str, Any]:
     return summary
 
 
-@router.get("/costs", dependencies=[Depends(require_role("viewer"))])
+@router.get("/costs", dependencies=[Depends(require_role("admin", "viewer"))])
 def get_costs(db: Session = Depends(get_db)) -> Dict[str, Any]:
     """Get cost analysis with Redis caching"""
     redis = get_redis()

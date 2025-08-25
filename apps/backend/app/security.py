@@ -19,10 +19,10 @@ from app.db import get_db  # افترض موجود
 from app.models_user import User, UserRole
 
 # إعدادات
-SECRET_KEY = os.getenv("SECRET_KEY", "dev-secret-change-me")
-ALGORITHM = os.getenv("JWT_ALG", "HS256")
-ACCESS_TOKEN_EXPIRE_MINUTES = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES", "60"))
-REFRESH_TOKEN_EXPIRE_DAYS = int(os.getenv("REFRESH_TOKEN_EXPIRE_DAYS", "7"))
+SECRET_KEY = os.getenv("JWT_SECRET_KEY", "dev-secret-change-me")
+ALGORITHM = os.getenv("JWT_ALGORITHM", "HS256")
+ACCESS_TOKEN_EXPIRE_MINUTES = int(os.getenv("JWT_EXPIRES_MINUTES", "30"))
+REFRESH_TOKEN_EXPIRE_DAYS = int(os.getenv("JWT_REFRESH_EXPIRES_MINUTES", "10080")) // 1440  # Convert minutes to days
 
 # استخدام HTTPBearer بدلاً من OAuth2PasswordBearer لتجنب مشاكل tokenUrl
 oauth2_scheme = HTTPBearer(auto_error=False)
@@ -81,7 +81,7 @@ def get_current_user(
 
 def require_role(*roles: Literal["admin","manager","viewer"]) -> Callable:
     def dep(user: User = Depends(get_current_user)) -> User:
-        if user.role not in roles:
+        if user.role.value not in roles:
             raise HTTPException(status_code=403, detail="Forbidden")
         return user
     return dep
