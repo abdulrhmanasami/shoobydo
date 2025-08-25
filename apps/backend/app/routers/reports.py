@@ -107,7 +107,7 @@ def get_costs(db: Session = Depends(get_db)) -> Dict[str, Any]:
         if cached:
             return json.loads(cached)
     
-    # Calculate costs (placeholder - replace with actual cost logic)
+    # Calculate costs (TODO: implement actual cost calculation logic)
     total_suppliers = db.query(Supplier).count()
     total_rows = db.query(func.coalesce(func.sum(Supplier.rows), 0)).scalar() or 0
     
