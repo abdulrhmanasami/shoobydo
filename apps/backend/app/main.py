@@ -1,4 +1,5 @@
-from fastapi import FastAPI, APIRouter
+from app.security import require_role
+from fastapi import FastAPI, APIRouter, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from app.routers.auth import router as auth
 from app.routers.products import router as products
@@ -28,7 +29,7 @@ api_v1.include_router(customers,                        tags=["customers"])
 api_v1.include_router(orders,                           tags=["orders"])
 api_v1.include_router(order_items,                      tags=["order_items"])
 api_v1.include_router(suppliers)
-api_v1.include_router(reports,                          tags=["reports"])
+api_v1.include_router(reports, dependencies=[Depends(require_role("admin","viewer"))], tags=["reports"])
 
 @app.get("/health", tags=["health"])
 def root_health():
