@@ -6,12 +6,14 @@ from app.routers.customers import router as customers
 from app.routers.orders import router as orders
 from app.routers.order_items import router as order_items
 from app.routers.suppliers import router as suppliers
-from app.routers.reports import router as reports
 
 app = FastAPI(title="Shoobydo API", version="0.2.x")
 
-# disable auto slash redirects (prevents 307 spam)
-app.router.redirect_slashes = False
+# prevent implicit 307 redirects
+try:
+    app.router.redirect_slashes = False
+except Exception:
+    pass
 
 app.add_middleware(
     CORSMiddleware,
@@ -27,8 +29,7 @@ api_v1.include_router(products,                         tags=["products"])
 api_v1.include_router(customers,                        tags=["customers"])
 api_v1.include_router(orders,                           tags=["orders"])
 api_v1.include_router(order_items,                      tags=["order_items"])
-api_v1.include_router(suppliers)
-api_v1.include_router(reports,                          tags=["reports"])
+api_v1.include_router(suppliers, prefix="/suppliers", tags=["suppliers"])
 
 @app.get("/health", tags=["health"])
 def root_health():

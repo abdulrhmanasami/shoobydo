@@ -13,8 +13,10 @@ class Supplier(Base):
     sheets: Mapped[int] = mapped_column(Integer, default=0)
 
 
-import app.models_product  # ensure Product model is imported
-import app.models_customer  # ensure Customer model is imported
-import app.models_order  # ensure Order model is imported
-import app.models_order_item  # ensure OrderItem model is imported
-import app.models_stock_movement  # ensure StockMovement model is imported
+# Import all models to ensure they are registered with SQLAlchemy
+from app.models_user import User, UserRole
+from app.models_product import Product
+from app.models_customer import Customer
+from app.models_order import Order
+from app.models_order_item import OrderItem
+from app.models_stock_movement import StockMovement

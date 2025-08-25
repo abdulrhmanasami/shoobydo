@@ -22,12 +22,12 @@ def _recalc_total(db: Session, order_id: int):
     return total
 
 @router.get("/{oid}/items", response_model=list[OrderItemOut])
-def list_items(oid: int = Path(..., ge=1), db: Session = Depends(get_db), user=Depends(require_user)):
+def list_items(oid: int = Path(..., ge=1), db: Session = Depends(get_db), user=Depends(require_role)):
     if not db.get(Order, oid):
         raise HTTPException(status_code=404, detail="order not found")
     return db.query(OrderItem).filter_by(order_id=oid).order_by(OrderItem.id.desc()).all()
 
-@router.post("/{oid}/items", response_model=OrderItemOut, dependencies=[Depends(require_any_role("admin","manager"))])
+@router.post("/{oid}/items", response_model=OrderItemOut, dependencies=[Depends(require_role("admin"))])
 def add_item(oid: int, data: OrderItemCreate, db: Session = Depends(get_db)):
     order = db.get(Order, oid)
     if not order: raise HTTPException(status_code=404, detail="order not found")
@@ -46,7 +46,7 @@ def add_item(oid: int, data: OrderItemCreate, db: Session = Depends(get_db)):
     _recalc_total(db, oid)
     return it
 
-@router.put("/{oid}/items/{iid}", response_model=OrderItemOut, dependencies=[Depends(require_any_role("admin","manager"))])
+@router.put("/{oid}/items/{iid}", response_model=OrderItemOut, dependencies=[Depends(require_role("admin"))])
 def update_item(oid: int, iid: int, data: OrderItemUpdate, db: Session = Depends(get_db)):
     it = db.get(OrderItem, iid)
     if not it or it.order_id != oid: raise HTTPException(status_code=404, detail="item not found")
@@ -72,7 +72,7 @@ def update_item(oid: int, iid: int, data: OrderItemUpdate, db: Session = Depends
     _recalc_total(db, oid)
     return it
 
-@router.delete("/{oid}/items/{iid}", dependencies=[Depends(require_any_role("admin"))])
+@router.delete("/{oid}/items/{iid}", dependencies=[Depends(require_role("admin"))])
 def delete_item(oid: int, iid: int, db: Session = Depends(get_db)):
     it = db.get(OrderItem, iid)
     if not it or it.order_id != oid: raise HTTPException(status_code=404, detail="item not found")

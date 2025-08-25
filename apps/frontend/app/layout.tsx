@@ -22,10 +22,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               <Link href="/dashboard">Dashboard</Link>
               <Link href="/suppliers">Suppliers</Link>
               <Link href="/products">Products</Link>
+              <Link href="/orders">Orders</Link>
               <Link href="/costs">Costs</Link>
               <Link href="/analytics">Analytics</Link>
               <Link href="/brand">Brand</Link>
               <Link href="/upload">Upload</Link>
+              <Link href="/login">Login</Link>
             </nav>
           </div>
         </header>

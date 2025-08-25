@@ -4,7 +4,7 @@ from sqlalchemy import or_, func, and_, desc
 from typing import Dict, Any
 from datetime import datetime, date
 from app.db import get_db
-from app.security import get_current_user, require_role
+from app.dependencies.auth import require_user, require_any_role
 from app.models_order import Order
 from app.models_customer import Customer
 from app.models_order_item import OrderItem
@@ -18,7 +18,7 @@ def list_orders(
     limit: int = Query(default=50, ge=1, le=200),
     offset: int = Query(default=0, ge=0),
     db: Session = Depends(get_db),
-    user=Depends(require_role),
+    user=Depends(require_user),
 ):
     qs = db.query(Order)
     if q:
@@ -31,17 +31,17 @@ def list_orders(
     return qs.order_by(Order.id.desc()).offset(offset).limit(limit).all()
 
 @router.get("/{oid}", response_model=OrderOut)
-def get_order(oid: int = Path(..., ge=1), db: Session = Depends(get_db), user=Depends(require_role)):
+def get_order(oid: int = Path(..., ge=1), db: Session = Depends(get_db), user=Depends(require_user)):
     obj = db.get(Order, oid)
     if not obj:
         raise HTTPException(status_code=404, detail="not found")
     return obj
-@router.post("/", response_model=OrderOut, dependencies=[Depends(require_role("admin"))])
+@router.post("/", response_model=OrderOut, dependencies=[Depends(require_any_role("admin","manager"))])
 def create_order(data: OrderCreate, db: Session = Depends(get_db)):
     if not db.get(Customer, data.customer_id):
         raise HTTPException(status_code=422, detail="customer not found")
     obj = Order(**data.model_dump()); db.add(obj); db.commit(); db.refresh(obj); return obj
-@router.put("/{oid}", response_model=OrderOut, dependencies=[Depends(require_role("admin"))])
+@router.put("/{oid}", response_model=OrderOut, dependencies=[Depends(require_any_role("admin","manager"))])
 def update_order(oid: int, data: OrderUpdate, db: Session = Depends(get_db)):
     obj = db.get(Order, oid)
     if not obj: raise HTTPException(status_code=404, detail="not found")
@@ -50,7 +50,7 @@ def update_order(oid: int, data: OrderUpdate, db: Session = Depends(get_db)):
         raise HTTPException(status_code=422, detail="customer not found")
     for k,v in patch.items(): setattr(obj, k, v)
     db.commit(); db.refresh(obj); return obj
-@router.delete("/{oid}", dependencies=[Depends(require_role("admin"))])
+@router.delete("/{oid}", dependencies=[Depends(require_any_role("admin"))])
 def delete_order(oid: int, db: Session = Depends(get_db)):
     obj = db.get(Order, oid)
     if not obj: raise HTTPException(status_code=404, detail="not found")
@@ -63,7 +63,7 @@ def get_orders_summary(
     start_date: date | None = Query(default=None),
     end_date: date | None = Query(default=None),
     db: Session = Depends(get_db),
-    user=Depends(require_role)
+    user=Depends(require_user)
 ) -> Dict[str, Any]:
     """Get orders summary statistics"""
     query = db.query(Order)
@@ -105,7 +105,7 @@ def get_orders_summary(
 def get_daily_orders_stats(
     days: int = Query(default=30, ge=1, le=365),
     db: Session = Depends(get_db),
-    user=Depends(require_role)
+    user=Depends(require_user)
 ) -> Dict[str, Any]:
     """Get daily orders statistics for the last N days"""
     from datetime import timedelta
@@ -143,7 +143,7 @@ def get_customer_orders(
     limit: int = Query(default=50, ge=1, le=200),
     offset: int = Query(default=0, ge=0),
     db: Session = Depends(get_db),
-    user=Depends(require_role)
+    user=Depends(require_user)
 ):
     """Get all orders for a specific customer"""
     # Verify customer exists
@@ -168,7 +168,7 @@ def update_order_status(
     new_status: str = Query(...),
     notes: str | None = Query(default=None),
     db: Session = Depends(get_db),
-    user=Depends(require_role("admin"))
+    user=Depends(require_any_role("admin", "manager"))
 ) -> Dict[str, Any]:
     """Update order status with optional notes"""
     valid_statuses = ["pending", "paid", "cancelled", "refunded"]
@@ -202,7 +202,7 @@ def update_order_status(
 def get_order_items_summary(
     oid: int = Path(..., ge=1),
     db: Session = Depends(get_db),
-    user=Depends(require_role)
+    user=Depends(require_user)
 ) -> Dict[str, Any]:
     """Get summary of items in an order"""
     order = db.get(Order, oid)

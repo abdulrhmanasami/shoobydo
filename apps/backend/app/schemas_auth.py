@@ -21,7 +21,7 @@ class UserOut(BaseModel):
 class UserCreate(BaseModel):
     email: str
     password: str
-    role: Literal["admin","manager","viewer"] = "user"
+    role: Literal["admin","manager","viewer"] = "viewer"
 
 class UserLogin(BaseModel):
     email: str
