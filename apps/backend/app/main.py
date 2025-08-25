@@ -40,3 +40,15 @@ def api_health():
     return {"status":"ok"}
 
 app.include_router(api_v1)
+
+
+from fastapi import Request
+import logging
+log = logging.getLogger("reports-auth")
+
+@app.middleware("http")
+async def _dbg_reports_auth(request: Request, call_next):
+    if request.url.path.startswith("/api/v1/reports"):
+        has_auth = "authorization" in request.headers
+        log.warning("reports-auth header=%s", has_auth)
+    return await call_next(request)

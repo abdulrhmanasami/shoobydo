@@ -72,7 +72,7 @@ def get_kpis(db: Session = Depends(get_db)) -> Dict[str, Any]:
     return kpis
 
 
-@router.get("/summary")
+@router.get("/summary", dependencies=[Depends(get_current_user)])
 def get_summary(db: Session = Depends(get_db), user = Depends(get_current_user)) -> Dict[str, Any]:
     """Get summary statistics with Redis caching"""
     redis = get_redis()
