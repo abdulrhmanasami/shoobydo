@@ -1,0 +1,140 @@
+from fastapi import APIRouter, Depends, HTTPException, UploadFile, File
+from sqlalchemy.orm import Session
+from typing import List
+import os
+
+from app.db import get_db
+from app.models import Supplier
+from app.schemas import SupplierOut, SupplierStats, SupplierIn, SupplierUpdate
+from app.security import get_current_user, require_role
+
+router = APIRouter(prefix="/suppliers", tags=["suppliers"], redirect_slashes=False)
+
+
+@router.get("/", response_model=List[SupplierOut], dependencies=[Depends(get_current_user)])
+def list_suppliers(db: Session = Depends(get_db)):
+    return db.query(Supplier).order_by(Supplier.id.asc()).all()
+
+
+# alias without trailing slash to avoid 307
+@router.get("", include_in_schema=False)
+def list_suppliers_noslash(db: Session = Depends(get_db)):
+    return list_suppliers(db)
+
+
+@router.get("/stats", response_model=SupplierStats, dependencies=[Depends(get_current_user)])
+def supplier_stats(db: Session = Depends(get_db)):
+    total = db.query(Supplier).count()
+    agg_rows = 0
+    agg_sheets = 0
+    if total:
+        for s in db.query(Supplier.rows, Supplier.sheets).all():
+            agg_rows += int(s.rows or 0)
+            agg_sheets += int(s.sheets or 0)
+    return SupplierStats(total=total, files=total, rows=agg_rows, sheets=agg_sheets, notes="ok")
+
+
+@router.post("/reindex", dependencies=[Depends(require_role("admin"))])
+def reindex_suppliers(db: Session = Depends(get_db)):
+    # Scan data directory recursively for .xlsx files
+    data_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "..", "..", "data"))
+    found_files = []
+    if os.path.isdir(data_dir):
+        for root, _, files in os.walk(data_dir):
+            for f in files:
+                if f.lower().endswith(".xlsx"):
+                    found_files.append(os.path.join(root, f))
+
+    import pandas as pd
+    updated = 0
+    for path in found_files:
+        try:
+            xl = pd.ExcelFile(path)
+            sheet_names = list(xl.sheet_names)
+            total_rows = 0
+            for name in sheet_names:
+                try:
+                    df = xl.parse(name)
+                    total_rows += int(df.shape[0])
+                except Exception:
+                    pass
+            name = os.path.splitext(os.path.basename(path))[0]
+            existing = db.query(Supplier).filter(Supplier.file_path == path).one_or_none()
+            if existing:
+                existing.name = name
+                existing.rows = total_rows
+                existing.sheets = len(sheet_names)
+            else:
+                db.add(Supplier(name=name, file_path=path, rows=total_rows, sheets=len(sheet_names)))
+            updated += 1
+        except Exception:
+            # Skip unreadable files
+            pass
+    db.commit()
+    return {"indexed": updated, "files": len(found_files)}
+
+
+@router.post("/", response_model=SupplierOut, dependencies=[Depends(require_role("admin"))])
+def create_supplier(payload: SupplierIn, db: Session = Depends(get_db)):
+    entity = Supplier(name=payload.name, file_path=payload.file_path, rows=payload.rows, sheets=payload.sheets)
+    db.add(entity)
+    db.commit()
+    db.refresh(entity)
+    return entity
+
+
+@router.delete("/{supplier_id}", dependencies=[Depends(require_role("admin"))])
+def delete_supplier(supplier_id: int, db: Session = Depends(get_db), user = Depends(require_role("admin"))):
+    obj = db.query(Supplier).filter(Supplier.id == supplier_id).one_or_none()
+    if not obj:
+        raise HTTPException(status_code=404, detail="Supplier not found")
+    db.delete(obj)
+    db.commit()
+    return {"deleted": supplier_id}
+
+@router.get("/{supplier_id}", response_model=SupplierOut, dependencies=[Depends(get_current_user)])
+def get_supplier(supplier_id: int, db: Session = Depends(get_db)):
+    obj = db.query(Supplier).filter(Supplier.id == supplier_id).one_or_none()
+    if not obj:
+        raise HTTPException(status_code=404, detail="Supplier not found")
+    return obj
+
+@router.put("/{supplier_id}", response_model=SupplierOut, dependencies=[Depends(require_role("admin"))])
+def update_supplier(supplier_id: int, payload: SupplierUpdate, db: Session = Depends(get_db), user = Depends(require_role("admin"))):
+    obj = db.query(Supplier).filter(Supplier.id == supplier_id).one_or_none()
+    if not obj:
+        raise HTTPException(status_code=404, detail="Supplier not found")
+    if payload.name is not None:
+        obj.name = payload.name
+    if payload.file_path is not None:
+        obj.file_path = payload.file_path
+    if payload.rows is not None:
+        obj.rows = payload.rows
+    if payload.sheets is not None:
+        obj.sheets = payload.sheets
+    db.commit()
+    db.refresh(obj)
+    return obj
+
+@router.post("/upload", dependencies=[Depends(require_role("admin"))])
+def upload_excel(file: UploadFile = File(...), db: Session = Depends(get_db)):
+    filename = file.filename or ""
+    if not filename.lower().endswith(".xlsx"):
+        raise HTTPException(status_code=400, detail="Only .xlsx files are accepted")
+    # Save into data/02_Excel/
+    target_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "..", "..", "data", "02_Excel"))
+    os.makedirs(target_dir, exist_ok=True)
+    # Avoid collisions
+    safe_name = os.path.basename(filename)
+    base, ext = os.path.splitext(safe_name)
+    counter = 1
+    target_path = os.path.join(target_dir, safe_name)
+    while os.path.exists(target_path):
+        target_path = os.path.join(target_dir, f"{base}_{counter}{ext}")
+        counter += 1
+    with open(target_path, "wb") as out:
+        out.write(file.file.read())
+    # Reindex suppliers to reflect new file
+    res = reindex_suppliers(db)
+    return {"saved": os.path.relpath(target_path, start=os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "..", ".."))), "reindexed": res}
+
