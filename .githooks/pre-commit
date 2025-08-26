@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+set -euo pipefail
+patterns='دعني أتحقق|let me check|placeholder|Lorem ipsum'
+fail=0
+
+while IFS= read -r f; do
+  [ -f "$f" ] || continue
+  case "$f" in
+    *.md|*.txt)
+      if grep -qE "$patterns" "$f"; then
+        echo "❌ placeholder text detected in: $f"; fail=1
+      fi
+      ;;
+    *.pdf)
+      if command -v pdftotext >/dev/null && pdftotext "$f" - 2>/dev/null | grep -qE "$patterns"; then
+        echo "❌ placeholder text detected in PDF: $f"; fail=1
+      fi
+      ;;
+  esac
+done < <(git diff --cached --name-only --diff-filter=ACM)
+
+[ $fail -eq 0 ] || { echo "⛔ Commit blocked: remove placeholder text."; exit 1; }

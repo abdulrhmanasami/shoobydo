@@ -1,3 +1,5 @@
+**Executive Summary (v2):** docs/research/01_Report/EXEC_SUMMARY_Shoobydo_v2.md 
+**Executive Summary (v2):** docs/research/01_Report/EXEC_SUMMARY_Shoobydo_v2.md 
 SHOOBYDO Dropship Monorepo
 
 - docs/research: الملفات البحثية والتقارير (مرجع التنفيذ).
