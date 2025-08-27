@@ -7,6 +7,7 @@ from app.routers.orders import router as orders
 from app.routers.order_items import router as order_items
 from app.routers.suppliers import router as suppliers
 from app.routers.reports import router as reports
+from app.routers.inventory import router as inventory
 
 app = FastAPI(title="Shoobydo API", version="0.2.x")
 
@@ -29,6 +30,7 @@ api_v1.include_router(orders,                           tags=["orders"])
 api_v1.include_router(order_items,                      tags=["order_items"])
 api_v1.include_router(suppliers)
 api_v1.include_router(reports,                          tags=["reports"])
+api_v1.include_router(inventory,                        tags=["inventory"])
 
 @app.get("/health", tags=["health"])
 def root_health():
