@@ -134,6 +134,7 @@ def refresh_token(
             detail="Invalid refresh token"
         )
 
+
 @router.post("/logout")
 def logout(
     user: User = Depends(get_current_user)
@@ -145,6 +146,62 @@ def logout(
     # blacklisted_tokens.add(token)
     
     return {"message": "Logged out successfully"}
+
+
+@router.get("/me", response_model=UserOut)
+def get_current_user_info(
+    user: User = Depends(get_current_user)
+):
+    """
+    الحصول على معلومات المستخدم الحالي
+    """
+    return user
+
+@router.post("/refresh", response_model=Token)
+def refresh_token(refresh_token: str, db: Session = Depends(get_db)):
+    """
+    تجديد access token باستخدام refresh token
+    """
+    try:
+        payload = verify_refresh_token(refresh_token)
+        email = payload.get("sub")
+        
+        if not email:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Refresh token غير صالح"
+            )
+        
+        user = db.query(User).filter(User.email == email).first()
+        if not user or not user.is_active:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="المستخدم غير موجود أو معطل"
+            )
+        
+        # إنشاء access token جديد
+        new_access_token = create_access_token(sub=user.email, role=user.role.value)
+        
+        return Token(
+            access_token=new_access_token,
+            token_type="bearer"
+        )
+        
+    except Exception:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Refresh token غير صالح"
+        )
+
+@router.post("/logout")
+def logout(token: str = Depends(_bearer)):
+    """
+    تسجيل الخروج وإضافة token للقائمة السوداء
+    """
+    if token:
+        blacklisted_tokens.add(token.credentials)
+    
+    return {"message": "تم تسجيل الخروج بنجاح"}
 
 @router.get("/me", response_model=UserOut)
 def me(user: User = Depends(get_current_user)):
