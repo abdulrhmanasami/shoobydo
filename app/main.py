@@ -1,3 +1,4 @@
+from app.routers import inventory, reports
 from fastapi import FastAPI, APIRouter
 from fastapi.middleware.cors import CORSMiddleware
 from app.routers.auth import router as auth
@@ -40,3 +41,7 @@ def api_health():
     return {"status":"ok"}
 
 app.include_router(api_v1)
+
+api_v1.include_router(inventory, prefix='/inventory', tags=['inventory'])
+
+api_v1.include_router(reports, prefix='/reports', tags=['reports'])

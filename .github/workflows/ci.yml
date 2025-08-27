@@ -29,7 +29,7 @@ jobs:
           SKIP_DB_TESTS: true
         run: |
           . .venv/bin/activate
-          pytest -q
+          pytest -q --maxfail=1
 
   lint-frontend:
     runs-on: ubuntu-latest
@@ -46,7 +46,7 @@ jobs:
       - name: Lint
         working-directory: apps/frontend
         run: |
-          npx next lint || echo "Skipping lint failures for now"
+          npx next lint
 
   docker-build-backend:
     runs-on: ubuntu-latest
