@@ -12,3 +12,6 @@ backup_*.zip
 reports/
 .venv/
 *.py[cod]
+]633;E;{ echo ""\x3b echo "# ignore root PDFs"\x3b echo "/*.pdf"\x3b } >> .gitignore;]633;C
+# ignore root PDFs
+/*.pdf
