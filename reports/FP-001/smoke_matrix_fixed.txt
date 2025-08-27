@@ -1,0 +1,7 @@
+/health                      200
+/api/v1/reports/summary      401
+/api/v1/inventory/products/1/stock 404
+/api/v1/products/            422
+/api/v1/orders/              422
+/api/v1/suppliers            200
+/api/v1/customers/           422
