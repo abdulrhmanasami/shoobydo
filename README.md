@@ -142,3 +142,10 @@ Order Items API endpoints
 - `POST /inventory/products/{id}/reserve` → Reserve stock
 - `POST /inventory/products/{id}/release` → Release reserved stock
 <!-- EPIC-02-TASK-02K:END -->
+
+<!-- DOCS-INDEX:START -->
+## Project Documentation
+- [Executive Summary](docs/EXECUTIVE_SUMMARY.md)
+- [Implementation Gap Analysis](docs/IMPLEMENTATION_GAP_ANALYSIS.md)
+- [Feature Roadmap](docs/FEATURE_ROADMAP.md)
+<!-- DOCS-INDEX:END -->
