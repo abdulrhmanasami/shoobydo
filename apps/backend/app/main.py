@@ -23,14 +23,14 @@ app.add_middleware(
 api_v1 = APIRouter(prefix="/api/v1")
 
 # ملاحظة: في __init__.py صدّرنا كائن router مباشرةً، لذلك نمرّره كما هو.
-api_v1.include_router(auth,        prefix="/auth",         tags=["auth"])
-api_v1.include_router(products,                         tags=["products"])
-api_v1.include_router(customers,                        tags=["customers"])
-api_v1.include_router(orders,                           tags=["orders"])
-api_v1.include_router(order_items,                      tags=["order_items"])
-api_v1.include_router(suppliers)
-api_v1.include_router(reports,                          tags=["reports"])
-api_v1.include_router(inventory,                        tags=["inventory"])
+api_v1.include_router(auth,        tags=["auth"])
+api_v1.include_router(products,    tags=["products"])
+api_v1.include_router(customers,   tags=["customers"])
+api_v1.include_router(orders,      tags=["orders"])
+api_v1.include_router(order_items, tags=["order_items"])
+api_v1.include_router(suppliers,   tags=["suppliers"])
+api_v1.include_router(reports,     tags=["reports"])
+api_v1.include_router(inventory,   tags=["inventory"])
 
 @app.get("/health", tags=["health"])
 def root_health():
