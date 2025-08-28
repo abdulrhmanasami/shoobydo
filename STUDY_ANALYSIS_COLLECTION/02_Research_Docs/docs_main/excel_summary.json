@@ -1,0 +1,318 @@
+{
+  "suppliers_model_01.xlsx": [
+    {
+      "sheet": "لوحة KPI الرئيسية",
+      "rows": 25,
+      "cols": 9,
+      "columns": [
+        "الفئة",
+        "مؤشر الأداء",
+        "القيمة الحالية",
+        "القيمة المستهدفة",
+        "الوحدة",
+        "نسبة الإنجاز",
+        "الحالة",
+        "اللون",
+        "التاريخ"
+      ]
+    },
+    {
+      "sheet": "الأداء التاريخي",
+      "rows": 1464,
+      "cols": 4,
+      "columns": [
+        "التاريخ",
+        "المؤشر",
+        "القيمة",
+        "الوحدة"
+      ]
+    },
+    {
+      "sheet": "تحليل الموردين",
+      "rows": 10,
+      "cols": 9,
+      "columns": [
+        "المورد",
+        "عدد الطلبات الشهرية",
+        "معدل الجودة",
+        "وقت التسليم المتوسط",
+        "معدل الطلبات المكتملة",
+        "تقييم الخدمة",
+        "التكلفة النسبية",
+        "الحالة",
+        "التقييم العام"
+      ]
+    },
+    {
+      "sheet": "تحليل العملاء",
+      "rows": 8,
+      "cols": 8,
+      "columns": [
+        "البلد",
+        "عدد العملاء النشطين",
+        "متوسط قيمة الطلب",
+        "معدل العودة للشراء",
+        "معدل الرضا",
+        "النمو الشهري",
+        "الإيرادات الشهرية",
+        "اللغة المفضلة"
+      ]
+    },
+    {
+      "sheet": "الملخص التنفيذي",
+      "rows": 8,
+      "cols": 4,
+      "columns": [
+        "المؤشر الرئيسي",
+        "القيمة الحالية",
+        "الهدف الشهري",
+        "الحالة"
+      ]
+    }
+  ],
+  "suppliers_model_03.xlsx": [
+    {
+      "sheet": "KPI Dashboard",
+      "rows": 10,
+      "cols": 5,
+      "columns": [
+        "مؤشرات الأداء الرئيسية - لوحة المعلومات",
+        "Unnamed: 1",
+        "Unnamed: 2",
+        "Unnamed: 3",
+        "Unnamed: 4"
+      ]
+    },
+    {
+      "sheet": "تتبع المبيعات",
+      "rows": 30,
+      "cols": 5,
+      "columns": [
+        "التاريخ",
+        "الإيرادات (يورو)",
+        "عدد الطلبات",
+        "متوسط قيمة الطلب",
+        "العملاء الجدد"
+      ]
+    },
+    {
+      "sheet": "خدمة العملاء",
+      "rows": 30,
+      "cols": 5,
+      "columns": [
+        "التاريخ",
+        "الاستفسارات المستلمة",
+        "الاستفسارات المحلولة",
+        "وقت الاستجابة (ساعة)",
+        "معدل الرضا"
+      ]
+    },
+    {
+      "sheet": "العمليات",
+      "rows": 30,
+      "cols": 5,
+      "columns": [
+        "التاريخ",
+        "الطلبات المعالجة",
+        "وقت المعالجة المتوسط (ساعة)",
+        "معدل الدقة (%)",
+        "الطلبات المعلقة"
+      ]
+    },
+    {
+      "sheet": "التسويق",
+      "rows": 30,
+      "cols": 5,
+      "columns": [
+        "التاريخ",
+        "زوار الموقع",
+        "معدل التحويل (%)",
+        "تكلفة الإعلانات (يورو)",
+        "عائد الاستثمار"
+      ]
+    },
+    {
+      "sheet": "أداء الموردين",
+      "rows": 6,
+      "cols": 5,
+      "columns": [
+        "اسم المورد",
+        "عدد الطلبات",
+        "وقت التسليم المتوسط (يوم)",
+        "معدل الجودة (%)",
+        "التقييم العام"
+      ]
+    },
+    {
+      "sheet": "أداء المنتجات",
+      "rows": 8,
+      "cols": 5,
+      "columns": [
+        "اسم المنتج",
+        "المبيعات (يورو)",
+        "الكمية المباعة",
+        "معدل الإرجاع (%)",
+        "تقييم العملاء"
+      ]
+    }
+  ],
+  "suppliers_model_02.xlsx": [
+    {
+      "sheet": "Sheet1",
+      "rows": 4,
+      "cols": 5,
+      "columns": [
+        "Business_Model",
+        "Recommended_Suppliers",
+        "Monthly_Cost_EUR",
+        "Advantages",
+        "Challenges"
+      ]
+    }
+  ],
+  "suppliers_model_05.xlsx": [
+    {
+      "sheet": "مقارنة الموردين",
+      "rows": 14,
+      "cols": 13,
+      "columns": [
+        "اسم المورد",
+        "البلد",
+        "التخصص",
+        "عدد المنتجات",
+        "وقت الشحن (أيام)",
+        "التكلفة الشهرية (يورو)",
+        "نطاق الأسعار (يورو)",
+        "التقييم العام",
+        "الجودة",
+        "السرعة"
+      ]
+    },
+    {
+      "sheet": "تحليل حسب المستوى",
+      "rows": 3,
+      "cols": 4,
+      "columns": [
+        "المستوى الموصى",
+        "التقييم العام",
+        "التكلفة الشهرية (يورو)",
+        "عدد المنتجات"
+      ]
+    },
+    {
+      "sheet": "تحليل حسب التخصص",
+      "rows": 6,
+      "cols": 4,
+      "columns": [
+        "التخصص",
+        "التقييم العام",
+        "الجودة",
+        "السرعة"
+      ]
+    },
+    {
+      "sheet": "توصيات المبتدئين",
+      "rows": 4,
+      "cols": 13,
+      "columns": [
+        "اسم المورد",
+        "البلد",
+        "التخصص",
+        "عدد المنتجات",
+        "وقت الشحن (أيام)",
+        "التكلفة الشهرية (يورو)",
+        "نطاق الأسعار (يورو)",
+        "التقييم العام",
+        "الجودة",
+        "السرعة"
+      ]
+    },
+    {
+      "sheet": "توصيات المتقدمين",
+      "rows": 4,
+      "cols": 13,
+      "columns": [
+        "اسم المورد",
+        "البلد",
+        "التخصص",
+        "عدد المنتجات",
+        "وقت الشحن (أيام)",
+        "التكلفة الشهرية (يورو)",
+        "نطاق الأسعار (يورو)",
+        "التقييم العام",
+        "الجودة",
+        "السرعة"
+      ]
+    }
+  ],
+  "suppliers_model_04.xlsx": [
+    {
+      "sheet": "Complete_Comparison",
+      "rows": 20,
+      "cols": 11,
+      "columns": [
+        "Supplier_Name",
+        "Country_Region",
+        "Specialization",
+        "Monthly_Fee_EUR",
+        "Product_Price_Range_EUR",
+        "Shipping_Time_Days",
+        "EU_Warehouses",
+        "API_Integration",
+        "Custom_Branding",
+        "Overall_Rating"
+      ]
+    },
+    {
+      "sheet": "For_Beginners",
+      "rows": 14,
+      "cols": 11,
+      "columns": [
+        "Supplier_Name",
+        "Country_Region",
+        "Specialization",
+        "Monthly_Fee_EUR",
+        "Product_Price_Range_EUR",
+        "Shipping_Time_Days",
+        "EU_Warehouses",
+        "API_Integration",
+        "Custom_Branding",
+        "Overall_Rating"
+      ]
+    },
+    {
+      "sheet": "Premium_Suppliers",
+      "rows": 7,
+      "cols": 11,
+      "columns": [
+        "Supplier_Name",
+        "Country_Region",
+        "Specialization",
+        "Monthly_Fee_EUR",
+        "Product_Price_Range_EUR",
+        "Shipping_Time_Days",
+        "EU_Warehouses",
+        "API_Integration",
+        "Custom_Branding",
+        "Overall_Rating"
+      ]
+    },
+    {
+      "sheet": "Local_European",
+      "rows": 12,
+      "cols": 11,
+      "columns": [
+        "Supplier_Name",
+        "Country_Region",
+        "Specialization",
+        "Monthly_Fee_EUR",
+        "Product_Price_Range_EUR",
+        "Shipping_Time_Days",
+        "EU_Warehouses",
+        "API_Integration",
+        "Custom_Branding",
+        "Overall_Rating"
+      ]
+    }
+  ]
+}
