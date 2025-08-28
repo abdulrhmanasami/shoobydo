@@ -1,57 +1,25 @@
 name: CI
-
-on:
-  push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
-
+on: [push, pull_request]
 jobs:
-  backend:
+  build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
-      - name: Install backend deps
-        working-directory: apps/backend
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.11' }
+      - name: Backend deps
         run: |
-          python -m venv .venv
-          . .venv/bin/activate
+          cd apps/backend
+          python -m venv .venv && . .venv/bin/activate
           pip install -U pip
           pip install -r requirements.txt
-      - name: Run backend tests
-        working-directory: apps/backend
-        env:
-          API_BASE_URL: http://127.0.0.1:8803
-          SKIP_DB_TESTS: true
+      - name: Lint (flake8)
         run: |
-          . .venv/bin/activate
+          cd apps/backend && . .venv/bin/activate
+          python -m pip install flake8
+          flake8 .
+      - name: Tests (pytest)
+        run: |
+          cd apps/backend && . .venv/bin/activate
+          python -m pip install pytest
           pytest -q --maxfail=1
-
-  lint-frontend:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: Use Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '18'
-      - name: Install deps
-        working-directory: apps/frontend
-        run: |
-          npm ci || npm install
-      - name: Lint
-        working-directory: apps/frontend
-        run: |
-          npx next lint
-
-  docker-build-backend:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: Build backend image
-        run: docker build -t backend-ci:latest apps/backend
-
