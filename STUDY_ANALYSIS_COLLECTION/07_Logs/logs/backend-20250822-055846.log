@@ -1,0 +1,260 @@
+/Users/abdulrahman/Documents/GitHub/shoobydo/apps/backend/.venv/lib/python3.13/site-packages/pydantic/_internal/_config.py:373: UserWarning: Valid config keys have changed in V2:
+* 'orm_mode' has been renamed to 'from_attributes'
+  warnings.warn(message, UserWarning)
+INFO:     Started server process [84168]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:8805 (Press CTRL+C to quit)
+ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File "/Users/abdulrahman/Documents/GitHub/shoobydo/apps/backend/.venv/lib/python3.13/site-packages/uvicorn/protocols/http/httptools_impl.py", line 409, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        self.scope, self.receive, self.send
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/abdulrahman/Documents/GitHub/shoobydo/apps/backend/.venv/lib/python3.13/site-packages/uvicorn/middleware/proxy_headers.py", line 60, in __call__
+    return await self.app(scope, receive, send)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/abdulrahman/Documents/GitHub/shoobydo/apps/backend/.venv/lib/python3.13/site-packages/fastapi/applications.py", line 1054, in __call__
+    await super().__call__(scope, receive, send)
+  File "/Users/abdulrahman/Documents/GitHub/shoobydo/apps/backend/.venv/lib/python3.13/site-packages/starlette/applications.py", line 113, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/abdulrahman/Documents/GitHub/shoobydo/apps/backend/.venv/lib/python3.13/site-packages/starlette/middleware/errors.py", line 186, in __call__
+    raise exc
+  File "/Users/abdulrahman/Documents/GitHub/shoobydo/apps/backend/.venv/lib/python3.13/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "/Users/abdulrahman/Documents/GitHub/shoobydo/apps/backend/.venv/lib/python3.13/site-packages/starlette/middleware/cors.py", line 85, in __call__
+    await self.app(scope, receive, send)
+  File "/Users/abdulrahman/Documents/GitHub/shoobydo/apps/backend/.venv/lib/python3.13/site-packages/starlette/middleware/exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/Users/abdulrahman/Documents/GitHub/shoobydo/apps/backend/.venv/lib/python3.13/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/Users/abdulrahman/Documents/GitHub/shoobydo/apps/backend/.venv/lib/python3.13/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/abdulrahman/Documents/GitHub/shoobydo/apps/backend/.venv/lib/python3.13/site-packages/starlette/routing.py", line 716, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/abdulrahman/Documents/GitHub/shoobydo/apps/backend/.venv/lib/python3.13/site-packages/starlette/routing.py", line 736, in app
+    await route.handle(scope, receive, send)
+  File "/Users/abdulrahman/Documents/GitHub/shoobydo/apps/backend/.venv/lib/python3.13/site-packages/starlette/routing.py", line 290, in handle
+    await self.app(scope, receive, send)
+  File "/Users/abdulrahman/Documents/GitHub/shoobydo/apps/backend/.venv/lib/python3.13/site-packages/starlette/routing.py", line 78, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/Users/abdulrahman/Documents/GitHub/shoobydo/apps/backend/.venv/lib/python3.13/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/Users/abdulrahman/Documents/GitHub/shoobydo/apps/backend/.venv/lib/python3.13/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/abdulrahman/Documents/GitHub/shoobydo/apps/backend/.venv/lib/python3.13/site-packages/starlette/routing.py", line 75, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "/Users/abdulrahman/Documents/GitHub/shoobydo/apps/backend/.venv/lib/python3.13/site-packages/fastapi/routing.py", line 302, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+    )
+    ^
+  File "/Users/abdulrahman/Documents/GitHub/shoobydo/apps/backend/.venv/lib/python3.13/site-packages/fastapi/routing.py", line 215, in run_endpoint_function
+    return await run_in_threadpool(dependant.call, **values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/abdulrahman/Documents/GitHub/shoobydo/apps/backend/.venv/lib/python3.13/site-packages/starlette/concurrency.py", line 38, in run_in_threadpool
+    return await anyio.to_thread.run_sync(func)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/abdulrahman/Documents/GitHub/shoobydo/apps/backend/.venv/lib/python3.13/site-packages/anyio/to_thread.py", line 56, in run_sync
+    return await get_async_backend().run_sync_in_worker_thread(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        func, args, abandon_on_cancel=abandon_on_cancel, limiter=limiter
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/abdulrahman/Documents/GitHub/shoobydo/apps/backend/.venv/lib/python3.13/site-packages/anyio/_backends/_asyncio.py", line 2476, in run_sync_in_worker_thread
+    return await future
+           ^^^^^^^^^^^^
+  File "/Users/abdulrahman/Documents/GitHub/shoobydo/apps/backend/.venv/lib/python3.13/site-packages/anyio/_backends/_asyncio.py", line 967, in run
+    result = context.run(func, *args)
+  File "/Users/abdulrahman/Documents/GitHub/shoobydo/apps/backend/app/routers/products.py", line 17, in create_product
+    obj = Product(**data.model_dump())
+  File "<string>", line 4, in __init__
+  File "/Users/abdulrahman/Documents/GitHub/shoobydo/apps/backend/.venv/lib/python3.13/site-packages/sqlalchemy/orm/state.py", line 571, in _initialize_instance
+    with util.safe_reraise():
+         ~~~~~~~~~~~~~~~~~^^
+  File "/Users/abdulrahman/Documents/GitHub/shoobydo/apps/backend/.venv/lib/python3.13/site-packages/sqlalchemy/util/langhelpers.py", line 224, in __exit__
+    raise exc_value.with_traceback(exc_tb)
+  File "/Users/abdulrahman/Documents/GitHub/shoobydo/apps/backend/.venv/lib/python3.13/site-packages/sqlalchemy/orm/state.py", line 569, in _initialize_instance
+    manager.original_init(*mixed[1:], **kwargs)
+    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/abdulrahman/Documents/GitHub/shoobydo/apps/backend/.venv/lib/python3.13/site-packages/sqlalchemy/orm/decl_base.py", line 2179, in _declarative_constructor
+    raise TypeError(
+        "%r is an invalid keyword argument for %s" % (k, cls_.__name__)
+    )
+TypeError: 'currency' is an invalid keyword argument for Product
+ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File "/Users/abdulrahman/Documents/GitHub/shoobydo/apps/backend/.venv/lib/python3.13/site-packages/uvicorn/protocols/http/httptools_impl.py", line 409, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        self.scope, self.receive, self.send
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/abdulrahman/Documents/GitHub/shoobydo/apps/backend/.venv/lib/python3.13/site-packages/uvicorn/middleware/proxy_headers.py", line 60, in __call__
+    return await self.app(scope, receive, send)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/abdulrahman/Documents/GitHub/shoobydo/apps/backend/.venv/lib/python3.13/site-packages/fastapi/applications.py", line 1054, in __call__
+    await super().__call__(scope, receive, send)
+  File "/Users/abdulrahman/Documents/GitHub/shoobydo/apps/backend/.venv/lib/python3.13/site-packages/starlette/applications.py", line 113, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/abdulrahman/Documents/GitHub/shoobydo/apps/backend/.venv/lib/python3.13/site-packages/starlette/middleware/errors.py", line 186, in __call__
+    raise exc
+  File "/Users/abdulrahman/Documents/GitHub/shoobydo/apps/backend/.venv/lib/python3.13/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "/Users/abdulrahman/Documents/GitHub/shoobydo/apps/backend/.venv/lib/python3.13/site-packages/starlette/middleware/cors.py", line 85, in __call__
+    await self.app(scope, receive, send)
+  File "/Users/abdulrahman/Documents/GitHub/shoobydo/apps/backend/.venv/lib/python3.13/site-packages/starlette/middleware/exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/Users/abdulrahman/Documents/GitHub/shoobydo/apps/backend/.venv/lib/python3.13/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/Users/abdulrahman/Documents/GitHub/shoobydo/apps/backend/.venv/lib/python3.13/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/abdulrahman/Documents/GitHub/shoobydo/apps/backend/.venv/lib/python3.13/site-packages/starlette/routing.py", line 716, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/abdulrahman/Documents/GitHub/shoobydo/apps/backend/.venv/lib/python3.13/site-packages/starlette/routing.py", line 736, in app
+    await route.handle(scope, receive, send)
+  File "/Users/abdulrahman/Documents/GitHub/shoobydo/apps/backend/.venv/lib/python3.13/site-packages/starlette/routing.py", line 290, in handle
+    await self.app(scope, receive, send)
+  File "/Users/abdulrahman/Documents/GitHub/shoobydo/apps/backend/.venv/lib/python3.13/site-packages/starlette/routing.py", line 78, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/Users/abdulrahman/Documents/GitHub/shoobydo/apps/backend/.venv/lib/python3.13/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/Users/abdulrahman/Documents/GitHub/shoobydo/apps/backend/.venv/lib/python3.13/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/abdulrahman/Documents/GitHub/shoobydo/apps/backend/.venv/lib/python3.13/site-packages/starlette/routing.py", line 75, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "/Users/abdulrahman/Documents/GitHub/shoobydo/apps/backend/.venv/lib/python3.13/site-packages/fastapi/routing.py", line 302, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+    )
+    ^
+  File "/Users/abdulrahman/Documents/GitHub/shoobydo/apps/backend/.venv/lib/python3.13/site-packages/fastapi/routing.py", line 215, in run_endpoint_function
+    return await run_in_threadpool(dependant.call, **values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/abdulrahman/Documents/GitHub/shoobydo/apps/backend/.venv/lib/python3.13/site-packages/starlette/concurrency.py", line 38, in run_in_threadpool
+    return await anyio.to_thread.run_sync(func)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/abdulrahman/Documents/GitHub/shoobydo/apps/backend/.venv/lib/python3.13/site-packages/anyio/to_thread.py", line 56, in run_sync
+    return await get_async_backend().run_sync_in_worker_thread(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        func, args, abandon_on_cancel=abandon_on_cancel, limiter=limiter
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/abdulrahman/Documents/GitHub/shoobydo/apps/backend/.venv/lib/python3.13/site-packages/anyio/_backends/_asyncio.py", line 2476, in run_sync_in_worker_thread
+    return await future
+           ^^^^^^^^^^^^
+  File "/Users/abdulrahman/Documents/GitHub/shoobydo/apps/backend/.venv/lib/python3.13/site-packages/anyio/_backends/_asyncio.py", line 967, in run
+    result = context.run(func, *args)
+  File "/Users/abdulrahman/Documents/GitHub/shoobydo/apps/backend/app/routers/products.py", line 17, in create_product
+    obj = Product(**data.model_dump())
+  File "<string>", line 4, in __init__
+  File "/Users/abdulrahman/Documents/GitHub/shoobydo/apps/backend/.venv/lib/python3.13/site-packages/sqlalchemy/orm/state.py", line 571, in _initialize_instance
+    with util.safe_reraise():
+         ~~~~~~~~~~~~~~~~~^^
+  File "/Users/abdulrahman/Documents/GitHub/shoobydo/apps/backend/.venv/lib/python3.13/site-packages/sqlalchemy/util/langhelpers.py", line 224, in __exit__
+    raise exc_value.with_traceback(exc_tb)
+  File "/Users/abdulrahman/Documents/GitHub/shoobydo/apps/backend/.venv/lib/python3.13/site-packages/sqlalchemy/orm/state.py", line 569, in _initialize_instance
+    manager.original_init(*mixed[1:], **kwargs)
+    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/abdulrahman/Documents/GitHub/shoobydo/apps/backend/.venv/lib/python3.13/site-packages/sqlalchemy/orm/decl_base.py", line 2179, in _declarative_constructor
+    raise TypeError(
+        "%r is an invalid keyword argument for %s" % (k, cls_.__name__)
+    )
+TypeError: 'currency' is an invalid keyword argument for Product
+ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File "/Users/abdulrahman/Documents/GitHub/shoobydo/apps/backend/.venv/lib/python3.13/site-packages/uvicorn/protocols/http/httptools_impl.py", line 409, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        self.scope, self.receive, self.send
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/abdulrahman/Documents/GitHub/shoobydo/apps/backend/.venv/lib/python3.13/site-packages/uvicorn/middleware/proxy_headers.py", line 60, in __call__
+    return await self.app(scope, receive, send)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/abdulrahman/Documents/GitHub/shoobydo/apps/backend/.venv/lib/python3.13/site-packages/fastapi/applications.py", line 1054, in __call__
+    await super().__call__(scope, receive, send)
+  File "/Users/abdulrahman/Documents/GitHub/shoobydo/apps/backend/.venv/lib/python3.13/site-packages/starlette/applications.py", line 113, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/abdulrahman/Documents/GitHub/shoobydo/apps/backend/.venv/lib/python3.13/site-packages/starlette/middleware/errors.py", line 186, in __call__
+    raise exc
+  File "/Users/abdulrahman/Documents/GitHub/shoobydo/apps/backend/.venv/lib/python3.13/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "/Users/abdulrahman/Documents/GitHub/shoobydo/apps/backend/.venv/lib/python3.13/site-packages/starlette/middleware/cors.py", line 85, in __call__
+    await self.app(scope, receive, send)
+  File "/Users/abdulrahman/Documents/GitHub/shoobydo/apps/backend/.venv/lib/python3.13/site-packages/starlette/middleware/exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/Users/abdulrahman/Documents/GitHub/shoobydo/apps/backend/.venv/lib/python3.13/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/Users/abdulrahman/Documents/GitHub/shoobydo/apps/backend/.venv/lib/python3.13/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/abdulrahman/Documents/GitHub/shoobydo/apps/backend/.venv/lib/python3.13/site-packages/starlette/routing.py", line 716, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/abdulrahman/Documents/GitHub/shoobydo/apps/backend/.venv/lib/python3.13/site-packages/starlette/routing.py", line 736, in app
+    await route.handle(scope, receive, send)
+  File "/Users/abdulrahman/Documents/GitHub/shoobydo/apps/backend/.venv/lib/python3.13/site-packages/starlette/routing.py", line 290, in handle
+    await self.app(scope, receive, send)
+  File "/Users/abdulrahman/Documents/GitHub/shoobydo/apps/backend/.venv/lib/python3.13/site-packages/starlette/routing.py", line 78, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/Users/abdulrahman/Documents/GitHub/shoobydo/apps/backend/.venv/lib/python3.13/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/Users/abdulrahman/Documents/GitHub/shoobydo/apps/backend/.venv/lib/python3.13/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/abdulrahman/Documents/GitHub/shoobydo/apps/backend/.venv/lib/python3.13/site-packages/starlette/routing.py", line 75, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "/Users/abdulrahman/Documents/GitHub/shoobydo/apps/backend/.venv/lib/python3.13/site-packages/fastapi/routing.py", line 302, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+    )
+    ^
+  File "/Users/abdulrahman/Documents/GitHub/shoobydo/apps/backend/.venv/lib/python3.13/site-packages/fastapi/routing.py", line 215, in run_endpoint_function
+    return await run_in_threadpool(dependant.call, **values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/abdulrahman/Documents/GitHub/shoobydo/apps/backend/.venv/lib/python3.13/site-packages/starlette/concurrency.py", line 38, in run_in_threadpool
+    return await anyio.to_thread.run_sync(func)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/abdulrahman/Documents/GitHub/shoobydo/apps/backend/.venv/lib/python3.13/site-packages/anyio/to_thread.py", line 56, in run_sync
+    return await get_async_backend().run_sync_in_worker_thread(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        func, args, abandon_on_cancel=abandon_on_cancel, limiter=limiter
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/abdulrahman/Documents/GitHub/shoobydo/apps/backend/.venv/lib/python3.13/site-packages/anyio/_backends/_asyncio.py", line 2476, in run_sync_in_worker_thread
+    return await future
+           ^^^^^^^^^^^^
+  File "/Users/abdulrahman/Documents/GitHub/shoobydo/apps/backend/.venv/lib/python3.13/site-packages/anyio/_backends/_asyncio.py", line 967, in run
+    result = context.run(func, *args)
+  File "/Users/abdulrahman/Documents/GitHub/shoobydo/apps/backend/app/routers/products.py", line 17, in create_product
+    obj = Product(**data.model_dump())
+  File "<string>", line 4, in __init__
+  File "/Users/abdulrahman/Documents/GitHub/shoobydo/apps/backend/.venv/lib/python3.13/site-packages/sqlalchemy/orm/state.py", line 571, in _initialize_instance
+    with util.safe_reraise():
+         ~~~~~~~~~~~~~~~~~^^
+  File "/Users/abdulrahman/Documents/GitHub/shoobydo/apps/backend/.venv/lib/python3.13/site-packages/sqlalchemy/util/langhelpers.py", line 224, in __exit__
+    raise exc_value.with_traceback(exc_tb)
+  File "/Users/abdulrahman/Documents/GitHub/shoobydo/apps/backend/.venv/lib/python3.13/site-packages/sqlalchemy/orm/state.py", line 569, in _initialize_instance
+    manager.original_init(*mixed[1:], **kwargs)
+    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/abdulrahman/Documents/GitHub/shoobydo/apps/backend/.venv/lib/python3.13/site-packages/sqlalchemy/orm/decl_base.py", line 2179, in _declarative_constructor
+    raise TypeError(
+        "%r is an invalid keyword argument for %s" % (k, cls_.__name__)
+    )
+TypeError: 'currency' is an invalid keyword argument for Product
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [84168]

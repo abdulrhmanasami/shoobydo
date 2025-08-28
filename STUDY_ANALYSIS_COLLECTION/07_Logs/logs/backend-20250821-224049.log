@@ -1,0 +1,219 @@
+/Users/abdulrahman/Documents/GitHub/shoobydo/apps/backend/.venv/lib/python3.13/site-packages/pydantic/_internal/_config.py:373: UserWarning: Valid config keys have changed in V2:
+* 'orm_mode' has been renamed to 'from_attributes'
+  warnings.warn(message, UserWarning)
+INFO:     Started server process [68026]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:8805 (Press CTRL+C to quit)
+ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File "/Users/abdulrahman/Documents/GitHub/shoobydo/apps/backend/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 143, in __init__
+    self._dbapi_connection = engine.raw_connection()
+                             ~~~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/abdulrahman/Documents/GitHub/shoobydo/apps/backend/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 3301, in raw_connection
+    return self.pool.connect()
+           ~~~~~~~~~~~~~~~~~^^
+  File "/Users/abdulrahman/Documents/GitHub/shoobydo/apps/backend/.venv/lib/python3.13/site-packages/sqlalchemy/pool/base.py", line 447, in connect
+    return _ConnectionFairy._checkout(self)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/Users/abdulrahman/Documents/GitHub/shoobydo/apps/backend/.venv/lib/python3.13/site-packages/sqlalchemy/pool/base.py", line 1264, in _checkout
+    fairy = _ConnectionRecord.checkout(pool)
+  File "/Users/abdulrahman/Documents/GitHub/shoobydo/apps/backend/.venv/lib/python3.13/site-packages/sqlalchemy/pool/base.py", line 711, in checkout
+    rec = pool._do_get()
+  File "/Users/abdulrahman/Documents/GitHub/shoobydo/apps/backend/.venv/lib/python3.13/site-packages/sqlalchemy/pool/impl.py", line 177, in _do_get
+    with util.safe_reraise():
+         ~~~~~~~~~~~~~~~~~^^
+  File "/Users/abdulrahman/Documents/GitHub/shoobydo/apps/backend/.venv/lib/python3.13/site-packages/sqlalchemy/util/langhelpers.py", line 224, in __exit__
+    raise exc_value.with_traceback(exc_tb)
+  File "/Users/abdulrahman/Documents/GitHub/shoobydo/apps/backend/.venv/lib/python3.13/site-packages/sqlalchemy/pool/impl.py", line 175, in _do_get
+    return self._create_connection()
+           ~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/abdulrahman/Documents/GitHub/shoobydo/apps/backend/.venv/lib/python3.13/site-packages/sqlalchemy/pool/base.py", line 388, in _create_connection
+    return _ConnectionRecord(self)
+  File "/Users/abdulrahman/Documents/GitHub/shoobydo/apps/backend/.venv/lib/python3.13/site-packages/sqlalchemy/pool/base.py", line 673, in __init__
+    self.__connect()
+    ~~~~~~~~~~~~~~^^
+  File "/Users/abdulrahman/Documents/GitHub/shoobydo/apps/backend/.venv/lib/python3.13/site-packages/sqlalchemy/pool/base.py", line 899, in __connect
+    with util.safe_reraise():
+         ~~~~~~~~~~~~~~~~~^^
+  File "/Users/abdulrahman/Documents/GitHub/shoobydo/apps/backend/.venv/lib/python3.13/site-packages/sqlalchemy/util/langhelpers.py", line 224, in __exit__
+    raise exc_value.with_traceback(exc_tb)
+  File "/Users/abdulrahman/Documents/GitHub/shoobydo/apps/backend/.venv/lib/python3.13/site-packages/sqlalchemy/pool/base.py", line 895, in __connect
+    self.dbapi_connection = connection = pool._invoke_creator(self)
+                                         ~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/Users/abdulrahman/Documents/GitHub/shoobydo/apps/backend/.venv/lib/python3.13/site-packages/sqlalchemy/engine/create.py", line 661, in connect
+    return dialect.connect(*cargs, **cparams)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "/Users/abdulrahman/Documents/GitHub/shoobydo/apps/backend/.venv/lib/python3.13/site-packages/sqlalchemy/engine/default.py", line 629, in connect
+    return self.loaded_dbapi.connect(*cargs, **cparams)  # type: ignore[no-any-return]  # NOQA: E501
+           ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "/Users/abdulrahman/Documents/GitHub/shoobydo/apps/backend/.venv/lib/python3.13/site-packages/psycopg2/__init__.py", line 122, in connect
+    conn = _connect(dsn, connection_factory=connection_factory, **kwasync)
+psycopg2.OperationalError: connection to server at "127.0.0.1", port 5548 failed: Connection refused
+	Is the server running on that host and accepting TCP/IP connections?
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/abdulrahman/Documents/GitHub/shoobydo/apps/backend/.venv/lib/python3.13/site-packages/uvicorn/protocols/http/httptools_impl.py", line 409, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        self.scope, self.receive, self.send
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/abdulrahman/Documents/GitHub/shoobydo/apps/backend/.venv/lib/python3.13/site-packages/uvicorn/middleware/proxy_headers.py", line 60, in __call__
+    return await self.app(scope, receive, send)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/abdulrahman/Documents/GitHub/shoobydo/apps/backend/.venv/lib/python3.13/site-packages/fastapi/applications.py", line 1054, in __call__
+    await super().__call__(scope, receive, send)
+  File "/Users/abdulrahman/Documents/GitHub/shoobydo/apps/backend/.venv/lib/python3.13/site-packages/starlette/applications.py", line 113, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/abdulrahman/Documents/GitHub/shoobydo/apps/backend/.venv/lib/python3.13/site-packages/starlette/middleware/errors.py", line 186, in __call__
+    raise exc
+  File "/Users/abdulrahman/Documents/GitHub/shoobydo/apps/backend/.venv/lib/python3.13/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "/Users/abdulrahman/Documents/GitHub/shoobydo/apps/backend/.venv/lib/python3.13/site-packages/starlette/middleware/exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/Users/abdulrahman/Documents/GitHub/shoobydo/apps/backend/.venv/lib/python3.13/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/Users/abdulrahman/Documents/GitHub/shoobydo/apps/backend/.venv/lib/python3.13/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/abdulrahman/Documents/GitHub/shoobydo/apps/backend/.venv/lib/python3.13/site-packages/starlette/routing.py", line 716, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/abdulrahman/Documents/GitHub/shoobydo/apps/backend/.venv/lib/python3.13/site-packages/starlette/routing.py", line 736, in app
+    await route.handle(scope, receive, send)
+  File "/Users/abdulrahman/Documents/GitHub/shoobydo/apps/backend/.venv/lib/python3.13/site-packages/starlette/routing.py", line 290, in handle
+    await self.app(scope, receive, send)
+  File "/Users/abdulrahman/Documents/GitHub/shoobydo/apps/backend/.venv/lib/python3.13/site-packages/starlette/routing.py", line 78, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/Users/abdulrahman/Documents/GitHub/shoobydo/apps/backend/.venv/lib/python3.13/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/Users/abdulrahman/Documents/GitHub/shoobydo/apps/backend/.venv/lib/python3.13/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/abdulrahman/Documents/GitHub/shoobydo/apps/backend/.venv/lib/python3.13/site-packages/starlette/routing.py", line 75, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "/Users/abdulrahman/Documents/GitHub/shoobydo/apps/backend/.venv/lib/python3.13/site-packages/fastapi/routing.py", line 302, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+    )
+    ^
+  File "/Users/abdulrahman/Documents/GitHub/shoobydo/apps/backend/.venv/lib/python3.13/site-packages/fastapi/routing.py", line 215, in run_endpoint_function
+    return await run_in_threadpool(dependant.call, **values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/abdulrahman/Documents/GitHub/shoobydo/apps/backend/.venv/lib/python3.13/site-packages/starlette/concurrency.py", line 38, in run_in_threadpool
+    return await anyio.to_thread.run_sync(func)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/abdulrahman/Documents/GitHub/shoobydo/apps/backend/.venv/lib/python3.13/site-packages/anyio/to_thread.py", line 56, in run_sync
+    return await get_async_backend().run_sync_in_worker_thread(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        func, args, abandon_on_cancel=abandon_on_cancel, limiter=limiter
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/abdulrahman/Documents/GitHub/shoobydo/apps/backend/.venv/lib/python3.13/site-packages/anyio/_backends/_asyncio.py", line 2476, in run_sync_in_worker_thread
+    return await future
+           ^^^^^^^^^^^^
+  File "/Users/abdulrahman/Documents/GitHub/shoobydo/apps/backend/.venv/lib/python3.13/site-packages/anyio/_backends/_asyncio.py", line 967, in run
+    result = context.run(func, *args)
+  File "/Users/abdulrahman/Documents/GitHub/shoobydo/apps/backend/app/routers/auth.py", line 36, in login
+    user = db.query(User).filter(User.email == payload.email).one_or_none()
+  File "/Users/abdulrahman/Documents/GitHub/shoobydo/apps/backend/.venv/lib/python3.13/site-packages/sqlalchemy/orm/query.py", line 2785, in one_or_none
+    return self._iter().one_or_none()  # type: ignore
+           ~~~~~~~~~~^^
+  File "/Users/abdulrahman/Documents/GitHub/shoobydo/apps/backend/.venv/lib/python3.13/site-packages/sqlalchemy/orm/query.py", line 2857, in _iter
+    result: Union[ScalarResult[_T], Result[_T]] = self.session.execute(
+                                                  ~~~~~~~~~~~~~~~~~~~~^
+        statement,
+        ^^^^^^^^^^
+        params,
+        ^^^^^^^
+        execution_options={"_sa_orm_load_options": self.load_options},
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/abdulrahman/Documents/GitHub/shoobydo/apps/backend/.venv/lib/python3.13/site-packages/sqlalchemy/orm/session.py", line 2365, in execute
+    return self._execute_internal(
+           ~~~~~~~~~~~~~~~~~~~~~~^
+        statement,
+        ^^^^^^^^^^
+    ...<4 lines>...
+        _add_event=_add_event,
+        ^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/abdulrahman/Documents/GitHub/shoobydo/apps/backend/.venv/lib/python3.13/site-packages/sqlalchemy/orm/session.py", line 2241, in _execute_internal
+    conn = self._connection_for_bind(bind)
+  File "/Users/abdulrahman/Documents/GitHub/shoobydo/apps/backend/.venv/lib/python3.13/site-packages/sqlalchemy/orm/session.py", line 2110, in _connection_for_bind
+    return trans._connection_for_bind(engine, execution_options)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<string>", line 2, in _connection_for_bind
+  File "/Users/abdulrahman/Documents/GitHub/shoobydo/apps/backend/.venv/lib/python3.13/site-packages/sqlalchemy/orm/state_changes.py", line 137, in _go
+    ret_value = fn(self, *arg, **kw)
+  File "/Users/abdulrahman/Documents/GitHub/shoobydo/apps/backend/.venv/lib/python3.13/site-packages/sqlalchemy/orm/session.py", line 1189, in _connection_for_bind
+    conn = bind.connect()
+  File "/Users/abdulrahman/Documents/GitHub/shoobydo/apps/backend/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 3277, in connect
+    return self._connection_cls(self)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/Users/abdulrahman/Documents/GitHub/shoobydo/apps/backend/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 145, in __init__
+    Connection._handle_dbapi_exception_noconnection(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        err, dialect, engine
+        ^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/abdulrahman/Documents/GitHub/shoobydo/apps/backend/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 2440, in _handle_dbapi_exception_noconnection
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+  File "/Users/abdulrahman/Documents/GitHub/shoobydo/apps/backend/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 143, in __init__
+    self._dbapi_connection = engine.raw_connection()
+                             ~~~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/abdulrahman/Documents/GitHub/shoobydo/apps/backend/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 3301, in raw_connection
+    return self.pool.connect()
+           ~~~~~~~~~~~~~~~~~^^
+  File "/Users/abdulrahman/Documents/GitHub/shoobydo/apps/backend/.venv/lib/python3.13/site-packages/sqlalchemy/pool/base.py", line 447, in connect
+    return _ConnectionFairy._checkout(self)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/Users/abdulrahman/Documents/GitHub/shoobydo/apps/backend/.venv/lib/python3.13/site-packages/sqlalchemy/pool/base.py", line 1264, in _checkout
+    fairy = _ConnectionRecord.checkout(pool)
+  File "/Users/abdulrahman/Documents/GitHub/shoobydo/apps/backend/.venv/lib/python3.13/site-packages/sqlalchemy/pool/base.py", line 711, in checkout
+    rec = pool._do_get()
+  File "/Users/abdulrahman/Documents/GitHub/shoobydo/apps/backend/.venv/lib/python3.13/site-packages/sqlalchemy/pool/impl.py", line 177, in _do_get
+    with util.safe_reraise():
+         ~~~~~~~~~~~~~~~~~^^
+  File "/Users/abdulrahman/Documents/GitHub/shoobydo/apps/backend/.venv/lib/python3.13/site-packages/sqlalchemy/util/langhelpers.py", line 224, in __exit__
+    raise exc_value.with_traceback(exc_tb)
+  File "/Users/abdulrahman/Documents/GitHub/shoobydo/apps/backend/.venv/lib/python3.13/site-packages/sqlalchemy/pool/impl.py", line 175, in _do_get
+    return self._create_connection()
+           ~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/abdulrahman/Documents/GitHub/shoobydo/apps/backend/.venv/lib/python3.13/site-packages/sqlalchemy/pool/base.py", line 388, in _create_connection
+    return _ConnectionRecord(self)
+  File "/Users/abdulrahman/Documents/GitHub/shoobydo/apps/backend/.venv/lib/python3.13/site-packages/sqlalchemy/pool/base.py", line 673, in __init__
+    self.__connect()
+    ~~~~~~~~~~~~~~^^
+  File "/Users/abdulrahman/Documents/GitHub/shoobydo/apps/backend/.venv/lib/python3.13/site-packages/sqlalchemy/pool/base.py", line 899, in __connect
+    with util.safe_reraise():
+         ~~~~~~~~~~~~~~~~~^^
+  File "/Users/abdulrahman/Documents/GitHub/shoobydo/apps/backend/.venv/lib/python3.13/site-packages/sqlalchemy/util/langhelpers.py", line 224, in __exit__
+    raise exc_value.with_traceback(exc_tb)
+  File "/Users/abdulrahman/Documents/GitHub/shoobydo/apps/backend/.venv/lib/python3.13/site-packages/sqlalchemy/pool/base.py", line 895, in __connect
+    self.dbapi_connection = connection = pool._invoke_creator(self)
+                                         ~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/Users/abdulrahman/Documents/GitHub/shoobydo/apps/backend/.venv/lib/python3.13/site-packages/sqlalchemy/engine/create.py", line 661, in connect
+    return dialect.connect(*cargs, **cparams)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "/Users/abdulrahman/Documents/GitHub/shoobydo/apps/backend/.venv/lib/python3.13/site-packages/sqlalchemy/engine/default.py", line 629, in connect
+    return self.loaded_dbapi.connect(*cargs, **cparams)  # type: ignore[no-any-return]  # NOQA: E501
+           ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "/Users/abdulrahman/Documents/GitHub/shoobydo/apps/backend/.venv/lib/python3.13/site-packages/psycopg2/__init__.py", line 122, in connect
+    conn = _connect(dsn, connection_factory=connection_factory, **kwasync)
+sqlalchemy.exc.OperationalError: (psycopg2.OperationalError) connection to server at "127.0.0.1", port 5548 failed: Connection refused
+	Is the server running on that host and accepting TCP/IP connections?
+
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [68026]
