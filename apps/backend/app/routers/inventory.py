@@ -80,3 +80,8 @@ def release_product_stock(
     if success:
         return {"message": "Stock released successfully", "product_id": product_id, "quantity": quantity}
     raise HTTPException(status_code=400, detail="Release failed")
+
+
+@router.get("/", tags=["inventory"])
+def _index_router_inventory():
+    return { "ok": True, "router": "inventory" }

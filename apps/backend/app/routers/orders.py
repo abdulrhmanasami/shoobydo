@@ -226,3 +226,8 @@ def get_order_items_summary(
         "total_amount": float(items_stats.total_amount or 0),
         "order_total": float(order.total)
     }
+
+
+@router.get("/", tags=["orders"])
+def _index_router_orders():
+    return { "ok": True, "router": "orders" }
