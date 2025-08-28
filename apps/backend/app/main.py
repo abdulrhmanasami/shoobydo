@@ -5,14 +5,14 @@ assert not os.path.isdir(os.path.join(os.path.dirname(__file__), "../../.quarant
 
 from fastapi import FastAPI, APIRouter, Depends
 from fastapi.middleware.cors import CORSMiddleware
-from app.routers.auth import router as auth
-from app.routers.products import router as products
-from app.routers.customers import router as customers
-from app.routers.orders import router as orders
-from app.routers.order_items import router as order_items
-from app.routers.suppliers import router as suppliers
-from app.routers.reports import router as reports
-from app.routers.inventory import router as inventory
+from .routers.auth import router as auth
+from .routers.products import router as products
+from .routers.customers import router as customers
+from .routers.orders import router as orders
+from .routers.order_items import router as order_items
+from .routers.suppliers import router as suppliers
+from .routers.reports import router as reports
+from .routers.inventory import router as inventory
 from app.security import get_current_user, require_role
 
 app = FastAPI(title="Shoobydo API", version="0.2.x")
@@ -53,4 +53,7 @@ def root_health():
 def api_health():
     return {"status":"ok"}
 
-app.include_router(api_v1)
+# app.include_router(api_v1)  # disabled: replaced by build_api_v1()
+
+from .bootstrap_routers import build_api_v1
+app.include_router(build_api_v1())
