@@ -1,3 +1,8 @@
+import os
+# Guard against accidentally importing a quarantined root "app"
+assert not os.path.isdir(os.path.join(os.path.dirname(__file__), "../../.quarantine/root-app-dup")), \
+    "Quarantined root app/ detected; remove ambiguity before running."
+
 from fastapi import FastAPI, APIRouter
 from fastapi.middleware.cors import CORSMiddleware
 from app.routers.auth import router as auth
