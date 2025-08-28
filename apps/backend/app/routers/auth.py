@@ -29,15 +29,15 @@ blacklisted_tokens = set()
 def register(payload: UserCreate, db: Session = Depends(get_db)):
     """
     تسجيل مستخدم جديد
-    - يسمح فقط بإنشاء أول مستخدم بدون مصادقة
+    - يسمح فقط بإنشاء أول مستخدم بدون مصادقة (bootstrap)
     - المستخدمين اللاحقين يتطلبون صلاحيات admin
     """
-    # التحقق من وجود مستخدمين
-    exists = db.query(User).count()
-    if exists > 0:
+    # bootstrap: أول مستخدم فقط
+    users_count = db.query(User).count()
+    if users_count > 0:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN, 
-            detail="التسجيل مغلق - يتطلب صلاحيات مدير"
+            detail="Registration is disabled - only first user allowed"
         )
     
     # التحقق من صحة البريد الإلكتروني
@@ -55,10 +55,12 @@ def register(payload: UserCreate, db: Session = Depends(get_db)):
         )
     
     try:
+        # أول مستخدم = admin
         user = User(
             email=payload.email.lower(),
             password_hash=hash_password(payload.password),
-            role=UserRole(payload.role)
+            role=UserRole.admin,  # إجبارياً admin
+            is_active=True
         )
         db.add(user)
         db.commit()
