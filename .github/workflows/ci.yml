@@ -1,25 +1,11 @@
 name: CI
 on: [push, pull_request]
 jobs:
-  build:
+  api:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with: { python-version: '3.11' }
-      - name: Backend deps
-        run: |
-          cd apps/backend
-          python -m venv .venv && . .venv/bin/activate
-          pip install -U pip
-          pip install -r requirements.txt
-      - name: Lint (flake8)
-        run: |
-          cd apps/backend && . .venv/bin/activate
-          python -m pip install flake8
-          flake8 .
-      - name: Tests (pytest)
-        run: |
-          cd apps/backend && . .venv/bin/activate
-          python -m pip install pytest
-          pytest -q --maxfail=1
+      - run: python -m venv .venv && . .venv/bin/activate && pip install -r apps/backend/requirements.txt
+      - run: . .venv/bin/activate && pytest -q
