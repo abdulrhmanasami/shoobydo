@@ -142,3 +142,8 @@ def refresh_reports(db: Session = Depends(get_db)) -> Dict[str, Any]:
             redis.delete(*keys)
     
     return {"message": "Reports cache cleared", "refreshed": True}
+
+
+@router.get("/", tags=["reports"])
+def _index_router_reports():
+    return { "ok": True, "router": "reports" }
