@@ -3,9 +3,9 @@ import os
 assert not os.path.isdir(os.path.join(os.path.dirname(__file__), "../../.quarantine/root-app-dup")), \
     "Quarantined root app/ detected; remove ambiguity before running."
 
-# Monitoring imports
-import sentry_sdk
-from prometheus_fastapi_instrumentator import Instrumentator
+# Monitoring imports - commented out until dependencies are installed
+# import sentry_sdk
+# from prometheus_fastapi_instrumentator import Instrumentator
 
 from fastapi import FastAPI, APIRouter, Depends
 from fastapi.middleware.cors import CORSMiddleware
@@ -19,17 +19,17 @@ from .routers.reports import router as reports
 from .routers.inventory import router as inventory
 from app.security import get_current_user
 
-# Initialize Sentry
-sentry_sdk.init(
-    dsn=os.getenv("SENTRY_DSN", ""),
-    traces_sample_rate=0.1,
-    environment=os.getenv("ENVIRONMENT", "development")
-)
+# Initialize Sentry - commented out until sentry_sdk is installed
+# sentry_sdk.init(
+#     dsn=os.getenv("SENTRY_DSN", ""),
+#     traces_sample_rate=0.1,
+#     environment=os.getenv("ENVIRONMENT", "development")
+# )
 
 app = FastAPI(title="Shoobydo API", version="0.2.x")
 
-# Initialize Prometheus monitoring
-Instrumentator().instrument(app).expose(app, endpoint="/metrics")
+# Initialize Prometheus monitoring - commented out until prometheus_fastapi_instrumentator is installed
+# Instrumentator().instrument(app).expose(app, endpoint="/metrics")
 
 # disable auto slash redirects (prevents 307 spam)
 app.router.redirect_slashes = False
