@@ -93,7 +93,7 @@ def login(payload: UserLogin, db: Session = Depends(get_db)):
         )
     
     # إنشاء tokens
-    access_token = create_access_token(sub=user.email, role=user.role.value)
+    access_token = create_access_token(user.id, user.role)
     refresh_token = create_refresh_token(sub=user.email)
     
     return TokenPair(
