@@ -21,7 +21,7 @@ from app.models_user import User, UserRole
 # إعدادات
 SECRET_KEY = os.getenv("JWT_SECRET_KEY", "shoobydo-dev-secret-key-2025")
 ALGORITHM = os.getenv("JWT_ALGORITHM", "HS256")
-ACCESS_TOKEN_EXPIRE_MINUTES = int(os.getenv("JWT_EXPIRES_MINUTES", "30"))
+ACCESS_TOKEN_EXPIRE_MINUTES = int(os.getenv("JWT_EXPIRES_MINUTES", "120"))
 REFRESH_TOKEN_EXPIRE_DAYS = int(os.getenv("JWT_REFRESH_EXPIRES_MINUTES", "10080")) // 1440  # Convert minutes to days
 
 # استخدام HTTPBearer بدلاً من OAuth2PasswordBearer لتجنب مشاكل tokenUrl
@@ -53,29 +53,7 @@ def verify_refresh_token(token: str) -> dict:
             raise JWTError("Invalid token type")
         return payload
     except JWTError:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Invalid refresh token"
-        )
-
-def get_current_user(
-    token: Annotated[str, Depends(oauth2_scheme)],
-    db: Session = Depends(get_db)
-) -> User:
-    cred_exc = HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid credentials", headers={"WWW-Authenticate": "Bearer"})
-    
-    if not token:
         raise cred_exc
-        
-    try:
-        payload = jwt.decode(token.credentials, SECRET_KEY, algorithms=[ALGORITHM])
-        user_id = payload.get("sub")
-        if not user_id:
-            raise cred_exc
-        user = db.query(User).filter(User.id == user_id).first()
-        if not user or not user.is_active:
-            raise cred_exc
-        return user
     except JWTError:
         raise cred_exc
     user = db.query(User).filter(User.email == email).first()
