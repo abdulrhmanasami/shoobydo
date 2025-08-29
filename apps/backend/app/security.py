@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from datetime import datetime, timedelta, timezone
 from typing import Optional, Dict
+import uuid
 
 from fastapi import Depends, HTTPException, status
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
@@ -43,6 +44,7 @@ def create_access_token(data: Dict, expires_minutes: Optional[int] = None) -> st
     if "sub" in payload and payload["sub"] is not None:
         payload["sub"] = str(payload["sub"])
     payload.setdefault("type", "access")
+    payload["jti"] = payload.get("jti", uuid.uuid4().hex)  # JWT ID للقائمة السوداء
     payload["iat"] = int(now.timestamp())
     payload["nbf"] = int(now.timestamp())
     payload["exp"] = int((now + timedelta(minutes=exp_min)).timestamp())
@@ -64,6 +66,30 @@ def get_current_user(
         )
     try:
         payload = jwt.decode(token.credentials, SECRET_KEY, algorithms=[JWT_ALGORITHM], options={"verify_aud": False})
+        
+        # فحص نوع التوكن
+        tt = payload.get("type")
+        if tt != "access":
+            raise HTTPException(
+                status_code=401, 
+                detail="Invalid token type", 
+                headers={"WWW-Authenticate":"Bearer"}
+            )
+        
+        # فحص القائمة السوداء
+        try:
+            from .security_blacklist import is_blacklisted
+            jti = payload.get("jti", "")
+            if is_blacklisted(jti):
+                raise HTTPException(
+                    status_code=401, 
+                    detail="Token revoked", 
+                    headers={"WWW-Authenticate":"Bearer"}
+                )
+        except ImportError:
+            # Redis غير متوفر في البيئة المحلية
+            pass
+        
         sub = payload.get("sub")
         if sub is None:
             raise HTTPException(
@@ -133,6 +159,7 @@ def create_refresh_token(data: Dict, expires_minutes: Optional[int] = None) -> s
     if "sub" in payload and payload["sub"] is not None:
         payload["sub"] = str(payload["sub"])
     payload.setdefault("type", "refresh")
+    payload["jti"] = payload.get("jti", uuid.uuid4().hex)  # JWT ID للقائمة السوداء
     payload["iat"] = int(now.timestamp())
     payload["nbf"] = int(now.timestamp())
     payload["exp"] = int((now + timedelta(minutes=exp_min)).timestamp())

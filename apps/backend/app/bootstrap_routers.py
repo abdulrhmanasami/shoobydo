@@ -1,9 +1,12 @@
 from fastapi import APIRouter, Depends
-from .routers import auth, suppliers, products, customers, orders, inventory, reports, _diag
+from .routers import auth, suppliers, products, customers, orders, inventory, reports, _diag, health
 from .security import get_current_user
 
 def build_api_v1() -> APIRouter:
     api_v1 = APIRouter(prefix="/api/v1")
+
+    # Health check موسّع
+    api_v1.include_router(health.router, tags=["health"])
 
     # Canonical (بدون prefix: /api/v1/login, /register, /me, /logout)
     api_v1.include_router(auth.router, prefix="", tags=["auth"])

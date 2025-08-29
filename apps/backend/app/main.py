@@ -3,6 +3,10 @@ import os
 assert not os.path.isdir(os.path.join(os.path.dirname(__file__), "../../.quarantine/root-app-dup")), \
     "Quarantined root app/ detected; remove ambiguity before running."
 
+# Monitoring imports
+import sentry_sdk
+from prometheus_fastapi_instrumentator import Instrumentator
+
 from fastapi import FastAPI, APIRouter, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from .routers.auth import router as auth
@@ -15,10 +19,28 @@ from .routers.reports import router as reports
 from .routers.inventory import router as inventory
 from app.security import get_current_user
 
+# Initialize Sentry
+sentry_sdk.init(
+    dsn=os.getenv("SENTRY_DSN", ""),
+    traces_sample_rate=0.1,
+    environment=os.getenv("ENVIRONMENT", "development")
+)
+
 app = FastAPI(title="Shoobydo API", version="0.2.x")
+
+# Initialize Prometheus monitoring
+Instrumentator().instrument(app).expose(app, endpoint="/metrics")
 
 # disable auto slash redirects (prevents 307 spam)
 app.router.redirect_slashes = False
+
+# Add deprecation middleware for alias endpoints
+try:
+    from .middleware_deprecation import DeprecationAlias
+    app.add_middleware(DeprecationAlias)
+except ImportError:
+    # Middleware not available in development
+    pass
 
 app.add_middleware(
     CORSMiddleware,

@@ -10,7 +10,7 @@ Last updated: 2025-08-24
 from fastapi import APIRouter, Depends, HTTPException, status, Form
 import re
 from sqlalchemy.exc import IntegrityError
-from fastapi.security import HTTPBearer
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from sqlalchemy.orm import Session
 
 from app.db import get_db
@@ -114,7 +114,7 @@ def refresh_token(
         payload = verify_refresh_token(refresh_token)
         user_id = payload.get("sub")
         
-        user = db.get(User, int(user_id)) or db.query(User).filter(User.id == int(user_id)).first()
+        user = db.get(User, int(str(user_id))) or db.query(User).filter(User.id == int(str(user_id))).first()
         if not user or not user.is_active:
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
@@ -137,13 +137,44 @@ def refresh_token(
 
 @router.post("/logout")
 def logout(
-    user: User = Depends(get_current_user)
+    user: User = Depends(get_current_user),
+    token: HTTPAuthorizationCredentials = Depends(_bearer)
 ):
     """
     تسجيل الخروج وإضافة التوكن للقائمة السوداء
     """
-    # في الإنتاج، استخدم Redis للقائمة السوداء
-    # blacklisted_tokens.add(token)
+    if token and token.credentials:
+        try:
+            from jose import jwt
+            from app.security import SECRET_KEY, JWT_ALGORITHM
+            from datetime import datetime, timezone
+            
+            # فك التوكن لاستخراج jti و exp
+            payload = jwt.decode(
+                token.credentials, 
+                SECRET_KEY, 
+                algorithms=[JWT_ALGORITHM], 
+                options={"verify_aud": False}
+            )
+            
+            jti = payload.get("jti", "")
+            exp = payload.get("exp", 0)
+            
+            if jti and exp:
+                # حساب TTL المتبقي
+                now = int(datetime.now(timezone.utc).timestamp())
+                ttl = max(0, int(exp) - now)
+                
+                # إضافة للقائمة السوداء
+                try:
+                    from app.security_blacklist import blacklist
+                    blacklist(jti, ttl)
+                except ImportError:
+                    # Redis غير متوفر في البيئة المحلية
+                    pass
+        except Exception:
+            # في حالة فشل فك التوكن، تجاهل
+            pass
     
     return {"message": "Logged out successfully"}
 
