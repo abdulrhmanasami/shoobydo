@@ -1,0 +1,15 @@
+[Unit]
+Description=shoobydo backend
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=/Users/abdulrahman/Documents/GitHub/shoobydo/apps/backend
+Environment=SECRET_KEY=shoobydo-dev-secret JWT_ALGORITHM=HS256 ACCESS_TOKEN_EXPIRE_MINUTES=120 JWT_LEEWAY_SECONDS=10 DATABASE_URL=sqlite:///./shoobydo.db BACKEND_PORT=8080
+ExecStart=/usr/bin/env uvicorn app.main:app --host 0.0.0.0 --port ${BACKEND_PORT} --proxy-headers --forwarded-allow-ips="*"
+Restart=always
+RestartSec=5
+LimitNOFILE=65535
+
+[Install]
+WantedBy=multi-user.target
