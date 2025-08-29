@@ -223,3 +223,14 @@ REDIS_PORT=6389
 
 ### Artifacts
 - reports/EPIC-02-TASK-02H/health_after_merge.txt
+
+## Auth Endpoints
+
+- POST `/api/v1/login` (canonical)
+- GET  `/api/v1/me`
+- POST `/api/v1/logout`
+
+Aliases (hidden): `/api/v1/auth/*`.
+
+Tokens: HS256, `sub` (string user id), `exp`, `iat`, `nbf`.
+
