@@ -2,7 +2,7 @@ from __future__ import annotations
 from enum import Enum
 from sqlalchemy import String, Integer, Boolean, Enum as SAEnum, DateTime, func
 from sqlalchemy.orm import Mapped, mapped_column
-from app.db import Base
+from .db import Base
 
 class UserRole(str, Enum):
     admin = "admin"

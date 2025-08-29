@@ -15,8 +15,8 @@ from fastapi.security import HTTPBearer
 from jose import jwt, JWTError
 from passlib.context import CryptContext
 from sqlalchemy.orm import Session
-from app.db import get_db  # افترض موجود
-from app.models_user import User, UserRole
+from .db import get_db  # نفس الدالة المستخدمة في الراوترات
+from .models_user import User, UserRole
 
 # إعدادات
 SECRET_KEY = os.getenv("JWT_SECRET_KEY", "shoobydo-dev-secret-key-2025")
@@ -25,7 +25,7 @@ ACCESS_TOKEN_EXPIRE_MINUTES = int(os.getenv("JWT_EXPIRES_MINUTES", "120"))
 REFRESH_TOKEN_EXPIRE_DAYS = int(os.getenv("JWT_REFRESH_EXPIRES_MINUTES", "10080")) // 1440  # Convert minutes to days
 
 # استخدام HTTPBearer بدلاً من OAuth2PasswordBearer لتجنب مشاكل tokenUrl
-oauth2_scheme = HTTPBearer(auto_error=False)
+oauth2_scheme = HTTPBearer(auto_error=True)
 pwd = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 def hash_password(p: str) -> str:
@@ -48,7 +48,7 @@ def create_refresh_token(sub: str) -> str:
 
 def verify_refresh_token(token: str) -> dict:
     try:
-        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        payload = jwt.decode(token.credentials, SECRET_KEY, algorithms=[ALGORITHM])
         if payload.get("type") != "refresh":
             raise JWTError("Invalid token type")
         return payload
@@ -56,7 +56,7 @@ def verify_refresh_token(token: str) -> dict:
         raise cred_exc
     except JWTError:
         raise cred_exc
-    user = db.query(User).filter(User.email == email).first()
+    user = db.get(User, user_id) or db.query(User).filter(User.id==user_id).first()
     if not user or not user.is_active:
         raise cred_exc
     return user
@@ -69,7 +69,7 @@ def get_current_user(
 ) -> User:
     cred_exc = HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid credentials", headers={"WWW-Authenticate": "Bearer"})
     
-    if not token:
+    if not token or not getattr(token, 'credentials', None):
         raise cred_exc
         
     try:
@@ -77,6 +77,7 @@ def get_current_user(
         user_id = payload.get("sub")
         if not user_id:
             raise cred_exc
+        user_id = int(user_id)  # تأكد من تحويلها إلى int
         user = db.query(User).filter(User.id == user_id).first()
         if not user or not user.is_active:
             raise cred_exc
