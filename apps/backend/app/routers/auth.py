@@ -10,14 +10,13 @@ Last updated: 2025-08-24
 from fastapi import APIRouter, Depends, HTTPException, status, Form
 import re
 from sqlalchemy.exc import IntegrityError
-from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
+from fastapi.security import HTTPBearer
 from sqlalchemy.orm import Session
-from typing import Optional
 
-from apps.backend.app.db import get_db
-from apps.backend.app.models_user import User, UserRole
+from app.db import get_db
+from app.models_user import User, UserRole
 from app.schemas_auth import UserCreate, UserLogin, Token, UserOut, TokenPair
-from app.security import hash_password, verify_password, create_access_token, get_current_user, require_role, create_refresh_token, verify_refresh_token
+from app.security import hash_password, verify_password, create_access_token, get_current_user, create_refresh_token, verify_refresh_token
 
 router = APIRouter()
 _bearer = HTTPBearer(auto_error=False)
@@ -93,8 +92,8 @@ def login(payload: UserLogin, db: Session = Depends(get_db)):
         )
     
     # إنشاء tokens
-    access_token = create_access_token(user.id, user.role)
-    refresh_token = create_refresh_token(sub=user.email)
+    access_token = create_access_token({"sub": str(user.id), "type": "access"})
+    refresh_token = create_access_token({"sub": str(user.id), "type": "refresh"}, expires_minutes=60*24*14)
     
     return TokenPair(
         access_token=access_token,
@@ -123,14 +122,14 @@ def refresh_token(
             )
         
         # إنشاء access token جديد
-        new_access_token = create_access_token(sub=user.email, role=user.role.value)
+        new_access_token = create_access_token({"sub": str(user.id), "type": "access"})
         
         return Token(
             access_token=new_access_token,
             token_type="bearer"
         )
         
-    except Exception as e:
+    except Exception:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Invalid refresh token"
@@ -153,7 +152,7 @@ def me(user: User = Depends(get_current_user)):
     """
     الحصول على معلومات المستخدم الحالي
     """
-    return user
+    return UserOut(id=user.id, email=user.email, role=user.role.value, is_active=user.is_active)
 
 @router.post("/change-password")
 def change_password(

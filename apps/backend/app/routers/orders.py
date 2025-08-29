@@ -1,10 +1,10 @@
 from fastapi import APIRouter, Depends, HTTPException, Query, Path
 from sqlalchemy.orm import Session
-from sqlalchemy import or_, func, and_, desc
+from sqlalchemy import or_, func, desc
 from typing import Dict, Any
 from datetime import datetime, date
-from apps.backend.app.db import get_db
-from apps.backend.app.security import get_current_user, require_role
+from app.db import get_db
+from app.security import require_role
 from app.models_order import Order
 from app.models_customer import Customer
 from app.models_order_item import OrderItem

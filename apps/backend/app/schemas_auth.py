@@ -7,7 +7,7 @@ Purpose: Pydantic schemas for Auth flows (login, token, user output)
 Last updated: 2025-08-20
 """
 
-from typing import Literal, Optional
+from typing import Literal
 from pydantic import ConfigDict
 from pydantic import BaseModel
 

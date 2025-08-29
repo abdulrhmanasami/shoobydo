@@ -1,12 +1,11 @@
 from fastapi import APIRouter, Depends, HTTPException, Path
 from sqlalchemy.orm import Session
-from sqlalchemy import func, or_
-from apps.backend.app.db import get_db
-from apps.backend.app.security import get_current_user, require_role
+from sqlalchemy import func
+from app.db import get_db
+from app.security import require_role
 from app.models_order import Order
 from app.models_product import Product
 from app.models_order_item import OrderItem
-from app.services.orders_total import recalc_order_total
 from app.services.inventory import reserve_stock, release_stock
 from app.schemas_order_item import OrderItemCreate, OrderItemUpdate, OrderItemOut
 

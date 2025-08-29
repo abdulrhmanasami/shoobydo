@@ -63,13 +63,7 @@ def get_current_user(
             headers={"WWW-Authenticate": "Bearer"},
         )
     try:
-        payload = jwt.decode(
-            token.credentials,
-            SECRET_KEY,
-            algorithms=[JWT_ALGORITHM],
-            options={"verify_aud": False},
-            leeway=LEEWAY_SECONDS,
-        )
+        payload = jwt.decode(token.credentials, SECRET_KEY, algorithms=[JWT_ALGORITHM], options={"verify_aud": False})
         sub = payload.get("sub")
         if sub is None:
             raise HTTPException(
@@ -106,3 +100,62 @@ def get_current_user(
             headers={"WWW-Authenticate": "Bearer"},
         )
     return user
+
+
+from passlib.context import CryptContext
+
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+
+def hash_password(password: str) -> str:
+    """Hash a password using bcrypt."""
+    return pwd_context.hash(password)
+
+def verify_password(plain_password: str, hashed_password: str) -> bool:
+    """Verify a password against its hash."""
+    return pwd_context.verify(plain_password, hashed_password)
+
+def require_role(*roles: str):
+    """Dependency to require specific user roles."""
+    def role_checker(user: User = Depends(get_current_user)) -> User:
+        if user.role not in roles:
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="Insufficient permissions"
+            )
+        return user
+    return role_checker
+
+def create_refresh_token(data: Dict, expires_minutes: Optional[int] = None) -> str:
+    """Create a refresh token."""
+    now = datetime.now(timezone.utc)
+    exp_min = expires_minutes or ACCESS_TOKEN_EXPIRE_MINUTES * 2  # Refresh tokens last longer
+    payload = dict(data or {})
+    if "sub" in payload and payload["sub"] is not None:
+        payload["sub"] = str(payload["sub"])
+    payload.setdefault("type", "refresh")
+    payload["iat"] = int(now.timestamp())
+    payload["nbf"] = int(now.timestamp())
+    payload["exp"] = int((now + timedelta(minutes=exp_min)).timestamp())
+    return jwt.encode(payload, SECRET_KEY, algorithm=JWT_ALGORITHM)
+
+def verify_refresh_token(token: str) -> Dict:
+    """Verify and decode a refresh token."""
+    try:
+        payload = jwt.decode(
+            token,
+            SECRET_KEY,
+            algorithms=[JWT_ALGORITHM],
+            options={"verify_aud": False},
+            leeway=LEEWAY_SECONDS,
+        )
+        if payload.get("type") != "refresh":
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Invalid token type"
+            )
+        return payload
+    except JWTError:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid refresh token"
+        )
