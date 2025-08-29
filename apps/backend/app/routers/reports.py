@@ -5,11 +5,11 @@ Purpose: Reports and KPIs with Redis caching
 Last updated: 2025-08-24
 """
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 from sqlalchemy import func
 from typing import Dict, Any
-from apps.backend.app.db import get_db
+from app.db import get_db
 from app.security import require_role
 from app.services.redis_store import get_redis
 from app.models import Supplier

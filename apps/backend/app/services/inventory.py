@@ -12,7 +12,7 @@ Last updated: 2025-08-21
 from sqlalchemy.orm import Session
 from app.models_product import Product
 from app.models_stock_movement import StockMovement
-from typing import Optional, Tuple
+from typing import Optional
 from fastapi import HTTPException
 
 

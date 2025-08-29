@@ -13,7 +13,7 @@ from .routers.order_items import router as order_items
 from .routers.suppliers import router as suppliers
 from .routers.reports import router as reports
 from .routers.inventory import router as inventory
-from app.security import get_current_user, require_role
+from app.security import get_current_user
 
 app = FastAPI(title="Shoobydo API", version="0.2.x")
 

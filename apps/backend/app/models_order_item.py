@@ -1,6 +1,6 @@
 from __future__ import annotations
 from sqlalchemy import Integer, ForeignKey, Numeric, DateTime, func
-from sqlalchemy.orm import Mapped, mapped_column, relationship
+from sqlalchemy.orm import Mapped, mapped_column
 from app.db import Base
 
 class OrderItem(Base):
