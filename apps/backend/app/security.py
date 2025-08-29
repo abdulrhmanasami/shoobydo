@@ -34,10 +34,10 @@ def hash_password(p: str) -> str:
 def verify_password(p: str, hashed: str) -> bool:
     return pwd.verify(p, hashed)
 
-def create_access_token(sub: str, role: str) -> str:
+def create_access_token(user_id: int, role: str) -> str:
     now = dt.datetime.utcnow()
     exp = now + dt.timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
-    payload = {"sub": sub, "role": role, "iat": int(now.timestamp()), "exp": int(exp.timestamp())}
+    payload = {"sub": user_id, "role": role, "iat": int(now.timestamp()), "exp": int(exp.timestamp())}
     return jwt.encode(payload, SECRET_KEY, algorithm=ALGORITHM)
 
 def create_refresh_token(sub: str) -> str:
@@ -69,9 +69,13 @@ def get_current_user(
         
     try:
         payload = jwt.decode(token.credentials, SECRET_KEY, algorithms=[ALGORITHM])
-        email: str = payload.get("sub")
-        if not email:
+        user_id = payload.get("sub")
+        if not user_id:
             raise cred_exc
+        user = db.query(User).filter(User.id == user_id).first()
+        if not user or not user.is_active:
+            raise cred_exc
+        return user
     except JWTError:
         raise cred_exc
     user = db.query(User).filter(User.email == email).first()
