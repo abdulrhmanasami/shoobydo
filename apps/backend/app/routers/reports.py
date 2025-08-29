@@ -9,7 +9,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from sqlalchemy import func
 from typing import Dict, Any
-from app.db import get_db
+from apps.backend.app.db import get_db
 from app.security import require_role
 from app.services.redis_store import get_redis
 from app.models import Supplier

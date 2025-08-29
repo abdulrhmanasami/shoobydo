@@ -5,10 +5,10 @@ import os
 import pandas as pd
 from pathlib import Path
 
-from app.db import get_db
+from apps.backend.app.db import get_db
 from app.models import Supplier
 from app.schemas import SupplierOut, SupplierStats, SupplierIn, SupplierUpdate
-from app.security import get_current_user, require_role
+from apps.backend.app.security import get_current_user, require_role
 
 router = APIRouter(prefix="/suppliers", tags=["suppliers"], redirect_slashes=False)
 
