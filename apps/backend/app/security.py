@@ -11,7 +11,7 @@ import os
 import datetime as dt
 from typing import Annotated, Callable, Literal
 from fastapi import Depends, HTTPException, status
-from fastapi.security import HTTPBearer
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from jose import jwt, JWTError
 from passlib.context import CryptContext
 from sqlalchemy.orm import Session
@@ -25,7 +25,7 @@ ACCESS_TOKEN_EXPIRE_MINUTES = int(os.getenv("JWT_EXPIRES_MINUTES", "120"))
 REFRESH_TOKEN_EXPIRE_DAYS = int(os.getenv("JWT_REFRESH_EXPIRES_MINUTES", "10080")) // 1440  # Convert minutes to days
 
 # استخدام HTTPBearer بدلاً من OAuth2PasswordBearer لتجنب مشاكل tokenUrl
-oauth2_scheme = HTTPBearer(auto_error=True)
+oauth2_scheme = HTTPBearer(auto_error=False)
 pwd = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 def hash_password(p: str) -> str:
@@ -63,8 +63,7 @@ def verify_refresh_token(token: str) -> dict:
 
 
 
-def get_current_user(
-    token: Annotated[str, Depends(oauth2_scheme)],
+def get_current_user(token: HTTPAuthorizationCredentials = Depends(oauth2_scheme),
     db: Session = Depends(get_db)
 ) -> User:
     cred_exc = HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid credentials", headers={"WWW-Authenticate": "Bearer"})
@@ -78,7 +77,7 @@ def get_current_user(
         if not user_id:
             raise cred_exc
         user_id = int(user_id)  # تأكد من تحويلها إلى int
-        user = db.query(User).filter(User.id == user_id).first()
+        print('DBG_ME user_id=', user_id); user = db.query(User).filter(User.id == user_id).first(); print('DBG_ME user_found=', bool(user))
         if not user or not user.is_active:
             raise cred_exc
         return user
