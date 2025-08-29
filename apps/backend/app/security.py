@@ -141,13 +141,7 @@ def create_refresh_token(data: Dict, expires_minutes: Optional[int] = None) -> s
 def verify_refresh_token(token: str) -> Dict:
     """Verify and decode a refresh token."""
     try:
-        payload = jwt.decode(
-            token,
-            SECRET_KEY,
-            algorithms=[JWT_ALGORITHM],
-            options={"verify_aud": False},
-            leeway=LEEWAY_SECONDS,
-        )
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[JWT_ALGORITHM], options={"verify_aud": False})
         if payload.get("type") != "refresh":
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,

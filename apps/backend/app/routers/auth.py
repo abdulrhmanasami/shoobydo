@@ -112,9 +112,9 @@ def refresh_token(
     """
     try:
         payload = verify_refresh_token(refresh_token)
-        email = payload.get("sub")
+        user_id = payload.get("sub")
         
-        user = db.query(User).filter(User.email == email).first()
+        user = db.get(User, int(user_id)) or db.query(User).filter(User.id == int(user_id)).first()
         if not user or not user.is_active:
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
