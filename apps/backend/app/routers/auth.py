@@ -14,8 +14,8 @@ from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from sqlalchemy.orm import Session
 from typing import Optional
 
-from app.db import get_db
-from app.models_user import User, UserRole
+from apps.backend.app.db import get_db
+from apps.backend.app.models_user import User, UserRole
 from app.schemas_auth import UserCreate, UserLogin, Token, UserOut, TokenPair
 from app.security import hash_password, verify_password, create_access_token, get_current_user, require_role, create_refresh_token, verify_refresh_token
 

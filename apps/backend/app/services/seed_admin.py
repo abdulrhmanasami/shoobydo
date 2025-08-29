@@ -10,7 +10,7 @@ import uuid
 from sqlalchemy.orm import Session
 
 from apps.backend.app.db import SessionLocal
-from app.models_user import User, UserRole
+from apps.backend.app.models_user import User, UserRole
 from app.security import get_password_hash
 
 
