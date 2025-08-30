@@ -17,14 +17,20 @@ DATABASE_URL = os.getenv("DATABASE_URL") or (
     f"{os.getenv('POSTGRES_DB','shoobydo')}"
 )
 
-if not config.get_main_option("sqlalchemy.url"):
-    config.set_main_option("sqlalchemy.url", DATABASE_URL)
+# Override the sqlalchemy.url in config with our resolved DATABASE_URL
+config.set_main_option("sqlalchemy.url", DATABASE_URL)
 
 # Target metadata (make sure Base aggregates all models)
-from app.db.base import Base  # noqa: E402
+from app.db import Base  # noqa: E402
 
 try:
     import app.models  # noqa: F401 # force-load models for autogenerate
+    import app.models_user  # noqa: F401
+    import app.models_product  # noqa: F401
+    import app.models_order  # noqa: F401
+    import app.models_order_item  # noqa: F401
+    import app.models_customer  # noqa: F401
+    import app.models_stock_movement  # noqa: F401
 except Exception:
     pass
 
