@@ -18,9 +18,12 @@ def build_api_v1() -> APIRouter:
     # Admin router (admin only)
     api_v1.include_router(admin.router, prefix="/admin", tags=["admin"])
 
+    # Order items router
+    api_v1.include_router(order_items.router, prefix="/orders", tags=["order_items"])
+
     # باقي الروترات كما هي (لا تضف prefixes إضافية كي لا تتكرر القطاعات)
     protected = APIRouter(dependencies=[Depends(get_current_user)])
-    for r in (suppliers.router, products.router, customers.router, orders.router, order_items.router, inventory.router, reports.router):
+    for r in (suppliers.router, products.router, customers.router, orders.router, inventory.router, reports.router):
         protected.include_router(r)
     api_v1.include_router(protected)
     return api_v1

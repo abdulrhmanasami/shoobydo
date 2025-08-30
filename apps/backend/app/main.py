@@ -28,6 +28,29 @@ from app.security import get_current_user
 
 app = FastAPI(title="Shoobydo API", version="0.2.x")
 
+
+
+import os
+
+# ---- Optional Monitoring (gated) ----
+SENTRY_DSN = os.getenv("SENTRY_DSN")
+PROM_ENABLED = os.getenv("PROMETHEUS_ENABLED", "0") == "1"
+
+if SENTRY_DSN:
+    try:
+        import sentry_sdk
+        sentry_sdk.init(dsn=SENTRY_DSN, traces_sample_rate=float(os.getenv("SENTRY_TRACES","0.0")))
+    except Exception as e:
+        print(f"[monitoring] Sentry disabled: {e}")
+
+if PROM_ENABLED:
+    try:
+        from prometheus_fastapi_instrumentator import Instrumentator
+        Instrumentator().instrument(app).expose(app)
+    except Exception as e:
+        print(f"[monitoring] Prometheus disabled: {e}")
+# -------------------------------------
+
 # Initialize Prometheus monitoring - commented out until prometheus_fastapi_instrumentator is installed
 # Instrumentator().instrument(app).expose(app, endpoint="/metrics")
 
@@ -79,3 +102,12 @@ def api_health():
 
 from .bootstrap_routers import build_api_v1
 app.include_router(build_api_v1())
+
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=os.getenv("CORS_ALLOW_ORIGINS","*").split(","),
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
