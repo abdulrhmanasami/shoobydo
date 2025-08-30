@@ -1,0 +1,50 @@
+version: "3.9"
+name: shoobydo-staging
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: shoobydo
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: pass
+    volumes: [ "pgdata_stg:/var/lib/postgresql/data" ]
+    healthcheck:
+      test: ["CMD-SHELL","pg_isready -U user -d shoobydo"]
+      interval: 5s
+      timeout: 3s
+      retries: 30
+  redis:
+    image: redis:7-alpine
+    command: ["redis-server","--save","","--appendonly","no"]
+    healthcheck:
+      test: ["CMD","redis-cli","ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 30
+  backend:
+    image: ${BACKEND_IMAGE}
+    env_file: [.env.staging]
+    ports: ["8801:8001"]    # خارجي 8801 ← داخلي 8001 (تفادي التعارض)
+    depends_on:
+      db: { condition: service_healthy }
+      redis: { condition: service_healthy }
+    healthcheck:
+      test: ["CMD","curl","-sfL","http://localhost:8001/health"]
+      interval: 5s
+      timeout: 3s
+      retries: 60
+  frontend:
+    image: ${FRONTEND_IMAGE}
+    env_file: [.env.staging]
+    environment:
+      NEXT_PUBLIC_API_BASE: ${NEXT_PUBLIC_API_BASE}
+    ports: ["8800:3000"]    # خارجي 8800 ← داخلي 3000
+    depends_on:
+      backend: { condition: service_healthy }
+    healthcheck:
+      test: ["CMD","curl","-sfL","http://localhost:3000"]
+      interval: 5s
+      timeout: 3s
+      retries: 60
+volumes:
+  pgdata_stg:
