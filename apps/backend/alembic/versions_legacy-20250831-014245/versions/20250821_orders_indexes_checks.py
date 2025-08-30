@@ -9,8 +9,8 @@ from alembic import op
 import sqlalchemy as sa
 
 # revision identifiers, used by Alembic.
-revision = 'orders_indexes_checks_20250821'
-down_revision = '8daeac2d2c8f'
+revision = "orders_indexes_checks_20250821"
+down_revision = "8daeac2d2c8f"
 branch_labels = None
 depends_on = None
 
@@ -65,5 +65,3 @@ def downgrade() -> None:
         END$$;
         """
     )
-
-

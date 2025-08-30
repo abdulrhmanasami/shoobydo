@@ -1,6 +1,6 @@
 #!/bin/bash
 set -euo pipefail
-B=${1:-http://127.0.0.1:8801}
+B=${1:-http://127.0.0.1:8802}
 P=${2:-/api/v1/reports/summary}
 N=${N:-200}
 C=${C:-20}
