@@ -1,10 +1,10 @@
 repos:
+- repo: https://github.com/zricethezav/gitleaks
+  rev: v8.18.4
+  hooks:
+  - id: gitleaks
 - repo: https://github.com/psf/black
-  rev: 24.4.2
-  hooks: [{id: black}]
-- repo: https://github.com/pycqa/isort
-  rev: 5.13.2
-  hooks: [{id: isort}]
-- repo: https://github.com/charliermarsh/ruff-pre-commit
-  rev: v0.6.3
-  hooks: [{id: ruff}]
+  rev: 24.8.0
+  hooks:
+  - id: black
+    language_version: python3
