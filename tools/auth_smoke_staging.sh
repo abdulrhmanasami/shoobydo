@@ -20,6 +20,7 @@ fi
 if [ -z "${TOKEN:-}" ]; then
   echo "[auth] FAILED to obtain token"; echo "$RESP"; exit 1
 fi
+
 echo "[auth] got token: ${#TOKEN} chars"
 
 auth_get() {
@@ -31,7 +32,9 @@ auth_get() {
 }
 
 # اختبارات أمثلة — عدّل المسارات حسب مشروعك
-auth_get "/api/v1/reports/summary"
-auth_get "/api/v1/reports/kpis"
+auth_get "/api/v1/admin/ping"
+auth_get "/api/v1/inventory/"
+auth_get "/api/v1/reports/"
+auth_get "/api/v1/suppliers"
 
 echo "✅ auth smoke passed"
