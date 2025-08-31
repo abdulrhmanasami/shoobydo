@@ -15,3 +15,9 @@ reports/
 ]633;E;{ echo ""\x3b echo "# ignore root PDFs"\x3b echo "/*.pdf"\x3b } >> .gitignore;]633;C
 # ignore root PDFs
 /*.pdf
+
+# block heavy archives
+*.zip
+*.7z
+*.tar
+*.tar.gz
