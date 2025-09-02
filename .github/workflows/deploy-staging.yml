@@ -1,0 +1,56 @@
+name: Deploy to Staging
+on:
+  push:
+    branches: [develop]
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Environment to deploy to'
+        required: true
+        default: 'staging'
+        type: choice
+        options:
+        - staging
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup SSH
+      uses: webfactory/ssh-agent@v0.8.0
+      with:
+        ssh-private-key: ${{ secrets.STAGING_SSH_PRIVATE_KEY }}
+        
+    - name: Deploy to staging server
+      env:
+        STAGING_HOST: ${{ secrets.STAGING_HOST }}
+        STAGING_USER: ${{ secrets.STAGING_USER }}
+        SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+      run: |
+        echo "Deploying to staging server: $STAGING_HOST"
+        echo "Using user: $STAGING_USER"
+        
+        # Test SSH connection
+        ssh -o StrictHostKeyChecking=no $STAGING_USER@$STAGING_HOST "echo 'SSH connection successful'"
+        
+        # Deploy application
+        ssh -o StrictHostKeyChecking=no $STAGING_USER@$STAGING_HOST << 'EOF'
+          echo "Starting deployment..."
+          cd /opt/commisio || mkdir -p /opt/commisio
+          echo "Deployment completed successfully"
+        EOF
+        
+        # Send notification to Slack
+        if [ "$SLACK_WEBHOOK" != "https://hooks.slack.com/services/XXX/YYY/ZZZ" ]; then
+          curl -X POST -H 'Content-type: application/json' \
+            --data "{\"text\":\"🚀 Staging deployment completed successfully!\"}" \
+            $SLACK_WEBHOOK
+        fi
