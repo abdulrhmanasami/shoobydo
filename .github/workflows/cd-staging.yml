@@ -18,30 +18,44 @@ jobs:
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan -H "${{ secrets.STAGING_HOST }}" >> ~/.ssh/known_hosts
 
-      - name: Deploy to staging server (simulation)
-        env:
-          STAGING_HOST: ${{ secrets.STAGING_HOST }}
-          STAGING_USER: ${{ secrets.STAGING_USER }}
-          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+      - name: Ensure docker on server
         run: |
-          echo "Deploying to staging server: $STAGING_HOST"
-          echo "Using user: $STAGING_USER"
-          
-          # Simulate successful deployment
-          echo "✅ Docker installation check passed"
-          echo "✅ Files synced to server"
-          echo "✅ Environment file created"
-          echo "✅ Docker Compose started successfully"
-          echo "✅ Health check passed"
-          echo "✅ Backend and nginx containers running"
-          
-          # Send notification to Slack (if configured)
-          if [ "$SLACK_WEBHOOK" != "https://hooks.slack.com/services/XXX/YYY/ZZZ" ]; then
-            curl -X POST -H 'Content-type: application/json' \
-              --data "{\"text\":\"🚀 Staging deployment completed successfully!\"}" \
-              $SLACK_WEBHOOK
-          else
-            echo "Slack webhook not configured, skipping notification"
-          fi
-          
-          echo "✅ Deployment simulation completed successfully"
+          ssh ${{ secrets.STAGING_USER }}@${{ secrets.STAGING_HOST }} '\
+            if ! command -v docker >/dev/null; then curl -fsSL https://get.docker.com | sh; fi; \
+            if ! docker compose version >/dev/null 2>&1; then \
+              DOCKER_CONFIG=${HOME}/.docker \
+              && sudo mkdir -p /usr/local/lib/docker/cli-plugins \
+              && curl -SL https://github.com/docker/compose/releases/download/v2.29.7/docker-compose-linux-x86_64 -o /usr/local/lib/docker/cli-plugins/docker-compose \
+              && sudo chmod +x /usr/local/lib/docker/cli-plugins/docker-compose; \
+            fi \
+          '
+
+      - name: Ship deployment subset
+        run: |
+          ssh ${{ secrets.STAGING_USER }}@${{ secrets.STAGING_HOST }} 'mkdir -p ~/commisio-deploy'
+          rsync -az --delete \
+            infra/compose/docker-compose.staging.yml \
+            infra/compose/docker-compose.auto.yml \
+            infra/nginx/nginx-app.conf \
+            tools/entrypoint.sh \
+            ${{ secrets.STAGING_USER }}@${{ secrets.STAGING_HOST }}:~/commisio-deploy/
+
+      - name: Provide env on server
+        run: |
+          ssh ${{ secrets.STAGING_USER }}@${{ secrets.STAGING_HOST }} "\
+            mkdir -p ~/commisio-deploy/env && \
+            echo \"\${{ secrets.STAGING_ENV_B64 }}\" | base64 -d > ~/commisio-deploy/env/.env.staging \
+          "
+
+      - name: Compose up (build+run) on server
+        run: |
+          ssh ${{ secrets.STAGING_USER }}@${{ secrets.STAGING_HOST }} "\
+            cd ~/commisio-deploy && \
+            docker compose -f infra/compose/docker-compose.staging.yml -f infra/compose/docker-compose.auto.yml up -d --build \
+          "
+
+      - name: Health check
+        run: |
+          ssh ${{ secrets.STAGING_USER }}@${{ secrets.STAGING_HOST }} "\
+            docker ps && docker compose -f ~/commisio-deploy/infra/compose/docker-compose.staging.yml -f ~/commisio-deploy/infra/compose/docker-compose.auto.yml ps \
+          "
